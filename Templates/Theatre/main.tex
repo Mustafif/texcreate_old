@@ -1,0 +1,38 @@
+% Theatre template
+% MKProjects 2021 | www.mkproj.com
+% TexCreate 
+% Used for creating scripts in LaTeX
+
+\documentclass[11pt, letterpaper]{memoir}
+% Packages goes here 
+\usepackage{dramatist}
+\usepackage{calc}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\thetitle}
+\rhead{\theauthor}
+\rfoot{Page \thepage}
+% MetaData goes here
+\author{}
+\title{}
+\date{}
+
+\begin{document}
+    \maketitle
+    \pagenumbering{arabic}
+    \newpage
+    \tableofcontents
+    \newpage
+    % Characters go here 
+    \Character[]{}{} %[character description]{character name}{alias}
+    % Set length to longest character name 
+    \setlength{\speakswidth}{\widthof{\speaksfont Name}}
+    \addtolength{\speakswidth}{\Dlabelsep}
+    \addtolength{\speaksindent}{\speakswidth}
+    % Acts 
+    \act[] %[act name]
+    \scene[]%[scene name]
+    % To make character speak, use \<alias>speaks{text}
+\end{document}

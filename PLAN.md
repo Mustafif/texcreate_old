@@ -11,3 +11,6 @@
 ### Book: 
 - includes the book template 
 - is distributed by a zip file
+
+### Traits
+- Add trait for load & create functions to help reduce code repetition
