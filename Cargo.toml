@@ -2,6 +2,12 @@
 name = "texcreate"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A tool to create TeX projects from LaTeX templates."
+author = "Mustafif Khan"
+repository = "https://github.com/MKProj/texcreate.git"
+homepage = "https://mkproj.com"
+github = "https://github.com/MKProj/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
