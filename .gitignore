@@ -1,0 +1,9 @@
+/target
+*test
+*.pdf
+*.log
+*.toc
+*.aux
+*.latexmk
+*.bbl
+*.synctex.gz
