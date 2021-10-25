@@ -1,4 +1,6 @@
 /target
+/test
+config.toml
 texcreate_*
 *test
 *.pdf

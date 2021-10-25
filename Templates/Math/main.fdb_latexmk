@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1634950682 "c:/Users/Musta/texcreate/Templates/Math/main.tex" "main.pdf" "main" 1634950682
-  "c:/Users/Musta/texcreate/Templates/Math/main.tex" 1634950680 351 8edd3ad0afe9b571bcda898574e41fcd ""
+["pdflatex"] 1635181676 "c:/Users/Musta/texcreate/Templates/Math/main.tex" "main.pdf" "main" 1635181676
+  "c:/Users/Musta/texcreate/Templates/Math/main.tex" 1635181642 384 33c206c44bbf48b68b1132aea1c1e587 ""
   "c:/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1634057785 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1634055994 1004 54797486969f23fa377b128694d548df ""
   "c:/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1634055994 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -51,12 +51,12 @@
   "c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1634081816 4399729 ba2bdf7099c8a2ba97051a2b802eaeb0 ""
   "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1634081954 2797803 c1f3b8d0bd62cf23d72170a59cb620be ""
   "c:/texlive/2021/texmf.cnf" 1634081795 713 e69b156964470283e0530f5060668171 ""
-  "main.aux" 1634950682 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "main.tex" 1634950680 351 8edd3ad0afe9b571bcda898574e41fcd ""
+  "main.aux" 1635181676 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.tex" 1635181642 384 33c206c44bbf48b68b1132aea1c1e587 ""
   "main.toc" 0 -1 0 "pdflatex"
-  "structure.tex" 1634950535 3094 5566e1e89836a3200ab7708d4b2608e5 ""
+  "structure.tex" 1635181673 3145 13e8ffb6931a0ab707a714fb08d8adf9 ""
   (generated)
-  "main.aux"
   "main.toc"
-  "main.log"
   "main.pdf"
+  "main.log"
+  "main.aux"

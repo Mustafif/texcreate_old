@@ -9,13 +9,13 @@ pub const DATE: &str = "\\date{}";
 #[derive(Deserialize)]
 pub struct Config{
     pub Project:Project,
+    pub Document: Document,
 }
 #[derive(Deserialize)]
 pub enum Template{
     Basic, 
     Math, 
-    Theatre,
-    Book    
+    Theatre,  
 }
 #[derive(Deserialize)]
 pub struct Project{
@@ -25,13 +25,20 @@ pub struct Project{
     pub template: String,
     pub project_name: String,
 }
+#[derive(Deserialize)]
+pub struct Document{
+    pub paper_size: String,
+    pub font_size: u8, 
+    pub document_class: String,
+}
+
+
 
 impl Template{
     pub fn list(){
         println!("Basic Template => Basic");
         println!("Math Template => Math");
-        println!("Theatre Template => Template");
-        //println!("Book");
+        println!("Theatre Template => Theatre");
     }
 }
 
@@ -48,7 +55,6 @@ impl Config{
             "Basic" => Template::Basic,
             "Math" => Template::Math,
             "Theatre" => Template::Theatre,
-            "Book" => Template::Book,
             _ => Template::Basic
         }
     }
@@ -66,9 +72,14 @@ impl Config{
         let mut file = std::fs::File::open(path).unwrap();
         let mut content = String::new();
         file.read_to_string(&mut content).unwrap();
+        // Project adjustments
         let mut content = content.replace(AUTHOR, &author);
         content = content.replace(TITLE, &title);
         content = content.replace(DATE, &date);
+        // Document adjustments 
+        content = content.replace("letterpaper", &self.Document.paper_size);
+        content = content.replace("11pt", &format!("{}pt", &self.Document.font_size));
+        content = content.replace("article", &self.Document.document_class);
         let mut file = std::fs::File::create(path).unwrap();
         file.write_all(content.as_bytes()).unwrap();
     }
@@ -76,9 +87,14 @@ impl Config{
 
 
 const CONFIG_TOML: &str = r#"[Project]
-author = ""
-title = ""
-date = ""
-project_name = ""
-template = ""
+author = "Author"
+title = "Title"
+date = "YYYY-MM-DD"
+project_name = "Project Name"
+template = "Math" #Make sure to have first letter upercased
+
+[Document]
+paper_size = "letterpaper"
+font_size = 11 #font size number
+document_class = "article"
 "#;

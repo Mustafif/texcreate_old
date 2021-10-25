@@ -22,16 +22,23 @@ $ texcreate create -n <name> -t <template>
 $ texcreate import -f config.toml
 # Note any <name>.toml works, but i prefer 
 # using config.toml
+# To create a config.toml, you can use the init command
+$ texcreate init
 ```
 
-### All Config.toml options
+### All config.toml options
 ```toml
 [Project]
 author = "Author"
 title = "Title"
-date = "Date"
+date = "YYYY-MM-DD"
 project_name = "Project Name"
-template = "Template"
+template = "Math" #Make sure to have first letter upercased
+
+[Document]
+paper_size = "letterpaper"
+font_size = 11 #font size number
+document_class = "article"
 ```
 More customizations will come in the future as I figure out more effective ways 
 to create the projects, and get more templates on the way.    

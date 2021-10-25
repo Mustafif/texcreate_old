@@ -1,6 +1,11 @@
 [Project]
-author = ""
-title = ""
-date = ""
-project_name = ""
-template = ""
+author = "Mustafif Khan"
+title = "Book"
+date = "\\today"
+project_name = "test"
+template = "Theatre" #Make sure to have first letter uppercased
+
+[Document]
+paper_size = "b5paper"
+font_size = 11
+document_class = "memoir"

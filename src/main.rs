@@ -1,14 +1,7 @@
 mod create;
-pub const BASIC: &str = "Templates/Basic/main.tex";
-pub const MATH_MAIN: &str = "Templates/Math/main.tex";
-pub const MATH_STRUCTURE: &str = "Templates/Math/structure.tex";
-pub const THEATRE: &str = "Templates/Theatre/main.tex";
-
-use create::basic::create_basic;
-use create::math::create_math;
-use create::theatre::create_theatre;
+use create::routes::*;
 use create::config::Config;
-use create::config::{Project, Template};
+use create::config::Template;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -44,12 +37,13 @@ fn main() {
         CLI::Init => Config::init(),
         CLI::Create{template, name, path} => {
             match (template.as_str(), path){
-                        ("Basic", Some(path)) => create_basic(&name, &path),
-                        ("Math", Some(path)) => create_math(&name, &path),
-                        ("Theatre", Some(path)) => create_theatre(&name, &path),
-                        ("Math", None) => create_math(&name, "."),
-                        ("Basic", None) => create_basic(&name, "."),
-                        _ => println!("Template not found")
+                        ("Basic", Some(path)) => create(&name, &path, BASIC),
+                        ("Math", Some(path)) => create(&name, &path, MATH),
+                        ("Basic", None) => create(&name, ".", BASIC),
+                        ("Math", None) => create(&name, ".", MATH),
+                        ("Theatre", Some(path)) => create(&name, &path, THEATRE),
+                        ("Theatre", None) => create(&name, ".", THEATRE),
+                        (_, _) => println!("Please specify a template"),
                     }
                 },
         CLI::List => Template::list(),
@@ -57,15 +51,15 @@ fn main() {
             let conf = Config::config(&file);
             match conf.from_template(){
                 Template::Basic => {
-                    create_basic(&conf.Project.project_name, ".");
+                    create(&conf.Project.project_name, ".", BASIC);
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
                 },
                 Template::Math => {
-                    create_math(&conf.Project.project_name, ".");
+                    create(&conf.Project.project_name, ".",MATH);
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
                 },
                 Template::Theatre => {
-                    create_theatre(&conf.Project.project_name, ".");
+                    create(&conf.Project.project_name, ".", THEATRE);
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
                 },
                 _ => println!("Error in {}, make sure template is valid", &file)

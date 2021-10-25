@@ -1,0 +1,16 @@
+# Fdb version 3
+["pdflatex"] 1635181737 "c:/Users/Musta/texcreate/Templates/Basic/main.tex" "main.pdf" "main" 1635181737
+  "c:/Users/Musta/texcreate/Templates/Basic/main.tex" 1635181735 337 f952254a3e39cc968c72a9df933f66b2 ""
+  "c:/texlive/2021/texmf-dist/fonts/map/fontname/texfonts.map" 1634057785 3524 cb3e574dea2d1052e39280babc910dc8 ""
+  "c:/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1634056815 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
+  "c:/texlive/2021/texmf-dist/tex/latex/base/article.cls" 1634058496 20144 0fe9067680219956678b52f12bdce8ee ""
+  "c:/texlive/2021/texmf-dist/tex/latex/base/size11.clo" 1634058496 8464 efc3cbec9b4f1a5665635866ad7e7dba ""
+  "c:/texlive/2021/texmf-dist/web2c/texmf.cnf" 1634058431 40042 fe981136cbb5f3715ab1b0e46e3d3892 ""
+  "c:/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1634081954 2797803 c1f3b8d0bd62cf23d72170a59cb620be ""
+  "c:/texlive/2021/texmf.cnf" 1634081795 713 e69b156964470283e0530f5060668171 ""
+  "main.aux" 1635181737 34 3985256e7290058c681f74d7a3565a19 ""
+  "main.tex" 1635181735 337 f952254a3e39cc968c72a9df933f66b2 ""
+  "structure.tex" 0 -1 0 ""
+  (generated)
+  "main.pdf"
+  "main.log"

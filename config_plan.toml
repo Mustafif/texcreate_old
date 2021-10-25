@@ -1,0 +1,11 @@
+[Project]
+author = ""
+title = ""
+date = ""
+project_name = ""
+template = "" #Make sure to have first letter upercased
+
+[Document]
+paper_size = ""
+font_size = 11 #font size number
+document_class = ""
