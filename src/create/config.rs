@@ -30,6 +30,7 @@ pub struct Document{
     pub paper_size: String,
     pub font_size: u8, 
     pub document_class: String,
+    pub packages: Vec<String>,
 }
 
 
@@ -83,13 +84,28 @@ impl Config{
         let mut file = std::fs::File::create(path).unwrap();
         file.write_all(content.as_bytes()).unwrap();
     }
+    pub fn add_packages(&self, path: &str){
+        if self.Document.packages.len() < 1{
+            return;
+        }
+
+        let mut file = std::fs::File::open(path).unwrap();
+        let mut content = String::new();
+        file.read_to_string(&mut content).unwrap();
+        let mut packages = String::new();
+        for package in &self.Document.packages{
+            packages.push_str(&format!("\\usepackage{{{}}}\n", package));
+        }
+        let mut file = std::fs::File::create(path).unwrap();
+        file.write_all(packages.as_bytes()).unwrap();
+    }
 }
 
 
 const CONFIG_TOML: &str = r#"[Project]
 author = "Author"
 title = "Title"
-date = "YYYY-MM-DD"
+date = "\today"
 project_name = "Project Name"
 template = "Math" #Make sure to have first letter upercased
 
@@ -97,4 +113,5 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
+packages = ["", ""]
 "#;

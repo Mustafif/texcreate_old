@@ -52,15 +52,18 @@ fn main() {
             match conf.from_template(){
                 Template::Basic => {
                     create(&conf.Project.project_name, ".", BASIC);
-                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
+                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
+                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },
                 Template::Math => {
                     create(&conf.Project.project_name, ".",MATH);
-                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
+                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
+                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },
                 Template::Theatre => {
                     create(&conf.Project.project_name, ".", THEATRE);
-                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name))
+                    conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
+                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },
                 _ => println!("Error in {}, make sure template is valid", &file)
             }

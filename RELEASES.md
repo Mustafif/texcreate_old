@@ -8,3 +8,6 @@
 - Added document options in config.toml
 - Reduced code repititon with routes.rs
 - All templates with a new main.tex & structure.tex standard
+
+# Version 0.3.1
+- Added packages support for Document options

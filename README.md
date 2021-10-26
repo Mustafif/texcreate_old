@@ -31,7 +31,7 @@ $ texcreate init
 [Project]
 author = "Author"
 title = "Title"
-date = "YYYY-MM-DD"
+date = "\today"
 project_name = "Project Name"
 template = "Math" #Make sure to have first letter upercased
 
@@ -39,6 +39,7 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
+packages = ["", ""]
 ```
 More customizations will come in the future as I figure out more effective ways 
 to create the projects, and get more templates on the way.    
