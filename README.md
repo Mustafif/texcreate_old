@@ -1,3 +1,7 @@
+![Current Version](https://img.shields.io/crates/v/texcreate?style=flat)
+![Downloads](https://img.shields.io/crates/d/texcreate?label=Downloads)
+![Lang](https://img.shields.io/github/languages/top/MKProj/texcreate)
+![License](https://img.shields.io/crates/l/texcreate?label=License)
 # TexCreate 
 ### Create LaTeX Projects with Prebuilt Templates
 
