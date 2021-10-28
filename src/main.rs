@@ -1,5 +1,6 @@
 mod create;
-use create::routes::*;
+mod routes;
+use routes::*;
 use create::config::Config;
 use create::config::Template;
 use structopt::StructOpt;

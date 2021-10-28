@@ -1,12 +1,5 @@
-/target
-/test
-config.toml
-texcreate_*
-*test
-*.pdf
-*.log
-*.toc
-*.aux
-*.latexmk
-*.bbl
-*.synctex.gz
+book
+test
+target
+rstex
+config_plan.toml
