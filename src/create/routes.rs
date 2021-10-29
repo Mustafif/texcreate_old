@@ -1,14 +1,25 @@
-pub const BASIC: &str = "Templates/Basic/";
-pub const MATH: &str = "Templates/Math/";
-pub const THEATRE: &str = "Templates/Theatre/";
+use super::template::*;
 use std::io::Write;
 
-pub fn load(path: &str) -> (String, String){
-    let main = std::fs::read_to_string(format!("{}main.tex", path)).unwrap();
-    let structure = std::fs::read_to_string(format!("{}structure.tex", path)).unwrap();
-    (main, structure)
+pub fn basic()-> (String, String){
+    (BASIC_MAIN.to_string(), BASIC_STRUCTURE.to_string())
+}
+pub fn math()-> (String, String){
+    (MATH_MAIN.to_string(), MATH_STRUCTURE.to_string())
 }
 
+pub fn theatre()-> (String, String){
+    (THEATRE_MAIN.to_string(), THEATRE_STRUCTURE.to_string())
+}
+
+pub fn load(template: &str)-> (String, String){
+    match template{
+        "Basic" => basic(),
+        "Math" => math(),
+        "Theatre" => theatre(),
+        _ => basic()
+    }
+}
 pub fn create(name: &str, file_path: &str, template: &str) {
     let (main, structure) = load(template);
     std::fs::create_dir(format!("{}/{}", file_path, name)).unwrap();

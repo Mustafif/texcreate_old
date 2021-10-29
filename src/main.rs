@@ -1,6 +1,5 @@
 mod create;
-mod routes;
-use routes::*;
+use create::routes::create;
 use create::config::Config;
 use create::config::Template;
 use structopt::StructOpt;
@@ -38,12 +37,12 @@ fn main() {
         CLI::Init => Config::init(),
         CLI::Create{template, name, path} => {
             match (template.as_str(), path){
-                        ("Basic", Some(path)) => create(&name, &path, BASIC),
-                        ("Math", Some(path)) => create(&name, &path, MATH),
-                        ("Basic", None) => create(&name, ".", BASIC),
-                        ("Math", None) => create(&name, ".", MATH),
-                        ("Theatre", Some(path)) => create(&name, &path, THEATRE),
-                        ("Theatre", None) => create(&name, ".", THEATRE),
+                        ("Basic", Some(path)) => create(&name, &path, "Basic"),
+                        ("Math", Some(path)) => create(&name, &path, "Math"),
+                        ("Basic", None) => create(&name, ".", "Basic"),
+                        ("Math", None) => create(&name, ".", "Math"),
+                        ("Theatre", Some(path)) => create(&name, &path, "Theatre"),
+                        ("Theatre", None) => create(&name, ".", "Theatre"),
                         (_, _) => println!("Please specify a template"),
                     }
                 },
@@ -52,17 +51,17 @@ fn main() {
             let conf = Config::config(&file);
             match conf.from_template(){
                 Template::Basic => {
-                    create(&conf.Project.project_name, ".", BASIC);
+                    create(&conf.Project.project_name, ".", "Basic");
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },
                 Template::Math => {
-                    create(&conf.Project.project_name, ".",MATH);
+                    create(&conf.Project.project_name, ".","Math");
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },
                 Template::Theatre => {
-                    create(&conf.Project.project_name, ".", THEATRE);
+                    create(&conf.Project.project_name, ".", "Theatre");
                     conf.adjust(&format!("./{}/{}.tex", conf.Project.project_name, conf.Project.project_name));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 },

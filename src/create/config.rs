@@ -2,6 +2,7 @@ use serde_derive::Deserialize;
 use toml::from_str;
 use std::io::prelude::*;
 use std::fs;
+use super::routes::*;
 pub const AUTHOR: &str = "\\author{}";
 pub const TITLE: &str = "\\title{}";
 pub const DATE: &str = "\\date{}";
@@ -62,7 +63,6 @@ impl Config{
             _ => Template::Basic
         }
     }
-    
     pub fn config(path: &str) -> Self{
         let config = std::fs::read_to_string(path).unwrap();
         let config: Self = from_str(&config).unwrap();
