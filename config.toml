@@ -3,10 +3,10 @@ author = "Mustafif Khan"
 title = "Book"
 date = "\\today"
 project_name = "test"
-template = "Basic" #Make sure to have first letter uppercased
+template = "Theatre" #Make sure to have first letter uppercased
 
 [Document]
 paper_size = "b5paper"
 font_size = 11
 document_class = "memoir"
-packages = ["amsmath", "amssymb", "amsthm", "amsfonts"]
+packages = ["amsmath", "amssymb","amsfonts", "test"]

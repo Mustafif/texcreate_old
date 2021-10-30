@@ -43,7 +43,8 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
-packages = ["", ""]
+packages = ["PhantomData", ""]
 ```
+> Note: Phantom Data is to show that the first element is not used, other packages after it will be added.  
 More customizations will come in the future as I figure out more effective ways 
 to create the projects, and get more templates on the way.    
