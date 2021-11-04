@@ -17,3 +17,5 @@ serde_derive = "1.0"
 serde = "1.0"
 toml = "0.5"
 mdbook = "0.4"
+reqwest = "0.11"
+tokio = { version = "1", features = ["full"] }

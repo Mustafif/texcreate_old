@@ -17,7 +17,7 @@ pub enum Template {
     Basic,
     Math,
     Theatre,
-    MKPB,
+    Book,
 }
 #[derive(Deserialize)]
 pub struct Project {
@@ -40,7 +40,7 @@ impl Template {
         println!("Basic Template => Basic");
         println!("Math Template => Math");
         println!("Theatre Template => Theatre");
-        println!("MKProjects Book Template => MKPB");
+        println!("MKProjects Book Template => Book");
     }
 }
 
@@ -55,7 +55,7 @@ impl Config {
             "Basic" => Template::Basic,
             "Math" => Template::Math,
             "Theatre" => Template::Theatre,
-            "MKPB" => Template::MKPB,
+            "Book" => Template::Book,
             _ => Template::Basic,
         }
     }

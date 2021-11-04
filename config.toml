@@ -1,12 +1,12 @@
 [Project]
-author = "Mustafif Khan"
-title = "Book"
-date = "\\today"
+author = "Author"
+title = "Title"
+date = "\today"
 project_name = "test"
-template = "Theatre" #Make sure to have first letter uppercased
+template = "Book" #Make sure to have first letter upercased
 
 [Document]
-paper_size = "b5paper"
-font_size = 11
-document_class = "memoir"
-packages = ["amsmath", "amssymb","amsfonts", "test"]
+paper_size = ""
+font_size = 0 #font size number
+document_class = ""
+packages = ["", ""]

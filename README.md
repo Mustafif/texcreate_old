@@ -47,4 +47,20 @@ packages = ["PhantomData", ""]
 ```
 > Note: Phantom Data is to show that the first element is not used, other packages after it will be added.  
 More customizations will come in the future as I figure out more effective ways 
-to create the projects, and get more templates on the way.    
+to create the projects, and get more templates on the way.
+
+### Book Template
+The Book template is the template that is used to create MKProject Books, which uses Rust's MDBook engine and a latex book template. This template is only avaiable through using `config.toml`, however it is a bit more special than the other templates where it will not use Document options (still keep it on the config.toml though).
+
+The Book template creates the following structure: 
+- `book`: The html output
+- `src`: The src directory of md files
+- `tex`: The tex directory of tex files
+- `.gitignore`" Specifies which files to ignore when using git
+- `book.toml`: The configuration file for the mdbook
+- `tex.zip`: Dispose if you'd like 
+
+Make sure to have the following installed: 
+- mdbook : `cargo install mdbook`
+- `unzip` : Should be preinstalled on most systems, verify with `unzip --version`
+ 

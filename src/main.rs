@@ -2,6 +2,7 @@ mod create;
 use create::config::Config;
 use create::config::Template;
 use create::routes::create;
+use create::mkproj_book::create as mkcreate;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -33,8 +34,8 @@ enum CLI {
         file: String,
     },
 }
-
-fn main() {
+#[tokio::main]
+async fn main() {
     let CLI = CLI::from_args();
     match CLI {
         CLI::Init => Config::init(),
@@ -78,7 +79,8 @@ fn main() {
                         conf.Project.project_name, conf.Project.project_name
                     ));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
-                }
+                },
+                Template::Book => mkcreate(&conf.Project.project_name, &conf.Project.title, &conf.Project.author).await.unwrap(),
                 _ => println!("Error in {}, make sure template is valid", &file),
             }
         }
