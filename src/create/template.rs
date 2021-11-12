@@ -39,84 +39,25 @@ pub const MATH_MAIN: &str = r#"% Math Template
     \newpage
     % Code goes here
 \end{document}"#;
-pub const MATH_STRUCTURE: &str = r#"% Packages goes here
+pub const MATH_STRUCTURE: &str = r#"% For math equations, theorems, symbols, etc
 \usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{amsfonts}
-\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsthm} 
+
+% For pictures
 \usepackage{graphicx}
-\usepackage{xcolor}
+\usepackage{tikz}
 
-\newcommand{\intoo}[2]{\mathopen{]}#1\,;#2\mathclose{[}}
-\newcommand{\ud}{\mathop{\mathrm{{}d}}\mathopen{}}
-\newcommand{\intff}[2]{\mathopen{[}#1\,;#2\mathclose{]}}
-\renewcommand{\qedsymbol}{$\blacksquare$}
-\newtheorem{notation}{Notation}[chapter]
+% Theorems
+\newtheorem{theorem}{Theorem}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
 
-% Boxed/framed environments
-\newtheoremstyle{blacknumbox}% Theorem style name
-{0pt}% Space above
-{0pt}% Space below
-{\normalfont}% Body font
-{}% Indent amount
-{\small\bf\sffamily\color{black}}% Theorem head font
-{\;}% Punctuation after theorem head
-{0.25em}% Space after theorem head
-{\small\sffamily\color{black}\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
-\thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries\color{black}---\nobreakspace#3.}} % Optional theorem note
-
-\newtheoremstyle{blacknumex}% Theorem style name
-{5pt}% Space above
-{5pt}% Space below
-{\normalfont}% Body font
-{} % Indent amount
-{\small\bf\sffamily}% Theorem head font
-{\;}% Punctuation after theorem head
-{0.25em}% Space after theorem head
-{\small\sffamily{\tiny\ensuremath{\blacksquare}}\nobreakspace\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
-\thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries---\nobreakspace#3.}}% Optional theorem note
-
-\newtheoremstyle{blacknumbox} % Theorem style name
-{0pt}% Space above
-{0pt}% Space below
-{\normalfont}% Body font
-{}% Indent amount
-{\small\bf\sffamily}% Theorem head font
-{\;}% Punctuation after theorem head
-{0.25em}% Space after theorem head
-{\small\sffamily\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
-\thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries---\nobreakspace#3.}}% Optional theorem note
-
-% Non-boxed/non-framed environments
-\newtheoremstyle{blacknum}% Theorem style name
-{5pt}% Space above
-{5pt}% Space below
-{\normalfont}% Body font
-{}% Indent amount
-{\small\bf\sffamily\color{black}}% Theorem head font
-{\;}% Punctuation after theorem head
-{0.25em}% Space after theorem head
-{\small\sffamily\color{black}\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% Theorem text (e.g. Theorem 2.1)
-\thmnote{\nobreakspace\the\thm@notefont\sffamily\bfseries\color{black}---\nobreakspace#3.}} % Optional theorem note
-\makeatother
-
-% Defines the theorem text style for each type of theorem to one of the three styles above
-\newcounter{dummy} 
-\numberwithin{dummy}{section}
-\theoremstyle{blacknumbox}
-\newtheorem{theoremeT}[dummy]{Theorem}
-\newtheorem{problem}{Problem}[chapter]
-\newtheorem{exerciseT}{Exercise}[chapter]
-\theoremstyle{blacknumex}
-\newtheorem{exampleT}{Example}[chapter]
-\theoremstyle{blacknumbox}
-\newtheorem{vocabulary}{Vocabulary}[chapter]
-\newtheorem{definitionT}{Definition}[section]
-\newtheorem{corollaryT}[dummy]{Corollary}
-\theoremstyle{blacknum}
-\newtheorem{proposition}[dummy]{Proposition}
-
-% All extra packages from config.toml goes here"#;
+% Extra packages from config.toml goes here"#;
 
 pub const THEATRE_MAIN: &str = r#"% Theatre template
 % MKProjects 2021 | www.mkproj.com
@@ -138,15 +79,16 @@ pub const THEATRE_MAIN: &str = r#"% Theatre template
     \tableofcontents
     \newpage
     % Characters go here 
-    \Character[]{}{} %[character description]{character name}{alias}
+    \Character[bob]{bob}{bob} %[character description]{character name}{alias}
     % Set length to longest character name 
     \setlength{\speakswidth}{\widthof{\speaksfont Name}}
     \addtolength{\speakswidth}{\Dlabelsep}
     \addtolength{\speaksindent}{\speakswidth}
     % Acts 
-    \act[] %[act name]
-    \scene[]%[scene name]
+    \act[act name] 
+    \scene[scene name]
     % To make character speak, use \<alias>speaks{text}
+    \bobspeaks{Bob is speaking}
 \end{document}
 "#;
 pub const THEATRE_STRUCTURE: &str = r#"% All packages goes here

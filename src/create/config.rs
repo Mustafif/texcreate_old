@@ -3,6 +3,7 @@ use serde_derive::Deserialize;
 use std::fs;
 use std::io::prelude::*;
 use toml::from_str;
+use serde_json::Error;
 pub const AUTHOR: &str = "\\author{}";
 pub const TITLE: &str = "\\title{}";
 pub const DATE: &str = "\\date{}";
@@ -34,13 +35,28 @@ pub struct Document {
     pub document_class: String,
     pub packages: Vec<String>,
 }
+#[derive(Deserialize)]
+pub struct List{
+    pub template: String, 
+    pub about: String,
+}
 
-impl Template {
-    pub fn list() {
-        println!("Basic Template => Basic");
-        println!("Math Template => Math");
-        println!("Theatre Template => Theatre");
-        println!("MKProjects Book Template => Book");
+impl List{
+    pub fn read(path: &str) -> Result<Vec<Self>, Error> {
+        let mut file = fs::File::open(path).expect("Unable to open file");
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).expect("Unable to read file");
+        let list: Vec<List> = serde_json::from_str(&contents)?;
+        Ok(list)
+    }
+    pub fn list(path: &str){
+        let json = Self::read(path).expect("Unable to read list.json");
+        println!("//////////////////////////////////////");
+        println!("// List of available templates:");
+        println!("//////////////////////////////////////");
+        for item in json{
+            println!("// {} => {}", item.template, item.about);
+        }
     }
 }
 
@@ -102,7 +118,7 @@ impl Config {
 const CONFIG_TOML: &str = r#"[Project]
 author = "Author"
 title = "Title"
-date = "\today"
+date = "\\today"
 project_name = "Project Name"
 template = "Math" #Make sure to have first letter upercased
 

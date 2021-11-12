@@ -1,0 +1,18 @@
+[
+    {
+        "template": "Basic",
+        "about": "A simple project with the basic setup you need"
+    },
+    {
+        "template": "Book", 
+        "about": "A project that utilizes both a markdown and tex format"
+    },
+    {
+        "template": "Math",
+        "about": "A project that utilizes math related packages"
+    },
+    {
+        "template": "Theatre", 
+        "about": "A project that is ideal to write scripts"
+    }
+]

@@ -1,12 +1,12 @@
 [Project]
 author = "Author"
 title = "Title"
-date = "\today"
+date = "\\today"
 project_name = "test"
-template = "Book" #Make sure to have first letter upercased
+template = "Theatre" #Make sure to have first letter upercased
 
 [Document]
-paper_size = ""
-font_size = 0 #font size number
-document_class = ""
+paper_size = "letterpaper"
+font_size = 12 #font size number
+document_class = "article"
 packages = ["", ""]
