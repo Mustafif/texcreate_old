@@ -1,9 +1,9 @@
 use super::routes::*;
 use serde_derive::Deserialize;
+use serde_json::Error;
 use std::fs;
 use std::io::prelude::*;
 use toml::from_str;
-use serde_json::Error;
 pub const AUTHOR: &str = "\\author{}";
 pub const TITLE: &str = "\\title{}";
 pub const DATE: &str = "\\date{}";
@@ -36,25 +36,26 @@ pub struct Document {
     pub packages: Vec<String>,
 }
 #[derive(Deserialize)]
-pub struct List{
-    pub template: String, 
+pub struct List {
+    pub template: String,
     pub about: String,
 }
 
-impl List{
+impl List {
     pub fn read(path: &str) -> Result<Vec<Self>, Error> {
         let mut file = fs::File::open(path).expect("Unable to open file");
         let mut contents = String::new();
-        file.read_to_string(&mut contents).expect("Unable to read file");
+        file.read_to_string(&mut contents)
+            .expect("Unable to read file");
         let list: Vec<List> = serde_json::from_str(&contents)?;
         Ok(list)
     }
-    pub fn list(path: &str){
+    pub fn list(path: &str) {
         let json = Self::read(path).expect("Unable to read list.json");
         println!("//////////////////////////////////////");
         println!("// List of available templates:");
         println!("//////////////////////////////////////");
-        for item in json{
+        for item in json {
             println!("// {} => {}", item.template, item.about);
         }
     }
@@ -75,10 +76,18 @@ impl Config {
             _ => Template::Basic,
         }
     }
-    pub fn config(path: &str) -> Self {
-        let config = std::fs::read_to_string(path).unwrap();
-        let config: Self = from_str(&config).unwrap();
-        config
+    pub fn config(path: &Option<String>) -> Self {
+        match path {
+            Some(path) => {
+                let config = std::fs::read_to_string(path).expect("Unable to read config file");
+                from_str(&config).expect("Unable to parse config file")
+            }
+            None => {
+                let config =
+                    std::fs::read_to_string("config.toml").expect("Unable to read config file");
+                from_str(&config).expect("Unable to parse config file")
+            }
+        }
     }
     pub fn adjust(&self, path: &str) {
         let title = format!("\\title{{{}}}", self.Project.title);
@@ -108,10 +117,15 @@ impl Config {
             .append(true)
             .open(path)
             .expect("Couldn't append to file");
-        
-            let p: Vec<String> = self.Document.packages.iter().map(|x| format!("\\usepackage{{{}}}", x)).collect();
-            let p = p.join("\n");
-            write!(file, "{}", p).expect("Couldn't write to file");
+
+        let p: Vec<String> = self
+            .Document
+            .packages
+            .iter()
+            .map(|x| format!("\\usepackage{{{}}}", x))
+            .collect();
+        let p = p.join("\n");
+        write!(file, "{}", p).expect("Couldn't write to file");
     }
 }
 

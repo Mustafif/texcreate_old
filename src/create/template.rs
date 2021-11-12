@@ -38,7 +38,8 @@ pub const MATH_MAIN: &str = r#"% Math Template
     \tableofcontents
     \newpage
     % Code goes here
-\end{document}"#;
+\end{document}
+"#;
 pub const MATH_STRUCTURE: &str = r#"% For math equations, theorems, symbols, etc
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -57,7 +58,8 @@ pub const MATH_STRUCTURE: &str = r#"% For math equations, theorems, symbols, etc
 \newtheorem{corollary}{Corollary}
 \newtheorem{proposition}{Proposition}
 
-% Extra packages from config.toml goes here"#;
+% Extra packages from config.toml goes here
+"#;
 
 pub const THEATRE_MAIN: &str = r#"% Theatre template
 % MKProjects 2021 | www.mkproj.com
@@ -68,37 +70,34 @@ pub const THEATRE_MAIN: &str = r#"% Theatre template
 % Packages goes into structure.tex file
 \input{structure.tex}
 % MetaData goes here
-\author{}
-\title{}
-\date{}
+\author{Author}
+\title{Title}
+\date{\today}
 
 \begin{document}
     \maketitle
     \pagenumbering{arabic}
     \newpage
     \tableofcontents
-    \newpage
-    % Characters go here 
+    % Characters go here
     \Character[bob]{bob}{bob} %[character description]{character name}{alias}
-    % Set length to longest character name 
+    % Set length to longest character name
     \setlength{\speakswidth}{\widthof{\speaksfont Name}}
     \addtolength{\speakswidth}{\Dlabelsep}
     \addtolength{\speaksindent}{\speakswidth}
-    % Acts 
-    \act[act name] 
-    \scene[scene name]
+    % Acts
+    \act[]
+    \scene[]
     % To make character speak, use \<alias>speaks{text}
+    \begin{drama}
     \bobspeaks{Bob is speaking}
-\end{document}
+    \end{drama}
+\end{document
 "#;
 pub const THEATRE_STRUCTURE: &str = r#"% All packages goes here
 \usepackage{dramatist}
 \usepackage{calc}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{\thetitle}
-\rhead{\theauthor}
-\rfoot{Page \thepage}
-% All config.toml extra packages goes here"#;
+% All config.toml extra packages goes here\usepackage{}
+"#;

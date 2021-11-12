@@ -1,8 +1,8 @@
 mod create;
 use create::config::Config;
-use create::config::{List,Template};
-use create::routes::create;
+use create::config::{List, Template};
 use create::mkproj_book::create as mkcreate;
+use create::routes::create;
 use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 #[structopt(
@@ -12,7 +12,7 @@ use structopt::StructOpt;
 /// All TexCreate Subcommands
 pub enum CLI {
     #[structopt(about = "Initialize a config.toml file")]
-    /// Initialize with `texcreate init` 
+    /// Initialize with `texcreate init`
     Init,
     #[structopt(about = "Create a LaTeX Project with a specified name & template")]
     /// Create project with `texcreate create -t <template> -n <name>`
@@ -38,7 +38,7 @@ pub enum CLI {
     /// Create project with a config.toml file `texcreate import -f config.toml`
     Import {
         #[structopt(short, long)]
-        file: String,
+        file: Option<String>,
     },
 }
 #[tokio::main]
@@ -86,9 +86,15 @@ async fn main() {
                         conf.Project.project_name, conf.Project.project_name
                     ));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
-                },
-                Template::Book => mkcreate(&conf.Project.project_name, &conf.Project.title, &conf.Project.author).await.unwrap(),
-                _ => println!("Error in {}, make sure template is valid", &file),
+                }
+                Template::Book => mkcreate(
+                    &conf.Project.project_name,
+                    &conf.Project.title,
+                    &conf.Project.author,
+                )
+                .await
+                .unwrap(),
+                _ => println!("Make sure template is valid"),
             }
         }
     }
