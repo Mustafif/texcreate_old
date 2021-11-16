@@ -1,14 +1,26 @@
-use texcreate_lib::Templates::book::create as mkcreate;
-use texcreate_lib::Config::{config::Config, List, Template};
-use texcreate_lib::routes::create;
 use structopt::StructOpt;
+use texcreate_lib::routes::create;
+use texcreate_lib::Config::{config::Config, List, Template};
+use texcreate_lib::Templates::book::create as mkcreate;
+
+#[macro_use]
+macro_rules! import_temp {
+    ($c:expr, $x: expr) => {
+        create(&$c.Project.project_name, ".", $x);
+        $c.adjust(&format!(
+            "./{}/{}.tex",
+            $c.Project.project_name, $c.Project.project_name
+        ));
+        $c.add_packages(&format!("./{}/structure.tex", $c.Project.project_name));
+    };
+}
 #[derive(StructOpt, Debug)]
 #[structopt(
     name = "texcreate",
     about = "Create LaTeX projects using prebuilt templates"
 )]
 /// All TexCreate Subcommands
-pub enum CLI {
+enum CLI {
     #[structopt(name = "update", about = "Updates to latest version")]
     Update,
     #[structopt(about = "Initialize a config.toml file")]
@@ -43,8 +55,8 @@ pub enum CLI {
 }
 #[tokio::main]
 async fn main() {
-    let CLI = CLI::from_args();
-    match CLI {
+    let cli = CLI::from_args();
+    match cli {
         CLI::Update => {
             let _ = std::process::Command::new("cargo")
                 .arg("install")
@@ -58,43 +70,24 @@ async fn main() {
             name,
             path,
         } => match (template.as_str(), path) {
-            (temp, path) => create(temp, &path, temp),
+            (temp, Some(path)) => create(temp, &path, temp),
+            (_, None) => println!("Error, not valid arguments passed"),
         },
         CLI::List => List::list("list.json"),
         CLI::Import { file } => {
             let conf = Config::config(&file);
             match conf.from_template() {
                 Template::Basic => {
-                    create(&conf.Project.project_name, ".", "Basic");
-                    conf.adjust(&format!(
-                        "./{}/{}.tex",
-                        conf.Project.project_name, conf.Project.project_name
-                    ));
-                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
+                    import_temp!(conf, "Basic");
                 }
                 Template::Math => {
-                    create(&conf.Project.project_name, ".", "Math");
-                    conf.adjust(&format!(
-                        "./{}/{}.tex",
-                        conf.Project.project_name, conf.Project.project_name
-                    ));
-                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
+                    import_temp!(conf, "Math");
                 }
                 Template::Theatre => {
-                    create(&conf.Project.project_name, ".", "Theatre");
-                    conf.adjust(&format!(
-                        "./{}/{}.tex",
-                        conf.Project.project_name, conf.Project.project_name
-                    ));
-                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
+                    import_temp!(conf, "Theatre");
                 }
                 Template::Code => {
-                    create(&conf.Project.project_name, ".", "Code");
-                    conf.adjust(&format!(
-                        "./{}/{}.tex",
-                        conf.Project.project_name, conf.Project.project_name
-                    ));
-                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
+                    import_temp!(conf, "Code");
                 }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,
@@ -103,8 +96,7 @@ async fn main() {
                 )
                 .await
                 .unwrap(),
-                _ => println!("Make sure template is valid"),
             }
-        },
+        }
     }
 }
