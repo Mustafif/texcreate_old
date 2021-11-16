@@ -17,11 +17,10 @@ fn load(template: &str) -> (String, String) {
 
 pub fn create(name: &str, file_path: &Option<String>, template: &str) {
     // Sanity check for file_path
-    if let file_path = Some(path){
-        file_path = Some(path);
-    } else {
-        file_path = "."
-    }
+    let file_path = match file_path{
+        Some(path) => path,
+        None => "."
+    };
     let (main, structure) = load(template);
     std::fs::create_dir(format!("{}/{}", file_path, name)).unwrap();
     let mut main_file =
