@@ -58,15 +58,7 @@ async fn main() {
             name,
             path,
         } => match (template.as_str(), path) {
-            ("Basic", Some(path)) => create(&name, &path, "Basic"),
-            ("Math", Some(path)) => create(&name, &path, "Math"),
-            ("Basic", None) => create(&name, ".", "Basic"),
-            ("Math", None) => create(&name, ".", "Math"),
-            ("Theatre", Some(path)) => create(&name, &path, "Theatre"),
-            ("Theatre", None) => create(&name, ".", "Theatre"),
-            ("Code", Some(path)) => create(&name, &path, "Code"), 
-            ("Code", None) => create(&name, ".", "Code"),
-            (_, _) => println!("Please specify a template"),
+            (temp, path) => create(temp, &path, temp),
         },
         CLI::List => List::list("list.json"),
         CLI::Import { file } => {
