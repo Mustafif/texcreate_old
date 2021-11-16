@@ -3,10 +3,9 @@ use texcreate_lib::routes::create;
 use texcreate_lib::Config::{config::Config, List, Template};
 use texcreate_lib::Templates::book::create as mkcreate;
 
-#[macro_use]
 macro_rules! import_temp {
     ($c:expr, $x: expr) => {
-        create(&$c.Project.project_name, ".", $x);
+        create(&$c.Project.project_name, &None , $x);
         $c.adjust(&format!(
             "./{}/{}.tex",
             $c.Project.project_name, $c.Project.project_name
@@ -70,8 +69,7 @@ async fn main() {
             name,
             path,
         } => match (template.as_str(), path) {
-            (temp, Some(path)) => create(temp, &path, temp),
-            (_, None) => println!("Error, not valid arguments passed"),
+            (temp, path) => create(temp, &path, temp),
         },
         CLI::List => List::list("list.json"),
         CLI::Import { file } => {
