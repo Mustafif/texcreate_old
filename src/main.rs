@@ -1,8 +1,6 @@
-mod create;
-use create::config::Config;
-use create::config::{List, Template};
-use create::mkproj_book::create as mkcreate;
-use create::routes::create;
+use texcreate_lib::Templates::book::create as mkcreate;
+use texcreate_lib::Config::{config::Config, List, Template};
+use texcreate_lib::routes::create;
 use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 #[structopt(
@@ -11,6 +9,8 @@ use structopt::StructOpt;
 )]
 /// All TexCreate Subcommands
 pub enum CLI {
+    #[structopt(name = "update", about = "Updates to latest version")]
+    Update,
     #[structopt(about = "Initialize a config.toml file")]
     /// Initialize with `texcreate init`
     Init,
@@ -45,6 +45,13 @@ pub enum CLI {
 async fn main() {
     let CLI = CLI::from_args();
     match CLI {
+        CLI::Update => {
+            let _ = std::process::Command::new("cargo")
+                .arg("install")
+                .arg("texcreate")
+                .spawn()
+                .expect("Failed to install latest version");
+        }
         CLI::Init => Config::init(),
         CLI::Create {
             template,
@@ -57,6 +64,8 @@ async fn main() {
             ("Math", None) => create(&name, ".", "Math"),
             ("Theatre", Some(path)) => create(&name, &path, "Theatre"),
             ("Theatre", None) => create(&name, ".", "Theatre"),
+            ("Code", Some(path)) => create(&name, &path, "Code"), 
+            ("Code", None) => create(&name, ".", "Code"),
             (_, _) => println!("Please specify a template"),
         },
         CLI::List => List::list("list.json"),
@@ -87,6 +96,14 @@ async fn main() {
                     ));
                     conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
                 }
+                Template::Code => {
+                    create(&conf.Project.project_name, ".", "Code");
+                    conf.adjust(&format!(
+                        "./{}/{}.tex",
+                        conf.Project.project_name, conf.Project.project_name
+                    ));
+                    conf.add_packages(&format!("./{}/structure.tex", conf.Project.project_name));
+                }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,
                     &conf.Project.title,
@@ -96,6 +113,6 @@ async fn main() {
                 .unwrap(),
                 _ => println!("Make sure template is valid"),
             }
-        }
+        },
     }
 }

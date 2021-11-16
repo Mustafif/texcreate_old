@@ -34,6 +34,5 @@ pub async fn create(project_name: &str, title: &str, author: &str) -> Result<(),
         .build()?;
     println!("Downloading tex.zip into project...");
     tex_create(&path(project_name)).await.unwrap();
-
     Ok(())
 }

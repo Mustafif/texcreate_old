@@ -1,25 +1,20 @@
-use super::template::*;
+use crate::Templates::*;
 use std::io::Write;
 
-pub fn basic() -> (String, String) {
-    (BASIC_MAIN.to_string(), BASIC_STRUCTURE.to_string())
-}
-pub fn math() -> (String, String) {
-    (MATH_MAIN.to_string(), MATH_STRUCTURE.to_string())
+fn const_conv(main: &str, structure: &str)-> (String, String) {
+    (main.to_string(), structure.to_string())
 }
 
-pub fn theatre() -> (String, String) {
-    (THEATRE_MAIN.to_string(), THEATRE_STRUCTURE.to_string())
-}
-
-pub fn load(template: &str) -> (String, String) {
+fn load(template: &str) -> (String, String) {
     match template {
-        "Basic" => basic(),
-        "Math" => math(),
-        "Theatre" => theatre(),
-        _ => basic(),
+        "Basic" => const_conv(basic::BASIC_MAIN, basic::BASIC_STRUCTURE),
+        "Code" => const_conv(code::CODE_MAIN, code::CODE_STRUCTURE),
+        "Math" => const_conv(math::MATH_MAIN, math::MATH_STRUCTURE),
+        "Theatre" => const_conv(theatre::THEATRE_MAIN, theatre::THEATRE_STRUCTURE),
+        _ => panic!("Unknown template: {}", template),
     }
 }
+
 pub fn create(name: &str, file_path: &str, template: &str) {
     let (main, structure) = load(template);
     std::fs::create_dir(format!("{}/{}", file_path, name)).unwrap();
