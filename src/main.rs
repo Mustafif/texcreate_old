@@ -69,7 +69,7 @@ async fn main() {
             name,
             path,
         } => match (template.as_str(), path) {
-            (temp, path) => create(temp, &path, temp),
+            (temp, path) => create(&name, &path, temp),
         },
         CLI::List => List::list("list.json"),
         CLI::Import { file } => {
