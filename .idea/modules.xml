@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/texcreate.iml" filepath="$PROJECT_DIR$/.idea/texcreate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/texcreate2.iml" filepath="$PROJECT_DIR$/.idea/texcreate2.iml" />
     </modules>
   </component>
 </project>

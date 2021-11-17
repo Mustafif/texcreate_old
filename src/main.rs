@@ -88,7 +88,7 @@ async fn main() {
                     import_temp!(conf, "Code");
                 }
                 Template::Novel =>{
-                    import_temp!(conf, "Novel")
+                    import_temp!(conf, "Novel");
                 }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,
