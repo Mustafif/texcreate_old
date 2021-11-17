@@ -6,5 +6,6 @@ pub enum Template {
     Math,
     Theatre,
     Book,
-    Code, 
+    Code,
+    Novel,
 }

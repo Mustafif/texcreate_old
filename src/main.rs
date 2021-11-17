@@ -87,13 +87,16 @@ async fn main() {
                 Template::Code => {
                     import_temp!(conf, "Code");
                 }
+                Template::Novel =>{
+                    import_temp!(conf, "Novel")
+                }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,
                     &conf.Project.title,
                     &conf.Project.author,
                 )
                 .await
-                .unwrap(),
+                .expect("Couldn't make Book Project"),
             }
         }
     }

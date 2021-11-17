@@ -38,6 +38,7 @@ impl Config {
             "Theatre" => Template::Theatre,
             "Book" => Template::Book,
             "Code" => Template::Code,
+            "Novel" => Template::Novel,
             _ => Template::Basic,
         }
     }
