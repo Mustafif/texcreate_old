@@ -18,5 +18,9 @@
     {
         "template": "Code", 
         "about": "A project ideal to document about programming"
+    },
+    {
+        "template": "Novel",
+        "about": "A project to begin writing that novel you always delay"
     }
 ]
