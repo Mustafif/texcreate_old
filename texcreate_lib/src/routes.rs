@@ -11,7 +11,7 @@ fn load(template: &str) -> (String, String) {
         "Code" => const_conv(code::CODE_MAIN, code::CODE_STRUCTURE),
         "Math" => const_conv(math::MATH_MAIN, math::MATH_STRUCTURE),
         "Theatre" => const_conv(theatre::THEATRE_MAIN, theatre::THEATRE_STRUCTURE),
-        "Novel" => const_conv(novel::NOVEL_MAIN, novel::NOVEL_STRUCTURE)
+        "Novel" => const_conv(novel::NOVEL_MAIN, novel::NOVEL_STRUCTURE),
         _ => panic!("Unknown template: {}", template),
     }
 }
