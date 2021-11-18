@@ -22,5 +22,9 @@
     {
         "template": "Novel",
         "about": "A project to begin writing that novel you always delay"
+    },
+    {
+        "template": "Beamer",
+        "about": "A project to start making presentations in LaTeX"
     }
 ]

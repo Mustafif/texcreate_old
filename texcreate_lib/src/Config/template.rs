@@ -8,4 +8,5 @@ pub enum Template {
     Book,
     Code,
     Novel,
+    Beamer,
 }

@@ -12,6 +12,7 @@ fn load(template: &str) -> (String, String) {
         "Math" => const_conv(math::MATH_MAIN, math::MATH_STRUCTURE),
         "Theatre" => const_conv(theatre::THEATRE_MAIN, theatre::THEATRE_STRUCTURE),
         "Novel" => const_conv(novel::NOVEL_MAIN, novel::NOVEL_STRUCTURE),
+        "Beamer" => const_conv(beamer::BEAMER_MAIN, beamer::BEAMER_STRUCTURE),
         _ => panic!("Unknown template: {}", template),
     }
 }

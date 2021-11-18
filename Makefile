@@ -1,7 +1,8 @@
 build:
-	make update
 	make git
 	make publish_lib
+	make update
+	make git
 	make publish
 update:
 	cargo update

@@ -39,6 +39,7 @@ impl Config {
             "Book" => Template::Book,
             "Code" => Template::Code,
             "Novel" => Template::Novel,
+            "Beamer" => Template::Beamer,
             _ => Template::Basic,
         }
     }
@@ -70,6 +71,13 @@ impl Config {
         // Document adjustments
         content = content.replace("letterpaper", &self.Document.paper_size);
         content = content.replace("11pt", &format!("{}pt", &self.Document.font_size));
+        // For Beamer class only, panics if doc class is not Beamer
+        if content.contains("beamer") && self.Project.template == "Beamer" {
+            s = "For Beamer Template keep document class as beamer!!!";
+            panic!(s);
+        }
+
+        }
         content = content.replace("article", &self.Document.document_class);
         let mut file = std::fs::File::create(path).unwrap();
         file.write_all(content.as_bytes()).unwrap();

@@ -90,6 +90,9 @@ async fn main() {
                 Template::Novel =>{
                     import_temp!(conf, "Novel");
                 }
+                Template::Beamer => {
+                    import_temp!(conf, "Beamer");
+                }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,
                     &conf.Project.title,
