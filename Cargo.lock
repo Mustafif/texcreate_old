@@ -1809,8 +1809,6 @@ dependencies = [
 [[package]]
 name = "texcreate_lib"
 version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e1cd6692edd59e9f009583d080fe38c69f74f9722f4504c6578f054adfe2cbe"
 dependencies = [
  "mdbook",
  "reqwest",

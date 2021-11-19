@@ -1,6 +1,7 @@
 [book]
-authors = ["Mustafif Khan"]
+authors = ["Mustafif"]
 language = "en"
 multilingual = false
-src = "src"
-title = "Book"
+src = "doc"
+title = "TexCreate"
+

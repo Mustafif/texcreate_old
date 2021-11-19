@@ -72,8 +72,9 @@ impl Config {
         content = content.replace("letterpaper", &self.Document.paper_size);
         content = content.replace("11pt", &format!("{}pt", &self.Document.font_size));
         // For Beamer class only, panics if doc class is not Beamer
-        if content.contains("beamer") && self.Project.template == "Beamer" {
-            panic!("For Beamer Template keep document class as beamer");
+        if self.Project.template == "Beamer" && self.Document.document_class != "beamer" {
+            eprintln!("Beamer Template must have a document class as beamer!!!");
+            return;
         }
         content = content.replace("article", &self.Document.document_class);
         let mut file = std::fs::File::create(path).unwrap();
