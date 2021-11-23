@@ -2,7 +2,9 @@ use structopt::StructOpt;
 use texcreate_lib::routes::create;
 use texcreate_lib::Config::{config::Config, List, Template};
 use texcreate_lib::Templates::book::create as mkcreate;
+use open::that;
 
+const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
     ($c:expr, $x: expr) => {
         create(&$c.Project.project_name, &None , $x);
@@ -51,11 +53,17 @@ enum CLI {
         #[structopt(short, long)]
         file: Option<String>,
     },
+    #[structopt(about="Opens the TexCreate documentation")]
+    Doc
 }
 #[tokio::main]
 async fn main() {
     let cli = CLI::from_args();
     match cli {
+        CLI::Doc => {
+            println!("Opening {}", TEXDOC);
+            that(TEXDOC).unwrap();
+        },
         CLI::Update => {
             let _ = std::process::Command::new("cargo")
                 .arg("install")
