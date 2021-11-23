@@ -9,4 +9,4 @@ template = "Code" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 12 #font size number
 document_class = "book"
-packages = ["", ""]
+packages = ["amsmath"]

@@ -9,7 +9,7 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
-packages = ["PhantomData", ""]
+packages = []
 "#;
 
 pub const AUTHOR: &str = "\\author{}";
