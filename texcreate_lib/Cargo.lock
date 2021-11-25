@@ -1829,6 +1829,7 @@ dependencies = [
 name = "texcreate_lib"
 version = "0.1.5"
 dependencies = [
+ "log",
  "mdbook",
  "reqwest",
  "serde",

@@ -71,7 +71,10 @@ async fn main() {
                 .spawn()
                 .expect("Failed to install latest version");
         }
-        CLI::Init => Config::init(),
+        CLI::Init => {
+            println!("Creating config.toml...");
+            Config::init()
+        },
         CLI::Create {
             template,
             name,

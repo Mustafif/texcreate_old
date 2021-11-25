@@ -43,11 +43,10 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
-packages = ["PhantomData", ""]
+packages = []
 ```
-> Note: Phantom Data is to show that the first element is not used, other packages after it will be added.  
-More customizations will come in the future as I figure out more effective ways 
-to create the projects, and get more templates on the way.
+> Note: Packages Phantom Data bug has been fixed to my knowledge, however if any occurences where
+> the first package isn't added, please contact me at [mustafif0929@gmail.com](mailto:mustafif0929@gmail.com)
 
 ### Book Template
 The Book template is the template that is used to create MKProject Books, which uses Rust's MDBook engine and a latex book template. This template is only avaiable through using `config.toml`, however it is a bit more special than the other templates where it will not use Document options (still keep it on the config.toml though).

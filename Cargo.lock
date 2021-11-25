@@ -1299,6 +1299,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
+name = "pretty_env_logger"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "926d36b9553851b8b0005f1275891b392ee4d2d833852c417ed025477350fb9d"
+dependencies = [
+ "env_logger",
+ "log",
+]
+
+[[package]]
 name = "proc-macro-error"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1828,8 +1838,10 @@ dependencies = [
 name = "texcreate"
 version = "0.7.2"
 dependencies = [
+ "log",
  "mdbook",
  "open",
+ "pretty_env_logger",
  "reqwest",
  "serde",
  "serde_derive",
@@ -1844,6 +1856,7 @@ dependencies = [
 name = "texcreate_lib"
 version = "0.1.5"
 dependencies = [
+ "log",
  "mdbook",
  "reqwest",
  "serde",

@@ -2,6 +2,7 @@ use crate::Templates::*;
 use std::io::Write;
 use std::path::Path;
 use std::fs::create_dir;
+use log::warn;
 fn const_conv(main: &str, structure: &str)-> (String, String) {
     (main.to_string(), structure.to_string())
 }
@@ -31,11 +32,12 @@ pub fn create(name: &str, file_path: &Option<String>, template: &str) {
     // Check if directory exists, if it does, use def
     // else create the directory 
     if Path::new(&path).exists(){
-        println!("Creating {}", &def_path);
+        let f = format!("Note: {} exists, creating {} instead\n", &path, &def_path);
+        println!("{}",f);
         create_dir(&def_path).expect("Error in creating directory");
         p = def_path;
     } else {
-        println!("Creating {}", &def_path);
+        println!("Creating {}", &path);
         create_dir(&path).expect("Error in creating directory");
         p = path;
     }

@@ -2,11 +2,11 @@
 author = "Author"
 title = "Title"
 date = "\\today"
-project_name = "test"
-template = "Code" #Make sure to have first letter upercased
+project_name = "Project Name"
+template = "Math" #Make sure to have first letter upercased
 
 [Document]
 paper_size = "letterpaper"
-font_size = 12 #font size number
-document_class = "book"
-packages = ["amsmath"]
+font_size = 11 #font size number
+document_class = "article"
+packages = []
