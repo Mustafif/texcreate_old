@@ -9,6 +9,7 @@ repository = "https://github.com/MKProj/texcreate.git"
 homepage = "https://mkproj.com"
 github = "https://github.com/MKProj/"
 documentation = "https://docs.rs/texcreate_lib/"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -23,5 +24,3 @@ reqwest = "0.11"
 tokio = { version = "1", features = ["full"] }
 texcreate_lib = {path = "texcreate_lib"}
 open = "2"
-log = "0.4"
-pretty_env_logger = "0.4"

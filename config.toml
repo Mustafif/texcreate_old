@@ -2,8 +2,8 @@
 author = "Author"
 title = "Title"
 date = "\\today"
-project_name = "Project Name"
-template = "Math" #Make sure to have first letter upercased
+project_name = "test"
+template = "Lachaise" #Make sure to have first letter upercased
 
 [Document]
 paper_size = "letterpaper"

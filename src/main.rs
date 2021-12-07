@@ -22,6 +22,7 @@ macro_rules! import_temp {
 )]
 /// All TexCreate Subcommands
 enum CLI {
+    /// Update TexCreate
     #[structopt(name = "update", about = "Updates to latest version")]
     Update,
     #[structopt(about = "Initialize a config.toml file")]
@@ -59,6 +60,7 @@ enum CLI {
 #[tokio::main]
 async fn main() {
     let cli = CLI::from_args();
+    // Match CLI subcommands 
     match cli {
         CLI::Doc => {
             println!("Opening {}", TEXDOC);
@@ -103,6 +105,9 @@ async fn main() {
                 }
                 Template::Beamer => {
                     import_temp!(conf, "Beamer");
+                }
+                Template::Lachaise => {
+                    import_temp!(conf, "Lachaise");
                 }
                 Template::Book => mkcreate(
                     &conf.Project.project_name,

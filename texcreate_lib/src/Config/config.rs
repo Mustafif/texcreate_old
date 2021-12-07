@@ -40,6 +40,7 @@ impl Config {
             "Code" => Template::Code,
             "Novel" => Template::Novel,
             "Beamer" => Template::Beamer,
+            "Lachaise" => Template::Lachaise,
             _ => Template::Basic,
         }
     }

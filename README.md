@@ -5,10 +5,6 @@
 # TexCreate 
 ### Create LaTeX Projects with Prebuilt Templates
 
-Currently only has two templates, but more are on the way: 
-- Basic Template : Good for a single file project
-- Math Template : Good for a math project 
-
 ## Install
 You can install via `Cargo`: 
 ```sh

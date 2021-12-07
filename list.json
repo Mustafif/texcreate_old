@@ -26,5 +26,9 @@
     {
         "template": "Beamer",
         "about": "A project to start making presentations in LaTeX"
+    },
+    {
+        "template": "Lachaise",
+        "about": "A project to write neat, nice documents/assignments"
     }
 ]
