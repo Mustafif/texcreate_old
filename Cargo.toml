@@ -22,5 +22,5 @@ toml = "0.5"
 mdbook = "0.4"
 reqwest = "0.11"
 tokio = { version = "1", features = ["full"] }
-texcreate_lib = {path = "texcreate_lib"}
+texcreate_lib = {path = "texcreate_lib", version= "0.1"}
 open = "2"
