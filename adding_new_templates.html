@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Beamer Template Example - TexCreate</title>
+        <title>Adding New Templates - TexCreate</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="chapter-item expanded "><a href="beamer_template_example.html" class="active"><strong aria-hidden="true">3.</strong> Beamer Template Example</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Development</li><li class="chapter-item expanded "><a href="adding_new_templates.html" class="active"><strong aria-hidden="true">3.</strong> Adding New Templates</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,7 +142,185 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="beamer-template-example"><a class="header" href="#beamer-template-example">Beamer Template Example</a></h1>
+                        <h1 id="adding-new-templates"><a class="header" href="#adding-new-templates">Adding New Templates</a></h1>
+<p>In TexCreate, templates are the foundation of the program, and most updates are just 
+adding new templates. So how do we add one? Well there's a few steps to it, but by the end 
+we should have a working template. </p>
+<blockquote>
+<p>Note: Some templates may need special attention, such as <code>book</code> and <code>beamer</code></p>
+</blockquote>
+<p>A general new template contains the following files:</p>
+<ul>
+<li><code>main.tex</code></li>
+<li><code>structure.tex</code></li>
+</ul>
+<p>The first is to contain the source code of the document, while structure.tex contains 
+all the preamble for the document. So to add a new template...</p>
+<ol>
+<li>Create a file in <code>texcreate_lib/src/Templates/&lt;temp_name&gt;.rs</code> and create 2 public
+constants that are the &lt;temp_name&gt;_MAIN and &lt;temp_name&gt;_STRUCTURE.</li>
+<li>Add the constants in the <code>mod.rs</code> file in the same directory as the templates:</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub mod basic;
+pub mod book;
+pub mod math;
+pub mod code;
+pub mod theatre;
+pub mod novel;
+pub mod beamer;
+pub mod lachaise;
+pub mod &lt;temp_name&gt;;
+
+use basic::*;
+use book::*;
+use math::*;
+use code::*;
+use theatre::*;
+use novel::*;
+use beamer::*;
+use lachaise::*;
+use &lt;temp_name&gt;::*;
+<span class="boring">}
+</span></code></pre></pre>
+<ol start="3">
+<li>Add a match pattern to <code>load()</code> in <code>texcreate_lib/src/routes.rs</code> : </li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn load(template: &amp;str) -&gt; (String, String) {
+    match template {
+        &quot;Basic&quot; =&gt; const_conv(basic::BASIC_MAIN, basic::BASIC_STRUCTURE),
+        &quot;Code&quot; =&gt; const_conv(code::CODE_MAIN, code::CODE_STRUCTURE),
+        &quot;Math&quot; =&gt; const_conv(math::MATH_MAIN, math::MATH_STRUCTURE),
+        &quot;Theatre&quot; =&gt; const_conv(theatre::THEATRE_MAIN, theatre::THEATRE_STRUCTURE),
+        &quot;Novel&quot; =&gt; const_conv(novel::NOVEL_MAIN, novel::NOVEL_STRUCTURE),
+        &quot;Beamer&quot; =&gt; const_conv(beamer::BEAMER_MAIN, beamer::BEAMER_STRUCTURE),
+        &quot;Lachaise&quot; =&gt; const_conv(lachaise::LACHAISE_MAIN, lachaise::LACHAISE_STRUCTURE),
+        &quot;&lt;temp_name&gt;&quot; =&gt; const_conv(&lt;temp_name&gt;::&lt;temp_name&gt;_MAIN, &lt;temp_name&gt;::&lt;temp_name&gt;_STRUCTURE),
+        _ =&gt; panic!(&quot;Unknown template: {}&quot;, template),
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol start="4">
+<li>Add the template to <code>texcreate_lib/src/Config/template.rs</code> <code>Template</code> enum: </li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Deserialize)]
+pub enum Template {
+    Basic,
+    Math,
+    Theatre,
+    Book,
+    Code,
+    Novel,
+    Beamer,
+    Lachaise, 
+    &lt;temp_name&gt;,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<ol start="5">
+<li>Inside <code>texcreate_lib/src/Config/config.rs</code>, add the template name to <code>from_template()</code>: </li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Config {
+    pub fn init() {
+        let mut file = fs::File::create(&quot;config.toml&quot;).expect(&quot;Unable to create config file&quot;);
+        file.write_all(CONFIG_TOML.as_bytes())
+            .expect(&quot;Unable to write to config file&quot;);
+    }
+    pub fn from_template(&amp;self) -&gt; Template {
+        match self.Project.template.as_str() {
+            &quot;Basic&quot; =&gt; Template::Basic,
+            &quot;Math&quot; =&gt; Template::Math,
+            &quot;Theatre&quot; =&gt; Template::Theatre,
+            &quot;Book&quot; =&gt; Template::Book,
+            &quot;Code&quot; =&gt; Template::Code,
+            &quot;Novel&quot; =&gt; Template::Novel,
+            &quot;Beamer&quot; =&gt; Template::Beamer,
+            &quot;Lachaise&quot; =&gt; Template::Lachaise,
+            &quot;&lt;temp_name&gt;&quot; =&gt; Template::&lt;temp_name&gt;,
+            _ =&gt; Template::Basic,
+        }
+    }
+    ...
+<span class="boring">}
+</span></code></pre></pre>
+<ol start="6">
+<li>Add the template to <code>list.json</code>:</li>
+</ol>
+<pre><code class="language-json">...
+    {
+        &quot;template&quot;: &quot;Beamer&quot;,
+        &quot;about&quot;: &quot;A project to start making presentations in LaTeX&quot;
+    },
+    {
+        &quot;template&quot;: &quot;Lachaise&quot;,
+        &quot;about&quot;: &quot;A project to write neat, nice documents/assignments&quot;
+    }, 
+    {
+        &quot;template&quot;: &quot;&lt;temp_name&gt;&quot;,
+        &quot;about&quot;: &quot;About the template&quot;
+    },
+]
+</code></pre>
+<p>With all work done in <code>texcreate_lib</code>, the last step is updating the <code>import</code> command in the <code>src/main.rs</code>: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>...
+CLI::Import { file } =&gt; {
+            let conf = Config::config(&amp;file);
+            match conf.from_template() {
+                Template::Basic =&gt; {
+                    import_temp!(conf, &quot;Basic&quot;);
+                }
+                Template::Math =&gt; {
+                    import_temp!(conf, &quot;Math&quot;);
+                }
+                Template::Theatre =&gt; {
+                    import_temp!(conf, &quot;Theatre&quot;);
+                }
+                Template::Code =&gt; {
+                    import_temp!(conf, &quot;Code&quot;);
+                }
+                Template::Novel =&gt;{
+                    import_temp!(conf, &quot;Novel&quot;);
+                }
+                Template::Beamer =&gt; {
+                    import_temp!(conf, &quot;Beamer&quot;);
+                }
+                Template::Lachaise =&gt; {
+                    import_temp!(conf, &quot;Lachaise&quot;);
+                }
+                Template::&lt;temp_name&gt; =&gt; {
+                    import_temp!(conf, &quot;&lt;temp_name&gt;&quot;);
+                }
+                Template::Book =&gt; mkcreate(
+                    &amp;conf.Project.project_name,
+                    &amp;conf.Project.title,
+                    &amp;conf.Project.author,
+                )
+                .await
+                .expect(&quot;Couldn't make Book Project&quot;),
+            }
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now it's wise to run <code>cargo build</code> and test out the template in a <code>config.toml</code> file using 
+<code>./target/debug/texcreate import</code> with the template as the one you want to test. If everything works, 
+you can now create a push request to the <strong>texcreate</strong> repository.</p>
 
                     </main>
 
