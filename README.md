@@ -77,3 +77,4 @@ Added support for error handling is specific cases while using `config.toml`, th
 - Add support for custom templates
 - Better progress indication when creating a project
 - A GUI counterpart
+- A web counterpart
