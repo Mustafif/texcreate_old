@@ -59,3 +59,21 @@ Make sure to have the following installed:
 - mdbook : `cargo install mdbook`
 - `unzip` : Should be preinstalled on most systems, verify with `unzip --version`
  
+
+## Errors 
+Added support for error handling is specific cases while using `config.toml`, the four errors are: 
+- Empty Project Fields 
+  - Fields in the Project section must contain a value, an empty string will result in this error 
+- Beamer Error 
+    - Beamer template must have a `beamer` document class, if not, this error will occur
+- Invalid Template
+  - The template must be one of the prebuilt templates, if not, this error will occur 
+  - To get a list use `texcreate list`
+- Invalid Document Class
+  - Not implemented yet, but will be added in the future
+  - This occurs when a document class is invalid or not supported by the template
+
+## Features Yet To Be Implemented
+- Add support for custom templates
+- Better progress indication when creating a project
+- A GUI counterpart
