@@ -8,10 +8,16 @@ const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
     ($c:expr, $x: expr) => {
         create(&$c.Project.project_name, &None , $x);
-        $c.adjust(&format!(
+        match $c.adjust(&format!(
             "./{}/{}.tex",
             $c.Project.project_name, $c.Project.project_name
-        ));
+        )){
+            Ok(a) => a,
+            Err(e) => {
+                eprintln!("{}", e)
+            }
+        };
+
         $c.add_packages(&format!("./{}/structure.tex", $c.Project.project_name));
     };
 }

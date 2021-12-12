@@ -1,16 +1,11 @@
 # Templates
-### Basic: 
-- article document: 11pt, letterpaper
-- includes package amsmath
+## New Templates: 
+Every minor version will contain a new template, whether it is entirely new or 
+a different option from another template. 
 
-### Math: 
-- article document: 11pt, letterpaper
-- includes package amsmath, symbols
-- includes theorems, remarks, definitions
+## Progress Indication: 
+Something I could not get to work is progress bars, so the next best thing is just 
+plain standard output of what the heck is happening. 
 
-### Book: 
-- includes the book template 
-- is distributed by a zip file
-
-### Traits
-- Add trait for load & create functions to help reduce code repetition
+## Better Custom Error handling
+Better error handling to domain specific cases 

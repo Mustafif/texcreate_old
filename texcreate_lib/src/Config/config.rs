@@ -3,6 +3,7 @@ use std::io::prelude::*;
 use toml::from_str;
 use super::{template::Template, consts::*};
 use std::fs;
+use crate::error::Errors;
 
 #[derive(Deserialize)]
 pub struct Config {
@@ -57,7 +58,29 @@ impl Config {
             }
         }
     }
-    pub fn adjust(&self, path: &str) {
+    pub fn adjust(&self, path: &str) -> Result<(), Errors> {
+        //Check all the configs for errors
+        //Checking for invalid template
+        let l = Template::list();
+        if !l.contains(&self.Project.template){
+            let inv_temp = self.Project.template.clone();
+            return Err(Errors::InvalidTemplateError(inv_temp))
+        }
+        //Checking for empty project
+        let proj = &self.Project;
+        if proj.author == "".to_string(){
+            return Err(Errors::EmptyError)
+        } else if proj.title == "".to_string(){
+            return Err(Errors::EmptyError)
+        } else if proj.date == "".to_string(){
+            return Err(Errors::EmptyError)
+        } else if proj.project_name == "".to_string(){
+            return Err(Errors::EmptyError)
+        } else if proj.template == "".to_string(){
+            return Err(Errors::EmptyError)
+        }
+
+
         let title = format!("\\title{{{}}}", self.Project.title);
         let author = format!("\\author{{{}}}", self.Project.author);
         let date = format!("\\date{{{}}}", self.Project.date);
@@ -66,23 +89,30 @@ impl Config {
         let mut content = String::new();
         file.read_to_string(&mut content).unwrap();
         // Project adjustments
+        println!("Adjusting author...");
         let mut content = content.replace(AUTHOR, &author);
+        println!("Adjusting title...");
         content = content.replace(TITLE, &title);
+        println!("Adjusting date...");
         content = content.replace(DATE, &date);
         // Document adjustments
+        println!("Adjusting document's papersize...");
         content = content.replace("letterpaper", &self.Document.paper_size);
+        println!("Adjusting document's fontsize...");
         content = content.replace("11pt", &format!("{}pt", &self.Document.font_size));
         // For Beamer class only, panics if doc class is not Beamer
         if self.Project.template == "Beamer" && self.Document.document_class != "beamer" {
-            eprintln!("Beamer Template must have a document class as beamer!!!");
-            return;
+            return Err(Errors::BeamerError)
         }
+        println!("Adjusting document's class");
         content = content.replace("article", &self.Document.document_class);
         let mut file = std::fs::File::create(path).unwrap();
         file.write_all(content.as_bytes()).unwrap();
+        Ok(())
     }
     pub fn add_packages(&self, path: &str) {
         if self.Document.packages.len() < 1 {
+            println!("No packages to add...");
             return;
         }
 
@@ -98,6 +128,7 @@ impl Config {
             .map(|x| format!("\\usepackage{{{}}}", x))
             .collect();
         let p = p.join("\n");
+        println!("Adding packages to structure.tex");
         write!(file, "{}", p).expect("Couldn't write to file");
     }
 }

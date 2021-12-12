@@ -2,7 +2,7 @@ use crate::Templates::*;
 use std::io::Write;
 use std::path::Path;
 use std::fs::create_dir;
-/// Constant Convert 
+// Constant Convert
 /// 
 /// Used to have the template constants into an easy tuple 
 /// 
@@ -11,10 +11,11 @@ use std::fs::create_dir;
 /// ```
 /// use texcreate_lib::routes::const_conv;
 /// use texcreate_lib::Templates::basic;
+/// use std::io::prelude::*;
 /// 
 /// // Let's build a basic template
 /// fn main(){
-///     let basic = const_conv(Basic_MAIN, BASIC_STRUCTURE);
+///     let basic = const_conv(Basic_MAIN, basic::BASIC_STRUCTURE);
 ///     // Write main.tex 
 ///     let mut main = std::fs::File::create("main.tex").unwrap();
 ///     main.write_all(basic.0.as_bytes()).unwrap();
@@ -93,6 +94,8 @@ pub fn create(name: &str, file_path: &Option<String>, template: &str) {
         Some(path) => path,
         None => "."
     };
+    //Loading template files
+    println!("Loading {} template...", template);
     let (main, structure) = load(template);
     let path = format!("{}/{}", file_path, name);
     let def_path = format!("{}/{}_texcreate", file_path, name); //default path 
@@ -109,9 +112,13 @@ pub fn create(name: &str, file_path: &Option<String>, template: &str) {
         create_dir(&path).expect("Error in creating directory");
         p = path;
     }
+    //Creating the main file
+    println!("Creating {}/{}.tex", &p, name);
     let mut main_file =
         std::fs::File::create(format!("{}/{}.tex", &p, name)).unwrap();
     main_file.write_all(main.as_bytes()).unwrap();
+    //Creating structure.tex
+    println!("Creating {}/structure.tex", &p);
     let mut structure_file =
         std::fs::File::create(format!("{}/structure.tex", &p)).unwrap();
     structure_file.write_all(structure.as_bytes()).unwrap();
