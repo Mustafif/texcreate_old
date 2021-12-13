@@ -19,19 +19,69 @@ There are two ways to create projects, the `create` & `import` commands:
 ```sh
 $ texcreate create -n <name> -t <template>
 # Optionally add -d <path>
-$ texcreate import -f config.toml
-# Note any <name>.toml works, but i prefer 
-# using config.toml
+$ texcreate build 
+# Note config.toml is default, any other file name 
+# must be specified with -f <file_path>
 # To create a config.toml, you can use the init command
 $ texcreate init
 ```
 
+### TexCreate Build & Multi Mode
+The build command has some for functionality introduced in 0.9: 
+- build modes: 
+  - single : The default build mode 
+    - Ideal for building single projects
+  - multi: Ideal for building multiple projects in one file
+
+To initialize a multi mode project, use `texcreate init --mode multi`
+You are then introduced to the following `config.toml`: 
+```toml
+[[Project]]
+author = "Author"
+title = "Title"
+date = "\\today"
+project_name = "Project1"
+template = "Math" #Make sure to have first letter upercased
+
+[[Document]]
+paper_size = "letterpaper"
+font_size = 11 #font size number
+document_class = "article"
+packages = []
+
+# Multi project
+[[Project]]
+author = "Author"
+title = "Title"
+date = "\\today"
+project_name = "Project2"
+template = "Code" #Make sure to have first letter upercased
+
+[[Document]]
+paper_size = "letterpaper"
+font_size = 11 #font size number
+document_class = "article"
+packages = []
+
+```
+> Note: 
+> - In multi-mode, Project and Document must be in an array form `[[ ]]`  
+> - The book template isn't currently supported, but is planned 
+to in future releases
+
+Then you may run `texcreate build --mode multi` which creates 2 projects: 
+```shell
+$ texcreate build --mode multi 
+...
+$ ls
+config.toml Project1 Project2
+```
 ### All config.toml options
 ```toml
 [Project]
 author = "Author"
 title = "Title"
-date = "\today"
+date = "\\today"
 project_name = "Project Name"
 template = "Math" #Make sure to have first letter upercased
 
@@ -76,5 +126,7 @@ Added support for error handling is specific cases while using `config.toml`, th
 ## Features Yet To Be Implemented
 - Add support for custom templates
 - Better progress indication when creating a project
+- Invalid Document Class
+- Beamer Error for MultiMode
 - A GUI counterpart
 - A web counterpart

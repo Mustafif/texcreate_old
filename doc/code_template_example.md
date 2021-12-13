@@ -14,12 +14,12 @@ template = "Code" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "book"
-packages = ["PhantomData", ""]
+packages = []
 ```
 With that set, let's create our project:
 ```shell
 # import assumes you're using config.toml
-$ texcreate import
+$ texcreate build
 # check directory
 $ ls
 config.toml Golang_Book

@@ -33,7 +33,7 @@ template = "Math" #Make sure to have first letter upercased
 paper_size = "letterpaper"
 font_size = 11 #font size number
 document_class = "article"
-packages = ["PhantomData", ""]
+packages = []
 ```
 Wow...so now what do we do, well let's create a project that will give a simple intro on 
 the basics of Golang. But...is there a template for that? Well conveniently there's a `list` command 
