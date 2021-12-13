@@ -1,8 +1,11 @@
 use structopt::StructOpt;
 use texcreate_lib::routes::create;
-use texcreate_lib::Config::{config::Config, List, Template};
+use texcreate_lib::Config::{
+    config::Config, config_multi::Config_Multi, List, Template
+};
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
+use texcreate_lib::from_template;
 
 const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
@@ -33,7 +36,11 @@ enum CLI {
     Update,
     #[structopt(about = "Initialize a config.toml file")]
     /// Initialize with `texcreate init`
-    Init,
+    Init{
+        /// Initialize with multi-mode
+        #[structopt(short = "m", long = "mode")]
+        mode: Option<String>,
+    },
     #[structopt(about = "Create a LaTeX Project with a specified name & template")]
     /// Create project with `texcreate create -t <template> -n <name>`
     Create {
@@ -54,11 +61,13 @@ enum CLI {
     #[structopt(about = "Lists all the available templates")]
     /// List all available templates `texcreate list`
     List,
-    #[structopt(about = "Import a config.toml to create project")]
+    #[structopt(about = "Build a project using a config.toml file")]
     /// Create project with a config.toml file `texcreate import -f config.toml`
-    Import {
+    Build {
         #[structopt(short, long)]
         file: Option<String>,
+        #[structopt(short, long)]
+        mode: Option<String>,
     },
     #[structopt(about="Opens the TexCreate documentation")]
     Doc
@@ -79,9 +88,19 @@ async fn main() {
                 .spawn()
                 .expect("Failed to install latest version");
         }
-        CLI::Init => {
-            println!("Creating config.toml...");
-            Config::init()
+        CLI::Init {mode} => {
+            let mode = match &mode{
+                Some(m) => m,
+                None => "single"
+            };
+
+            if mode == "multi"{
+                println!("Initializing multi-mode config.toml...");
+                Config_Multi::init();
+            } else {
+                println!("Creating config.toml...");
+                Config::init();
+            }
         },
         CLI::Create {
             template,
@@ -91,38 +110,53 @@ async fn main() {
             (temp, path) => create(&name, &path, temp),
         },
         CLI::List => List::list("list.json"),
-        CLI::Import { file } => {
-            let conf = Config::config(&file);
-            match conf.from_template() {
-                Template::Basic => {
-                    import_temp!(conf, "Basic");
+        CLI::Build { file, mode } => {
+            let mode = match &mode{
+                Some(m) => m,
+                None => "single"
+            };
+            if mode == "single"{
+                let conf = Config::config(&file);
+                match conf.from_template() {
+                    Template::Basic => {
+                        import_temp!(conf, "Basic");
+                    }
+                    Template::Math => {
+                        import_temp!(conf, "Math");
+                    }
+                    Template::Theatre => {
+                        import_temp!(conf, "Theatre");
+                    }
+                    Template::Code => {
+                        import_temp!(conf, "Code");
+                    }
+                    Template::Novel =>{
+                        import_temp!(conf, "Novel");
+                    }
+                    Template::Beamer => {
+                        import_temp!(conf, "Beamer");
+                    }
+                    Template::Lachaise => {
+                        import_temp!(conf, "Lachaise");
+                    }
+                    Template::Book => mkcreate(
+                        &conf.Project.project_name,
+                        &conf.Project.title,
+                        &conf.Project.author,
+                    )
+                        .await
+                        .expect("Couldn't make Book Project"),
                 }
-                Template::Math => {
-                    import_temp!(conf, "Math");
-                }
-                Template::Theatre => {
-                    import_temp!(conf, "Theatre");
-                }
-                Template::Code => {
-                    import_temp!(conf, "Code");
-                }
-                Template::Novel =>{
-                    import_temp!(conf, "Novel");
-                }
-                Template::Beamer => {
-                    import_temp!(conf, "Beamer");
-                }
-                Template::Lachaise => {
-                    import_temp!(conf, "Lachaise");
-                }
-                Template::Book => mkcreate(
-                    &conf.Project.project_name,
-                    &conf.Project.title,
-                    &conf.Project.author,
-                )
-                .await
-                .expect("Couldn't make Book Project"),
             }
+                //Mutli mode
+            else {
+                let conf = Config_Multi::config(&file);
+                match conf.adjust(&None){
+                    Ok(a) => a,
+                    Err(e) => eprintln!("{}", e)
+                };
+            }
+
         }
     }
 }
