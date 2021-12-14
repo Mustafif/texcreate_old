@@ -7,7 +7,7 @@ use std::fs::create_dir;
 use std::path::Path;
 use crate::error::Errors;
 use crate::config::{Project, Document};
-use crate::load;
+use crate::{invalid_class, load};
 
 
 #[derive(Deserialize)]
@@ -114,6 +114,17 @@ impl Config_Multi{
             } else if i.template == "".to_string(){
                 return Err(Errors::EmptyError);
             }
+            //Check for Beamer error
+            for k in &self.Document{
+                if i.template == "Beamer" && k.document_class != "beamer"{
+                    return Err(Errors::BeamerError)
+                }
+                //Check for Invalid class error
+                if invalid_class(&k.document_class){
+                    return Err(Errors::InvalidDocumentClassError(k.document_class.clone()))
+                }
+            }
+
             //After errors push formatted title, author, date
             title.push(format!("\\title{{{}}}", &i.title));
             author.push(format!("\\author{{{}}}", &i.author));

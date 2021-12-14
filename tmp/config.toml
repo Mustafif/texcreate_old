@@ -17,7 +17,7 @@ author = "Author"
 title = "Title"
 date = "\\today"
 project_name = "Project2"
-template = "Code" #Make sure to have first letter upercased
+template = "Beamer" #Make sure to have first letter upercased
 
 [[Document]]
 paper_size = "letterpaper"

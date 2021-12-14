@@ -105,21 +105,33 @@ pub fn create(name: &str, file_path: &Option<String>, template: &str) {
     if Path::new(&path).exists(){
         let f = format!("Note: {} exists, creating {} instead\n", &path, &def_path);
         println!("{}",f);
-        create_dir(&def_path).expect("Error in creating directory");
+        match create_dir(&def_path){
+            Ok(dir) => dir,
+            Err(e) => eprintln!("{}", e)
+        };
         p = def_path;
     } else {
         println!("Creating {}", &path);
-        create_dir(&path).expect("Error in creating directory");
+        match create_dir(&path){
+            Ok(dir) => dir,
+            Err(e) => eprintln!("{}", e)
+        };
         p = path;
     }
     //Creating the main file
     println!("Creating {}/{}.tex", &p, name);
     let mut main_file =
-        std::fs::File::create(format!("{}/{}.tex", &p, name)).unwrap();
-    main_file.write_all(main.as_bytes()).unwrap();
+        std::fs::File::create(format!("{}/{}.tex", &p, name)).expect("Couldn't create file");
+        match main_file.write_all(main.as_bytes()){
+            Ok(write) => write,
+            Err(e) => eprintln!("{}", e)
+        };
     //Creating structure.tex
     println!("Creating {}/structure.tex", &p);
     let mut structure_file =
-        std::fs::File::create(format!("{}/structure.tex", &p)).unwrap();
-    structure_file.write_all(structure.as_bytes()).unwrap();
+        std::fs::File::create(format!("{}/structure.tex", &p)).expect("Couldn't create file");
+    match structure_file.write_all(structure.as_bytes()){
+        Ok(write) => write,
+        Err(e) => eprintln!("{}", e)
+    };
 }

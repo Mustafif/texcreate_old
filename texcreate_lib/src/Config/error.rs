@@ -44,6 +44,24 @@ impl Error for Errors{
         }
     }
 }
-
-
+// Check if a string is a valid document class
+pub fn invalid_class(class: &str)-> bool{
+    let valid = vec![
+        "article",
+        "IEEEtran",
+        "proc",
+        "minimal",
+        "report",
+        "book",
+        "slides",
+        "memoir",
+        "letter",
+        "beamer"
+    ];
+    if !valid.contains(&class){
+        true
+    } else {
+        false
+    }
+}
 

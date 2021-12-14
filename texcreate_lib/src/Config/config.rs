@@ -4,6 +4,7 @@ use toml::from_str;
 use super::{template::Template, consts::*};
 use std::fs;
 use crate::error::Errors;
+use crate::invalid_class;
 
 #[derive(Deserialize)]
 pub struct Config {
@@ -26,7 +27,39 @@ pub struct Document {
     pub packages: Vec<String>,
 }
 
+impl Project{
+    pub fn new(author: String, title: String, date: String, template: String, project_name: String)
+        -> Project {
+        Project {
+            author,
+            title,
+            date,
+            template,
+            project_name,
+        }
+    }
+}
+
+impl Document{
+    pub fn new(paper_size: String, font_size: u8, document_class: String, packages: Vec<String>)
+        -> Document {
+        Document {
+            paper_size,
+            font_size,
+            document_class,
+            packages,
+        }
+    }
+}
+
+
 impl Config {
+    pub fn new(Project: Project, Document: Document) -> Config {
+        Config {
+            Project,
+            Document,
+        }
+    }
     pub fn init() {
         let mut file = fs::File::create("config.toml").expect("Unable to create config file");
         file.write_all(CONFIG_TOML.as_bytes())
@@ -79,7 +112,12 @@ impl Config {
         } else if proj.template == "".to_string(){
             return Err(Errors::EmptyError)
         }
-
+        // Checking for invalid doc class
+        if invalid_class(&self.Document.document_class){
+            return Err(
+                Errors::InvalidDocumentClassError(self.Document.document_class.clone())
+            )
+        }
 
         let title = format!("\\title{{{}}}", self.Project.title);
         let author = format!("\\author{{{}}}", self.Project.author);
