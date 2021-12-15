@@ -22,5 +22,5 @@ template = "Beamer" #Make sure to have first letter upercased
 [[Document]]
 paper_size = "letterpaper"
 font_size = 11 #font size number
-document_class = "article"
+document_class = "lol"
 packages = []

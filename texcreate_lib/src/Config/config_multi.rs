@@ -8,6 +8,7 @@ use std::path::Path;
 use crate::error::Errors;
 use crate::config::{Project, Document};
 use crate::{invalid_class, load};
+use crate::book::create;
 
 
 #[derive(Deserialize)]
@@ -50,7 +51,7 @@ impl Config_Multi{
         }
     }
 
-    pub fn adjust(&self, file_path: &Option<String>)->Result<(), Errors>{
+    pub fn adjust(&self, file_path: &Option<String>) -> Result<(), Errors>{
         //Create portion
         //Sanity check file path
         let mut path = String::new();
@@ -116,9 +117,6 @@ impl Config_Multi{
             }
             //Check for Beamer error
             for k in &self.Document{
-                if i.template == "Beamer" && k.document_class != "beamer"{
-                    return Err(Errors::BeamerError)
-                }
                 //Check for Invalid class error
                 if invalid_class(&k.document_class){
                     return Err(Errors::InvalidDocumentClassError(k.document_class.clone()))
@@ -128,7 +126,7 @@ impl Config_Multi{
             //After errors push formatted title, author, date
             title.push(format!("\\title{{{}}}", &i.title));
             author.push(format!("\\author{{{}}}", &i.author));
-            date.push(format!("\\date{{{}}}", &i.date))
+            date.push(format!("\\date{{{}}}", &i.date));
         }
 
         let mut papersize: Vec<String> = Vec::new();
