@@ -2436,7 +2436,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate"
-version = "0.9.1"
+version = "0.10.0"
 dependencies = [
  "indicatif",
  "mdbook",
@@ -2453,7 +2453,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate_lib"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "indicatif",
  "log",
