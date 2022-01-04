@@ -1,4 +1,6 @@
 mod list;
+
+use std::path::Path;
 use list::List;
 use structopt::StructOpt;
 use texcreate_lib::routes::create;
@@ -8,7 +10,7 @@ use texcreate_lib::Config::{
 use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
-use texcreate_lib::from_template;
+use texcreate_lib::{from_template, tc_html};
 
 const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
@@ -87,6 +89,16 @@ async fn main() {
             that(TEXDOC).unwrap();
         },
         CLI::Web => {
+            let tc = Path::new("texcreate.html");
+            let tc_file = Path::new("tc_files");
+
+            if !tc.exists(){
+                std::fs::File::create(&tc).unwrap();
+                std::fs::write(&tc, tc_html.as_bytes()).unwrap();
+            }
+            if !tc_file.exists(){
+                std::fs::create_dir(&tc_file).unwrap();
+            }
             texweb().launch().await.unwrap();
         }
         CLI::Update => {

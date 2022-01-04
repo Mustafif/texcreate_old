@@ -94,7 +94,7 @@ pub fn create(name: &str, file_path: &Option<String>, template: &str) {
         Some(path) => path,
         None => "."
     };
-    //Loading template files
+    //Loading template tc_files
     println!("Loading {} template...", template);
     let (main, structure) = load(template);
     let path = format!("{}/{}", file_path, name);
