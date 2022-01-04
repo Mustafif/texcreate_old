@@ -1,8 +1,11 @@
+mod list;
+use list::List;
 use structopt::StructOpt;
 use texcreate_lib::routes::create;
 use texcreate_lib::Config::{
-    config::Config, config_multi::Config_Multi, List, Template
+    config::Config, config_multi::Config_Multi, Template
 };
+use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
 use texcreate_lib::from_template;
@@ -70,7 +73,9 @@ enum CLI {
         mode: Option<String>,
     },
     #[structopt(about="Opens the TexCreate documentation")]
-    Doc
+    Doc, 
+    #[structopt(about="Opens the TexCreate web version")]
+    Web,
 }
 #[tokio::main]
 async fn main() {
@@ -81,6 +86,9 @@ async fn main() {
             println!("Opening {}", TEXDOC);
             that(TEXDOC).unwrap();
         },
+        CLI::Web => {
+            texweb().launch().await.unwrap();
+        }
         CLI::Update => {
             let _ = std::process::Command::new("cargo")
                 .arg("install")
