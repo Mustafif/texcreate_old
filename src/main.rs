@@ -1,5 +1,7 @@
 mod list;
 
+use std::borrow::BorrowMut;
+use std::ops::{Deref, DerefMut};
 use std::path::Path;
 use list::List;
 use structopt::StructOpt;
@@ -10,7 +12,8 @@ use texcreate_lib::Config::{
 use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
-use texcreate_lib::{from_template, tc_html};
+use texcreate_lib::{from_template, Project, tc_html};
+use toml::to_string_pretty;
 
 const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
@@ -78,6 +81,33 @@ enum CLI {
     Doc, 
     #[structopt(about="Opens the TexCreate web version")]
     Web,
+    #[structopt(about = "Quickly change config.toml parameters")]
+    Edit{
+        #[structopt(short="p", long="proj")]
+        proj: Option<String>,
+        #[structopt(short ="m", long="mode")]
+        mode: String,
+        #[structopt(long="author")]
+        author: Option<String>,
+        #[structopt(long="title")]
+        title: Option<String>,
+        #[structopt(long="date")]
+        date: Option<String>,
+        #[structopt(long="rename")]
+        rename: Option<String>,
+        #[structopt(long="template")]
+        template: Option<String>,
+        #[structopt(long="paper-size")]
+        paper_size: Option<String>,
+        #[structopt(long="font-size")]
+        font_size: Option<u8>,
+        #[structopt(long="doc-class")]
+        doc_class: Option<String>,
+        #[structopt(long="add-package")]
+        add_package: Option<String>,
+        #[structopt(long="rm-package")]
+        rm_package: Option<String>,
+    }
 }
 #[tokio::main]
 async fn main() {
@@ -177,6 +207,229 @@ async fn main() {
                 };
             }
 
+        }
+        CLI::Edit {
+            proj,
+            mode,
+            author,
+            title,
+            date,
+            rename,
+            template,
+            paper_size,
+            font_size,
+            doc_class,
+            add_package,
+            rm_package
+        } => {
+            // First check mode
+            if mode.as_str() == "single"{
+                // Since single has only one project,
+                // we assume we edit this project
+                let mut conf = Config::config(&None);
+                match &author {
+                    Some(s) => {
+                        println!("Changing author from {} to {}", &conf.Project.author, s);
+                        conf.Project.author = s.to_string();
+                    }
+                    None => println!("No changes to author field")
+                }
+                match &title {
+                    Some(s) => {
+                        println!("Changing title from {} to {}", &conf.Project.title, s);
+                        conf.Project.title = s.to_string();
+                    }
+                    None => println!("No changes to title field")
+                }
+                match &date {
+                    Some(s) => {
+                        println!("Changing date from {} to {}", &conf.Project.date, s);
+                        conf.Project.date = s.to_string();
+                    }
+                    None => println!("No changes to date field")
+                }
+                match &rename {
+                    Some(s) => {
+                        println!("Changing project name from {} to {}",
+                                 &conf.Project.project_name, s);
+                        conf.Project.project_name = s.to_string();
+                    }
+                    None => println!("No changes to project_name field")
+                }
+                match &template {
+                    Some(s) => {
+                        println!("Changing template from {} to {}",
+                                 &conf.Project.template, s);
+                        conf.Project.template = s.to_string();
+                    }
+                    None => println!("No changes to template field")
+                }
+                match &paper_size {
+                    Some(s) => {
+                        println!("Changing paper size from {} to {}",
+                                 &conf.Document.paper_size, s);
+                        conf.Document.paper_size = s.to_string();
+                    }
+                    None => println!("No changes to paper_size field")
+                }
+                match &font_size {
+                    Some(s) => {
+                        println!("Changing font size from {} to {}",
+                                 &conf.Document.paper_size, s);
+                        conf.Document.font_size = s.to_owned();
+                    }
+                    None => println!("No changes to font_size field")
+                }
+                match &doc_class {
+                    Some(s) => {
+                        println!("Changing document class from {} to {}",
+                                 &conf.Document.document_class, s);
+                        conf.Document.document_class = s.to_string();
+                    }
+                    None => println!("No changes to document class field")
+                }
+                match &add_package {
+                    Some(s) => {
+                        println!("Adding package {}", s);
+                        conf.Document.packages.push(s.to_string());
+                    }
+                    None => println!("No packages added")
+                }
+                match &rm_package{
+                    Some(s) => {
+                        println!("Removing package {}", s);
+                        let len = &conf.Document.packages.len();
+                        for i in 0..*len{
+                            if &conf.Document.packages[i] == s{
+                                let p1 = &conf.Document.packages[0..i];
+                                let p2 = &conf.Document.packages[i+1..*len];
+                                let mut p = Vec::new();
+                                for i in p1{
+                                    p.push(i.to_string());
+                                }
+                                for i in p2{
+                                    p.push(i.to_string());
+                                }
+                                conf.Document.packages = p;
+                            }
+                        }
+                    }
+                    None => println!("No packages removed")
+                }
+                let toml_s = to_string_pretty(&conf).unwrap();
+                std::fs::write("config.toml", toml_s).unwrap();
+            }
+            else {
+                let mut conf_m = Config_Multi::config(&None);
+                // Find the right project
+                let mut n = 0;
+                match &proj{
+                    Some(s) => {
+                        let len = &conf_m.Project.len();
+                        for i in 0..*len{
+                            if &conf_m.Project[i].project_name == s{
+                                n = i;
+                            }
+                        }
+                    }
+                    None => panic!("Need specific project name (-p <name>), have to abort!")
+                }
+                let mut conf_proj = conf_m.Project[n].borrow_mut();
+                let mut conf_doc = conf_m.Document[n].borrow_mut();
+                match &author {
+                    Some(s) => {
+                        println!("Changing author from {} to {}", &conf_proj.author, s);
+                        conf_proj.author = s.to_owned();
+                    }
+                    None => println!("No changes to author field")
+                }
+                match &title {
+                    Some(s) => {
+                        println!("Changing title from {} to {}", &conf_proj.title, s);
+                        conf_proj.title = s.to_owned();
+                    }
+                    None => println!("No changes to title field")
+                }
+                match &date {
+                    Some(s) => {
+                        println!("Changing date from {} to {}", &conf_proj.date, s);
+                        conf_proj.date = s.to_string();
+                    }
+                    None => println!("No changes to date field")
+                }
+                match &rename {
+                    Some(s) => {
+                        println!("Changing project name from {} to {}",
+                                 &conf_proj.project_name, s);
+                        conf_proj.project_name = s.to_owned();
+                    }
+                    None => println!("No changes to project_name field")
+                }
+                match &template {
+                    Some(s) => {
+                        println!("Changing template from {} to {}",
+                                 &conf_proj.template, s);
+                        conf_proj.template = s.to_owned();
+                    }
+                    None => println!("No changes to template field")
+                }
+                match &paper_size {
+                    Some(s) => {
+                        println!("Changing paper size from {} to {}",
+                                 &conf_doc.paper_size, s);
+                        conf_doc.paper_size = s.to_owned();
+                    }
+                    None => println!("No changes to paper_size field")
+                }
+                match &font_size {
+                    Some(s) => {
+                        println!("Changing font size from {} to {}",
+                                 &conf_doc.paper_size, s);
+                        conf_doc.font_size = s.to_owned();
+                    }
+                    None => println!("No changes to font_size field")
+                }
+                match &doc_class {
+                    Some(s) => {
+                        println!("Changing document class from {} to {}",
+                                 &conf_doc.document_class, s);
+                        conf_doc.document_class = s.to_owned();
+                    }
+                    None => println!("No changes to document class field")
+                }
+                match &add_package {
+                    Some(s) => {
+                        println!("Adding package {}", s);
+                        conf_doc.packages.push(s.to_string());
+                    }
+                    None => println!("No packages added")
+                }
+                match &rm_package{
+                    Some(s) => {
+                        println!("Removing package {}", s);
+                        let len = &conf_doc.packages.len();
+                        for i in 0..*len{
+                            if &conf_doc.packages[i] == s{
+                                let p1 = &conf_doc.packages[0..i];
+                                let p2 = &conf_doc.packages[i+1..*len];
+                                let mut p = Vec::new();
+                                for i in p1{
+                                    p.push(i.to_string());
+                                }
+                                for i in p2{
+                                    p.push(i.to_string());
+                                }
+                                conf_doc.packages = p;
+                            }
+                        }
+                    }
+                    None => println!("No packages removed")
+                }
+                conf_m.Project[n] = conf_proj.clone();
+                conf_m.Document[n] = conf_doc.clone();
+                let toml_s = to_string_pretty(&conf_m).unwrap();
+                std::fs::write("config.toml", toml_s).unwrap();
+            }
         }
     }
 }

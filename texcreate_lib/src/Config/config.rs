@@ -1,4 +1,4 @@
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 use std::io::prelude::*;
 use toml::from_str;
 use super::{template::Template, consts::*};
@@ -6,12 +6,12 @@ use std::fs;
 use crate::error::Errors;
 use crate::invalid_class;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Config {
     pub Project: Project,
     pub Document: Document,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Project {
     pub author: String,
     pub title: String,
@@ -19,7 +19,7 @@ pub struct Project {
     pub template: String,
     pub project_name: String,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Document {
     pub paper_size: String,
     pub font_size: u8,

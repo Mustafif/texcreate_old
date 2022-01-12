@@ -1,4 +1,4 @@
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 use std::io::prelude::*;
 use toml::from_str;
 use super::{template::Template, consts::*};
@@ -11,7 +11,7 @@ use crate::{invalid_class, load};
 use crate::book::create;
 
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Config_Multi{
     pub Project: Vec<Project>,
     pub Document: Vec<Document>,

@@ -1,12 +1,25 @@
-[Project]
-author = ""
-title = "Title"
-date = "\\today"
-project_name = "test"
-template = "Lalalala" #Make sure to have first letter upercased
+[[Project]]
+author = 'Author'
+title = 'Title'
+date = '\today'
+template = 'Math'
+project_name = 'Project1'
 
-[Document]
-paper_size = "letterpaper"
-font_size = 11 #font size number
-document_class = "article"
+[[Project]]
+author = 'Mustafif'
+title = 'Title'
+date = '\today'
+template = 'Code'
+project_name = 'Project2'
+
+[[Document]]
+paper_size = 'letterpaper'
+font_size = 11
+document_class = 'article'
+packages = []
+
+[[Document]]
+paper_size = 'a5paper'
+font_size = 11
+document_class = 'article'
 packages = []
