@@ -8,7 +8,7 @@
 
 
         <!-- Custom HTML head -->
-
+        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Development</li><li class="chapter-item expanded "><a href="adding_new_templates.html"><strong aria-hidden="true">3.</strong> Adding New Templates</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">TexCreate Commands</li><li class="chapter-item expanded "><a href="build.html"><strong aria-hidden="true">3.</strong> Build</a></li><li class="chapter-item expanded "><a href="create.html"><strong aria-hidden="true">4.</strong> Create</a></li><li class="chapter-item expanded "><a href="edit.html"><strong aria-hidden="true">5.</strong> Edit</a></li><li class="chapter-item expanded "><a href="init.html"><strong aria-hidden="true">6.</strong> Init</a></li><li class="chapter-item expanded "><a href="list.html"><strong aria-hidden="true">7.</strong> List</a></li><li class="chapter-item expanded "><a href="web.html"><strong aria-hidden="true">8.</strong> Web</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Development</li><li class="chapter-item expanded "><a href="adding_new_templates.html"><strong aria-hidden="true">9.</strong> Adding New Templates</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -90,7 +90,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -287,6 +287,46 @@ func main() {
 \end{document}
 </code></pre>
 <p>We could also save the code in a file and use <code>\lstuiinputlisting{file.go}</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="build"><a class="header" href="#build">Build</a></h1>
+<p>The build command is used to build a LaTeX project using a <code>config.toml</code> file.
+This command contains two optional arguments:</p>
+<ol>
+<li><code>--file</code>: The path to the <code>config.toml</code> file</li>
+<li><code>--mode</code>: To specify the build mode, the default is <code>single</code>
+<ul>
+<li><code>single</code>: Builds a single project </li>
+<li><code>multi</code> : Builds multiple projects</li>
+</ul>
+</li>
+</ol>
+<p>Let's try out the build command:</p>
+<pre><code class="language-shell"># Initialize a multi project 
+$ texcreate init --mode multi
+$ ls 
+config.toml 
+</code></pre>
+<p>Let's build the project:</p>
+<pre><code class="language-shell">$ texcreate build --mode multi
+$ ls
+config.toml Project1 Project2
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="create"><a class="header" href="#create">Create</a></h1>
+<p>The create command creates a new project without creating a <code>config.toml</code>, so 
+to use this command we specify the following arguments:</p>
+<ul>
+<li><code>-t/--template</code>: The template to use</li>
+<li><code>-n/--name</code>: The name of the project</li>
+<li><code>-d/--directory</code>: The directory to create the project in (<em>Optional</em>)</li>
+</ul>
+<pre><code class="language-shell">$ texcreate create -t Math -n MyProject -d /path/to/project
+$ texcreate create -t Code -n AnotherProject 
+# AnotherProject will be created in the current directory
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="edit"><a class="header" href="#edit">Edit</a></h1>
+<p>This command </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="init"><a class="header" href="#init">Init</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="list"><a class="header" href="#list">List</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="web"><a class="header" href="#web">Web</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="adding-new-templates"><a class="header" href="#adding-new-templates">Adding New Templates</a></h1>
 <p>In TexCreate, templates are the foundation of the program, and most updates are just 
 adding new templates. So how do we add one? Well there's a few steps to it, but by the end 

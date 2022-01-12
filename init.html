@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - TexCreate</title>
+        <title>Init - TexCreate</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">TexCreate Commands</li><li class="chapter-item expanded "><a href="build.html"><strong aria-hidden="true">3.</strong> Build</a></li><li class="chapter-item expanded "><a href="create.html"><strong aria-hidden="true">4.</strong> Create</a></li><li class="chapter-item expanded "><a href="edit.html"><strong aria-hidden="true">5.</strong> Edit</a></li><li class="chapter-item expanded "><a href="init.html"><strong aria-hidden="true">6.</strong> Init</a></li><li class="chapter-item expanded "><a href="list.html"><strong aria-hidden="true">7.</strong> List</a></li><li class="chapter-item expanded "><a href="web.html"><strong aria-hidden="true">8.</strong> Web</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Development</li><li class="chapter-item expanded "><a href="adding_new_templates.html"><strong aria-hidden="true">9.</strong> Adding New Templates</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="code_template_example.html"><strong aria-hidden="true">2.</strong> Code Template Example</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">TexCreate Commands</li><li class="chapter-item expanded "><a href="build.html"><strong aria-hidden="true">3.</strong> Build</a></li><li class="chapter-item expanded "><a href="create.html"><strong aria-hidden="true">4.</strong> Create</a></li><li class="chapter-item expanded "><a href="edit.html"><strong aria-hidden="true">5.</strong> Edit</a></li><li class="chapter-item expanded "><a href="init.html" class="active"><strong aria-hidden="true">6.</strong> Init</a></li><li class="chapter-item expanded "><a href="list.html"><strong aria-hidden="true">7.</strong> List</a></li><li class="chapter-item expanded "><a href="web.html"><strong aria-hidden="true">8.</strong> Web</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Development</li><li class="chapter-item expanded "><a href="adding_new_templates.html"><strong aria-hidden="true">9.</strong> Adding New Templates</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,60 +142,17 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>TexCreate is a project built to build LaTex projects without needing to 
-annoyingly type out the same commands over and over again. So instead type 
-all the metadata in a <code>config.toml</code> file and TexCreate will do the rest.</p>
-<p>Actually there is two methods to create projects, but the <code>import</code> command 
-is the recommended one, so we will focus on that.</p>
-<p>First let's install the project, and to do that simply run the following: </p>
-<pre><code class="language-shell">$ cargo install texcreate
-</code></pre>
-<p>At the time of writing the current version is 0.7.0, and this guide 
-should work from this version and future versions (to check run <code>texcreate --version</code>). </p>
-<p>Now let's setup our project, and to start we need a <code>config.toml</code>, so why not initialize it?</p>
-<pre><code class="language-shell">$ texcreate init
-# Check your directory
-$ ls
-config.toml
-</code></pre>
-<p>When you create a new <code>config.toml</code>, you get the following file: </p>
-<pre><code class="language-toml">[Project]
-author = &quot;Author&quot;
-title = &quot;Title&quot;
-date = &quot;\\today&quot;
-project_name = &quot;Project Name&quot;
-template = &quot;Math&quot; #Make sure to have first letter upercased
-
-[Document]
-paper_size = &quot;letterpaper&quot;
-font_size = 11 #font size number
-document_class = &quot;article&quot;
-packages = []
-</code></pre>
-<p>Wow...so now what do we do, well let's create a project that will give a simple intro on 
-the basics of Golang. But...is there a template for that? Well conveniently there's a <code>list</code> command 
-that gives us a list of the available templates we can use:</p>
-<pre><code class="language-shell">$ texcreate list
-//////////////////////////////////////
-// List of available templates:
-//////////////////////////////////////
-// Basic =&gt; A simple project with the basic setup you need
-// Book =&gt; A project that utilizes both a markdown and tex format
-// Math =&gt; A project that utilizes math related packages
-// Theatre =&gt; A project that is ideal to write scripts
-// Code =&gt; A project ideal to document about programming
-// Novel =&gt; A project to begin writing that novel you always delay
-// Beamer =&gt; A project to start making presentations in LaTeX
-</code></pre>
-<p>Let's use the <code>Code</code> template and we will continue in the next section.</p>
+                        <h1 id="init"><a class="header" href="#init">Init</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="edit.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next" href="code_template_example.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="list.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -205,8 +162,11 @@ that gives us a list of the available templates we can use:</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="edit.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next" href="code_template_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="list.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
