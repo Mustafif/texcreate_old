@@ -1,7 +1,5 @@
 mod list;
-
 use std::borrow::BorrowMut;
-use std::ops::{Deref, DerefMut};
 use std::path::Path;
 use list::List;
 use structopt::StructOpt;
@@ -12,7 +10,7 @@ use texcreate_lib::Config::{
 use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
-use texcreate_lib::{from_template, Project, tc_html};
+use texcreate_lib::tc_html;
 use toml::to_string_pretty;
 
 const TEXDOC: &str = "http://texcreate.mkproj.com/";

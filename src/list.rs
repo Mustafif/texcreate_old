@@ -9,16 +9,12 @@ pub struct List {
 }
 
 impl List {
-    pub fn read(path: &str) -> Result<Vec<Self>, Error> {
-        let mut file = fs::File::open(path).expect("Unable to open file");
-        let mut contents = String::new();
-        file.read_to_string(&mut contents)
-            .expect("Unable to read file");
-        let list: Vec<List> = serde_json::from_str(&contents)?;
+    pub fn read() -> Result<Vec<Self>, Error> {
+        let list: Vec<List> = serde_json::from_str(LIST)?;
         Ok(list)
     }
     pub fn list(path: &str) {
-        let json = Self::read(path).expect("Unable to read list.json");
+        let json = Self::read().expect("Unable to read list.json");
         println!("//////////////////////////////////////");
         println!("// List of available templates:");
         println!("//////////////////////////////////////");
@@ -27,3 +23,39 @@ impl List {
         }
     }
 }
+
+const LIST: &str = r#"[
+    {
+        "template": "Basic",
+        "about": "A simple project with the basic setup you need"
+    },
+    {
+        "template": "Book",
+        "about": "A project that utilizes both a markdown and tex format"
+    },
+    {
+        "template": "Math",
+        "about": "A project that utilizes math related packages"
+    },
+    {
+        "template": "Theatre",
+        "about": "A project that is ideal to write scripts"
+    },
+    {
+        "template": "Code",
+        "about": "A project ideal to document about programming"
+    },
+    {
+        "template": "Novel",
+        "about": "A project to begin writing that novel you always delay"
+    },
+    {
+        "template": "Beamer",
+        "about": "A project to start making presentations in LaTeX"
+    },
+    {
+        "template": "Lachaise",
+        "about": "A project to write neat, nice documents/assignments"
+    }
+]
+"#;
