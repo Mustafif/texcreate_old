@@ -7,7 +7,7 @@ build:
 update:
 	cargo update
 publish:
-	cargo publish
+	cargo release --execute
 publish_lib:
 	cd texcreate_lib && cargo publish
 git:
