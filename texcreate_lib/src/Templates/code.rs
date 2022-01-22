@@ -1,11 +1,11 @@
 pub const CODE_MAIN: &str = r#"% Code Template 
 % MKProjects TexCreate 2021 
 % MIT & GPLv2 License
-\documentclass[11pt, letterpaper]{article}
+\documentclass[{font_size}pt, {paper_size}]{{doc_class}}
 \input{structure.tex}
-\author{}
-\date{}
-\title{}
+\author{{author}}
+\date{{date}}
+\title{{title}}
 
 \begin{document}
 \maketitle

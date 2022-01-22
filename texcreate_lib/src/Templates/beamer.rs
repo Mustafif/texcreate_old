@@ -1,10 +1,11 @@
 pub const BEAMER_MAIN : &str = r#"% Beamer Template 
 % MKProjects | TexCreate
 % Mit & GPlv2 License
-\documentclass{beamer}
-\title{}
-\author{}
-\date{}
+\documentclass{{doc_class}}
+// No use for {paper_size} and {font_size}pt in Beamer
+\title{{title}}
+\author{{author}}
+\date{{date}}
 \institute{}
 \input{structure.tex}
 \begin{document}

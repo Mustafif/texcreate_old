@@ -1,7 +1,7 @@
 mod list;
 use std::borrow::BorrowMut;
 use std::path::Path;
-use list::List;
+use list::list;
 use structopt::StructOpt;
 use texcreate_lib::routes::create;
 use texcreate_lib::Config::{
@@ -10,8 +10,9 @@ use texcreate_lib::Config::{
 use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
-use texcreate_lib::tc_html;
+use texcreate_lib::{Document, Project, tc_html};
 use toml::to_string_pretty;
+use std::io::stdin;
 
 const TEXDOC: &str = "http://texcreate.mkproj.com/";
 macro_rules! import_temp {
@@ -46,23 +47,6 @@ enum CLI {
         /// Initialize with multi-mode
         #[structopt(short = "m", long = "mode")]
         mode: Option<String>,
-    },
-    #[structopt(about = "Create a LaTeX Project with a specified name & template")]
-    /// Create project with `texcreate create -t <template> -n <name>`
-    Create {
-        #[structopt(short = "t", long = "template", help = "Template to use")]
-        /// Template to use
-        template: String,
-        #[structopt(short = "n", long = "name", help = "Name of the project")]
-        /// Project name
-        name: String,
-        #[structopt(
-            short = "d",
-            long = "directory",
-            help = "Directory to create the project in"
-        )]
-        /// Optional output directory
-        path: Option<String>,
     },
     #[structopt(about = "Lists all the available templates")]
     /// List all available templates `texcreate list`
@@ -108,7 +92,7 @@ enum CLI {
     }
 }
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), std::io::Error> {
     let cli = CLI::from_args();
     // Match CLI subcommands 
     match cli {
@@ -146,18 +130,59 @@ async fn main() {
                 println!("Initializing multi-mode config.toml...");
                 Config_Multi::init();
             } else {
-                println!("Creating config.toml...");
-                Config::init();
+                println!("Would you like to use the default config.toml? (y/n): ");
+                let mut input = String::new();
+                std::io::stdin().read_line(&mut input)?;
+                input = input.trim().to_string();
+                if input == "y" || input == "yes"{
+                    println!("Initializing single-mode config.toml...");
+                    Config::init(None)?;
+                } else {
+                    println!("Initializing custom config.toml...");
+                    // Ask for input for each field
+                    let mut author = String::new();
+                    let mut title = String::new();
+                    let mut date = String::new();
+                    let mut proj_name = String::new();
+                    let mut template = String::new();
+                    let mut paper_size = String::new();
+                    let mut font_size = String::new();
+                    let mut doc_class = String::new();
+
+                    println!("// Enter author name:");
+                    stdin().read_line(&mut author)?;
+                    author = author.trim().to_string();
+                    println!("// Enter project title:");
+                    stdin().read_line(&mut title)?;
+                    title = title.trim().to_string();
+                    println!("// Enter date:");
+                    stdin().read_line(&mut date)?;
+                    date = date.trim().to_string();
+                    println!("// Enter project name:");
+                    stdin().read_line(&mut proj_name)?;
+                    proj_name = proj_name.trim().to_string();
+                    list();
+                    println!("// Enter template:");
+                    stdin().read_line(&mut template)?;
+                    template = template.trim().to_string();
+                    println!("// Enter paper size:");
+                    stdin().read_line(&mut paper_size)?;
+                    paper_size = paper_size.trim().to_string();
+                    println!("// Enter font size:");
+                    stdin().read_line(&mut font_size)?;
+                    let fs: u8 = font_size.trim().parse().unwrap();
+                    println!("// Enter document class:");
+                    stdin().read_line(&mut doc_class)?;
+                    doc_class = doc_class.trim().to_string();
+
+                    let doc = Document::new(paper_size, fs, doc_class, vec![]);
+                    let proj = Project::new(author, title, date, template, proj_name);
+                    let conf = Config::new(proj, doc);
+                    Config::init(Some(conf))?;
+                }
             }
         },
-        CLI::Create {
-            template,
-            name,
-            path,
-        } => match (template.as_str(), path) {
-            (temp, path) => create(&name, &path, temp),
-        },
-        CLI::List => List::list("list.json"),
+        CLI::List => list(),
         CLI::Build { file, mode } => {
             let mode = match &mode{
                 Some(m) => m,
@@ -192,8 +217,7 @@ async fn main() {
                         &conf.Project.title,
                         &conf.Project.author,
                     )
-                        .await
-                        .expect("Couldn't make Book Project"),
+                        .await.expect("Failed to create book"),
                 }
             }
                 //Mutli mode
@@ -315,7 +339,7 @@ async fn main() {
                     None => println!("No packages removed")
                 }
                 let toml_s = to_string_pretty(&conf).unwrap();
-                std::fs::write("config.toml", toml_s).unwrap();
+                std::fs::write("config.toml", toml_s)?;
             }
             else {
                 let mut conf_m = Config_Multi::config(&None);
@@ -430,4 +454,5 @@ async fn main() {
             }
         }
     }
+    Ok(())
 }

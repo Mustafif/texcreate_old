@@ -1,13 +1,13 @@
 pub const NOVEL_MAIN: &str = r#"% Novel Template
 % MKProjects 2021 | TexCreate
 % MIT & GPLv2 License
-\documentclass[11pt, letterpaper, oneside]{book}
+\documentclass[{font_size}pt, {papaer_size}, oneside]{{doc_class}}
 
 \input{structure.tex}
 
-\author{}
-\title{}
-\date{}
+\author{{author}}
+\title{{title}}
+\date{{date}}
 
 \begin{document}
     \maketitle

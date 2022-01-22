@@ -3,13 +3,13 @@ pub const THEATRE_MAIN: &str = r#"% Theatre template
 % TexCreate 
 % Used for creating scripts in LaTeX
 
-\documentclass[11pt, letterpaper]{article}
+\documentclass[{font_size}pt, {paper_size}]{{doc_class}}
 % Packages goes into structure.tex file
 \input{structure.tex}
 % MetaData goes here
-\author{Author}
-\title{Title}
-\date{\today}
+\author{{author}}
+\title{{title}}
+\date{{date}}
 
 \begin{document}
     \maketitle

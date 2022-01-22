@@ -1,25 +1,12 @@
-[[Project]]
-author = 'Author'
-title = 'Title'
-date = '\today'
-template = 'Math'
-project_name = 'Project1'
+[Project]
+author = 'author'
+title = 'title'
+date = '\\today'
+template = 'Basic'
+project_name = 'Project'
 
-[[Project]]
-author = 'Mustafif'
-title = 'Title'
-date = '\today'
-template = 'Code'
-project_name = 'Project2'
-
-[[Document]]
+[Document]
 paper_size = 'letterpaper'
-font_size = 11
-document_class = 'article'
-packages = []
-
-[[Document]]
-paper_size = 'a5paper'
 font_size = 11
 document_class = 'article'
 packages = []

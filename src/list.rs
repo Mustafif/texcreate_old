@@ -13,17 +13,16 @@ impl List {
         let list: Vec<List> = serde_json::from_str(LIST)?;
         Ok(list)
     }
-    pub fn list(path: &str) {
-        let json = Self::read().expect("Unable to read list.json");
-        println!("//////////////////////////////////////");
-        println!("// List of available templates:");
-        println!("//////////////////////////////////////");
-        for item in json {
-            println!("// {} => {}", item.template, item.about);
-        }
+}
+pub fn list() {
+    let json = List::read().expect("Unable to read list.json");
+    println!("//////////////////////////////////////");
+    println!("// List of available templates:");
+    println!("//////////////////////////////////////");
+    for item in json {
+        println!("// {} => {}", item.template, item.about);
     }
 }
-
 const LIST: &str = r#"[
     {
         "template": "Basic",

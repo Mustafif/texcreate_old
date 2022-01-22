@@ -7,15 +7,25 @@ use std::fmt::{Display, Formatter, write};
 /// - Using beamer template and not using a beamer document class
 /// - Using an invalid template
 /// - Using an invalid document class
-/// - Empty project name
+/// - Empty project field
+/// - IO error (Uses std::io::Error)
 
 #[derive(Debug)]
 pub enum Errors {
     BeamerError,
     InvalidTemplateError(String),
     InvalidDocumentClassError(String),
-    EmptyError,
+    EmptyError(String),
+    IoError(std::io::Error),
 }
+// Implement From for Errors
+impl From<std::io::Error> for Errors {
+    fn from(i: std::io::Error) -> Self {
+        Errors::IoError(i)
+    }
+}
+
+
 // Implement Display for Errors
 impl Display for Errors {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
@@ -29,7 +39,8 @@ impl Display for Errors {
                 let s = format!("ERROR: Using an invalid document class: {}", d);
                 write!(f, "{}",&s)
             },
-            Errors::EmptyError => write!(f, "ERROR: Empty project field in config.toml"),
+            Errors::EmptyError(s) => write!(f, "ERROR: Empty {} Field in config.toml", s),
+            Errors::IoError(e) => write!(f, "ERROR: {}", e.to_string()),
         }
     }
 }
@@ -40,7 +51,8 @@ impl Error for Errors{
             Errors::BeamerError => None,
             Errors::InvalidTemplateError(_) => Some(self),
             Errors::InvalidDocumentClassError(_) => Some(self),
-            Errors::EmptyError => None,
+            Errors::EmptyError(_) => Some(self),
+            Errors::IoError(_) => Some(self),
         }
     }
 }

@@ -105,15 +105,15 @@ impl Config_Multi{
             }
             //Check for empty project
             if i.author == "".to_string(){
-                return Err(Errors::EmptyError);
+                return Err(Errors::EmptyError("Author".to_string()));
             } else if i.title == "".to_string(){
-                return Err(Errors::EmptyError);
+                return Err(Errors::EmptyError("Title".to_string()));
             } else if i.date == "".to_string(){
-                return Err(Errors::EmptyError);
+                return Err(Errors::EmptyError("Date".to_string()));
             } else if i.project_name == "".to_string(){
-                return Err(Errors::EmptyError);
+                return Err(Errors::EmptyError("Project Name".to_string()));
             } else if i.template == "".to_string(){
-                return Err(Errors::EmptyError);
+                return Err(Errors::EmptyError("Template".to_string()));
             }
             //Check for Beamer error
             for k in &self.Document{

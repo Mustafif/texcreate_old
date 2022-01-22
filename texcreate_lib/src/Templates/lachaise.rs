@@ -19,7 +19,7 @@ pub const LACHAISE_MAIN: &str = r#"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass{article}
+\documentclass[{font_size}pt, {paper_size}]{{doc_class}}
 
 \input{structure.tex} % Include the file specifying the document structure and custom commands
 
@@ -27,11 +27,11 @@ pub const LACHAISE_MAIN: &str = r#"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	ASSIGNMENT INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title{} % Title of the assignment
+\title{{title}} % Title of the assignment
 
-\author{} % Author name and email address
+\author{{author}} % Author name and email address
 
-\date{} % University, school and/or department name(s) and a date
+\date{{date}} % University, school and/or department name(s) and a date
 
 %----------------------------------------------------------------------------------------
 
