@@ -1,16 +1,16 @@
 mod list;
-use std::borrow::BorrowMut;
+use std::borrow::{Borrow, BorrowMut};
 use std::path::Path;
 use list::list;
 use structopt::StructOpt;
 use texcreate_lib::routes::create;
 use texcreate_lib::Config::{
-    config::Config, config_multi::Config_Multi, Template
+    config::Config, config_multi::ConfigMulti, Template
 };
 use texcreate_lib::Web::web::texweb;
 use texcreate_lib::Templates::book::create as mkcreate;
 use open::that;
-use texcreate_lib::{Document, Project, tc_html};
+use texcreate_lib::{Document, Project, TC_HTML};
 use toml::to_string_pretty;
 use std::io::stdin;
 
@@ -106,7 +106,7 @@ async fn main() -> Result<(), std::io::Error> {
 
             if !tc.exists(){
                 std::fs::File::create(&tc).unwrap();
-                std::fs::write(&tc, tc_html.as_bytes()).unwrap();
+                std::fs::write(&tc, TC_HTML.as_bytes()).unwrap();
             }
             if !tc_file.exists(){
                 std::fs::create_dir(&tc_file).unwrap();
@@ -128,7 +128,7 @@ async fn main() -> Result<(), std::io::Error> {
 
             if mode == "multi"{
                 println!("Initializing multi-mode config.toml...");
-                Config_Multi::init();
+                ConfigMulti::init()?;
             } else {
                 println!("Would you like to use the default config.toml? (y/n): ");
                 let mut input = String::new();
@@ -222,7 +222,7 @@ async fn main() -> Result<(), std::io::Error> {
             }
                 //Mutli mode
             else {
-                let conf = Config_Multi::config(&file);
+                let conf = ConfigMulti::config(&file);
                 match conf.adjust(&None){
                     Ok(a) => a,
                     Err(e) => eprintln!("{}", e)
@@ -342,98 +342,97 @@ async fn main() -> Result<(), std::io::Error> {
                 std::fs::write("config.toml", toml_s)?;
             }
             else {
-                let mut conf_m = Config_Multi::config(&None);
+                let mut conf_m = ConfigMulti::config(&None);
                 // Find the right project
                 let mut n = 0;
                 match &proj{
                     Some(s) => {
-                        let len = &conf_m.Project.len();
+                        let len = &conf_m.conf.len();
                         for i in 0..*len{
-                            if &conf_m.Project[i].project_name == s{
+                            if &conf_m.conf[i].Project.project_name == s{
                                 n = i;
                             }
                         }
                     }
                     None => panic!("Need specific project name (-p <name>), have to abort!")
                 }
-                let mut conf_proj = conf_m.Project[n].borrow_mut();
-                let mut conf_doc = conf_m.Document[n].borrow_mut();
+                let mut conf = conf_m.conf[n].borrow_mut();
                 match &author {
                     Some(s) => {
-                        println!("Changing author from {} to {}", &conf_proj.author, s);
-                        conf_proj.author = s.to_owned();
+                        println!("Changing author from {} to {}", &conf.Project.author, s);
+                        conf.Project.author = s.to_owned();
                     }
                     None => println!("No changes to author field")
                 }
                 match &title {
                     Some(s) => {
-                        println!("Changing title from {} to {}", &conf_proj.title, s);
-                        conf_proj.title = s.to_owned();
+                        println!("Changing title from {} to {}", &conf.Project.title, s);
+                        conf.Project.title = s.to_owned();
                     }
                     None => println!("No changes to title field")
                 }
                 match &date {
                     Some(s) => {
-                        println!("Changing date from {} to {}", &conf_proj.date, s);
-                        conf_proj.date = s.to_string();
+                        println!("Changing date from {} to {}", &conf.Project.date, s);
+                        conf.Project.date = s.to_string();
                     }
                     None => println!("No changes to date field")
                 }
                 match &rename {
                     Some(s) => {
                         println!("Changing project name from {} to {}",
-                                 &conf_proj.project_name, s);
-                        conf_proj.project_name = s.to_owned();
+                                 &conf.Project.project_name, s);
+                        conf.Project.project_name = s.to_owned();
                     }
                     None => println!("No changes to project_name field")
                 }
                 match &template {
                     Some(s) => {
                         println!("Changing template from {} to {}",
-                                 &conf_proj.template, s);
-                        conf_proj.template = s.to_owned();
+                                 &conf.Project.template, s);
+                        conf.Project.template = s.to_owned();
                     }
                     None => println!("No changes to template field")
                 }
                 match &paper_size {
                     Some(s) => {
                         println!("Changing paper size from {} to {}",
-                                 &conf_doc.paper_size, s);
-                        conf_doc.paper_size = s.to_owned();
+                                 &conf.Document.paper_size, s);
+                        conf.Document.paper_size = s.to_owned();
                     }
                     None => println!("No changes to paper_size field")
                 }
                 match &font_size {
                     Some(s) => {
                         println!("Changing font size from {} to {}",
-                                 &conf_doc.paper_size, s);
-                        conf_doc.font_size = s.to_owned();
+                                 &conf.Document.paper_size, s);
+                        conf.Document.font_size = s.to_owned();
                     }
                     None => println!("No changes to font_size field")
                 }
                 match &doc_class {
                     Some(s) => {
                         println!("Changing document class from {} to {}",
-                                 &conf_doc.document_class, s);
-                        conf_doc.document_class = s.to_owned();
+                                 &conf.Document.document_class, s);
+                        conf.Document.document_class = s.to_owned();
                     }
                     None => println!("No changes to document class field")
                 }
                 match &add_package {
                     Some(s) => {
                         println!("Adding package {}", s);
-                        conf_doc.packages.push(s.to_string());
+                        conf.Document.packages.push(s.to_string());
                     }
                     None => println!("No packages added")
                 }
                 match &rm_package{
                     Some(s) => {
                         println!("Removing package {}", s);
-                        let len = &conf_doc.packages.len();
+                        let len = &conf.Document.packages.len();
                         for i in 0..*len{
-                            if &conf_doc.packages[i] == s{
-                                let p1 = &conf_doc.packages[0..i];
-                                let p2 = &conf_doc.packages[i+1..*len];
+                            if &conf.Document.packages[i] == s{
+                                let p1 = &conf.Document.packages[0..i];
+                                let p2 = &conf.Document.packages[i+1..*len];
                                 let mut p = Vec::new();
                                 for i in p1{
                                     p.push(i.to_string());
@@ -441,14 +440,14 @@ async fn main() -> Result<(), std::io::Error> {
                                 for i in p2{
                                     p.push(i.to_string());
                                 }
-                                conf_doc.packages = p;
+                                conf.Document.packages = p;
                             }
                         }
                     }
                     None => println!("No packages removed")
                 }
-                conf_m.Project[n] = conf_proj.clone();
-                conf_m.Document[n] = conf_doc.clone();
+                conf_m.conf[n] = conf.clone();
+                //conf_m.conf[n].Document = conf.Document;
                 let toml_s = to_string_pretty(&conf_m).unwrap();
                 std::fs::write("config.toml", toml_s).unwrap();
             }

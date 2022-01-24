@@ -1,24 +1,22 @@
+use super::{consts::*, template::Template};
+use crate::config::Config;
+use crate::error::Errors;
+use crate::{invalid_class, load};
 use serde_derive::{Deserialize, Serialize};
-use std::io::prelude::*;
-use toml::from_str;
-use super::{template::Template, consts::*};
 use std::fs;
 use std::fs::create_dir;
+use std::io::prelude::*;
 use std::path::Path;
-use crate::error::Errors;
-use crate::config::{Project, Document};
-use crate::{invalid_class, load};
-use crate::book::create;
-
+use toml::from_str;
+use toml::to_string_pretty;
 
 #[derive(Deserialize, Serialize, Clone)]
-pub struct Config_Multi{
-    pub Project: Vec<Project>,
-    pub Document: Vec<Document>,
+pub struct ConfigMulti {
+    pub conf: Vec<Config>,
 }
 
 pub fn from_template(temp: &str) -> Template {
-    match temp{
+    match temp {
         "Basic" => Template::Basic,
         "Math" => Template::Math,
         "Theatre" => Template::Theatre,
@@ -31,13 +29,25 @@ pub fn from_template(temp: &str) -> Template {
     }
 }
 
-impl Config_Multi{
-    pub fn init(){
-        let mut file = fs::File::create("config.toml").expect("Unable to create config.toml");
-        file.write_all(CONFIG_TOML_MULTI.as_bytes())
-            .expect("Unable to write config.toml");
+impl Default for ConfigMulti {
+    fn default() -> Self {
+        let conf_one = Config::default();
+        let mut conf_two = Config::default();
+        conf_two.Project.project_name = "Project2".to_owned();
+        return ConfigMulti {
+            conf: vec![conf_one, conf_two],
+        };
     }
-    pub fn config(path: &Option<String>)->Self{
+}
+
+impl ConfigMulti {
+    pub fn init() -> Result<(), std::io::Error> {
+        let mut file = fs::File::create("config.toml")?;
+        let s = to_string_pretty(&ConfigMulti::default()).unwrap();
+        file.write_all(s.as_bytes())?;
+        Ok(())
+    }
+    pub fn config(path: &Option<String>) -> Self {
         match path {
             Some(path) => {
                 let config = std::fs::read_to_string(path).expect("Unable to read config file");
@@ -51,143 +61,127 @@ impl Config_Multi{
         }
     }
 
-    pub fn adjust(&self, file_path: &Option<String>) -> Result<(), Errors>{
+    pub fn adjust(&self, file_path: &Option<String>) -> Result<(), Errors> {
         //Create portion
         //Sanity check file path
         let mut path = String::new();
         let mut main_path: Vec<String> = Vec::new();
         let mut str_path: Vec<String> = Vec::new();
 
-        let file_path = match file_path{
-            Some(path)=> path,
-            None => "."
+        let file_path = match file_path {
+            Some(path) => path,
+            None => ".",
         };
-        for i in &self.Project{
-            println!("Loading {} template...", i.template);
-            let (main, structure) = load(&i.template);
-            path = format!("{}/{}", file_path, &i.project_name);
-            let def_path = format!("{}/{}", file_path, &i.project_name);
-
-            if Path::new(&path).exists(){
-                let f = format!("Note {} exists, creating {} instead\n" ,&path, &def_path);
-                println!("{}", f);
-                create_dir(&def_path).expect("Error in creating directory");
-                path = def_path;
-            } else {
-                println!("Creating {}", &path);
-                create_dir(&path).expect("Error in creating directory");
-            }
-
-            //Creating the main file
-            println!("Creating {}/{}.tex", &path, &i.project_name);
-            let mut main_file =
-                std::fs::File::create(format!("{}/{}.tex", &path, &i.project_name)).unwrap();
-            main_file.write_all(main.as_bytes()).unwrap();
-            //Creating structure.tex
-            println!("Creating {}/structure.tex", &path);
-            let mut structure_file =
-                std::fs::File::create(format!("{}/structure.tex", &path)).unwrap();
-            structure_file.write_all(structure.as_bytes()).unwrap();
-            main_path.push(format!("{}/{}.tex", &path, &i.project_name));
-            str_path.push(format!("{}/structure.tex", &path));
-        }
-        //Check for errors
-        // Checking for invalid templates
-        let l = Template::list();
         let mut title: Vec<String> = Vec::new();
         let mut author: Vec<String> = Vec::new();
         let mut date: Vec<String> = Vec::new();
 
-        for i in &self.Project{
-            if !l.contains(&i.template){
-                let inv_temp = i.template.clone();
-                return Err(Errors::InvalidTemplateError(inv_temp));
-            }
-            //Check for empty project
-            if i.author == "".to_string(){
-                return Err(Errors::EmptyError("Author".to_string()));
-            } else if i.title == "".to_string(){
-                return Err(Errors::EmptyError("Title".to_string()));
-            } else if i.date == "".to_string(){
-                return Err(Errors::EmptyError("Date".to_string()));
-            } else if i.project_name == "".to_string(){
-                return Err(Errors::EmptyError("Project Name".to_string()));
-            } else if i.template == "".to_string(){
-                return Err(Errors::EmptyError("Template".to_string()));
-            }
-            //Check for Beamer error
-            for k in &self.Document{
-                //Check for Invalid class error
-                if invalid_class(&k.document_class){
-                    return Err(Errors::InvalidDocumentClassError(k.document_class.clone()))
-                }
-            }
-
-            //After errors push formatted title, author, date
-            title.push(format!("\\title{{{}}}", &i.title));
-            author.push(format!("\\author{{{}}}", &i.author));
-            date.push(format!("\\date{{{}}}", &i.date));
-        }
-
         let mut papersize: Vec<String> = Vec::new();
         let mut fontsize: Vec<String> = Vec::new();
         let mut doc_class: Vec<String> = Vec::new();
-        //Document variables
-        for i in &self.Document{
-            papersize.push(i.paper_size.to_string());
-            fontsize.push(i.font_size.to_string());
-            doc_class.push(i.document_class.to_string());
-        }
+        let len = &self.conf.len();
+        for i in &self.conf {
+            println!("Loading {} template...", &i.Project.template);
+            let (main, structure) = load(&i.Project.template);
+            path = format!("{}/{}", file_path, &i.Project.project_name);
+            let def_path = format!("{}/{}", file_path, &i.Project.project_name);
 
-        for k in main_path{
-            let mut file = std::fs::File::open(&k).unwrap();
+            if Path::new(&path).exists() {
+                let f = format!("Note {} exists, creating {} instead\n", &path, &def_path);
+                println!("{}", f);
+                create_dir(&def_path)?;
+                path = def_path;
+            } else {
+                println!("Creating {}", &path);
+                create_dir(&path)?;
+            }
+
+            //Creating the main file
+            println!("Creating {}/{}.tex", &path, &i.Project.project_name);
+            let mut main_file =
+                std::fs::File::create(format!("{}/{}.tex", &path, &i.Project.project_name))?;
+            main_file.write_all(main.as_bytes())?;
+            //Creating structure.tex
+            println!("Creating {}/structure.tex\n", &path);
+            let mut structure_file = std::fs::File::create(format!("{}/structure.tex", &path))?;
+            structure_file.write_all(structure.as_bytes())?;
+            main_path.push(format!("{}/{}.tex", &path, &i.Project.project_name));
+            str_path.push(format!("{}/structure.tex", &path));
+            //Check for errors
+            // Checking for invalid templates
+            let l = Template::list();
+
+            if !l.contains(&i.Project.template) {
+                let inv_temp = i.Project.template.clone();
+                return Err(Errors::InvalidTemplateError(inv_temp));
+            }
+            //Check for empty project
+            if &i.Project.author == "" {
+                return Err(Errors::EmptyError("Author".to_string()));
+            } else if &i.Project.title == "" {
+                return Err(Errors::EmptyError("Title".to_string()));
+            } else if &i.Project.date == "" {
+                return Err(Errors::EmptyError("Date".to_string()));
+            } else if &i.Project.project_name == "" {
+                return Err(Errors::EmptyError("Project Name".to_string()));
+            } else if &i.Project.template == "" {
+                return Err(Errors::EmptyError("Template".to_string()));
+            }
+            //Check for Invalid class error
+            if invalid_class(&i.Document.document_class) {
+                return Err(Errors::InvalidDocumentClassError(
+                    i.Document.document_class.clone(),
+                ));
+            }
+            papersize.push(i.Document.paper_size.to_string());
+            fontsize.push(i.Document.font_size.to_string());
+            doc_class.push(i.Document.document_class.to_string());
+            //After errors push formatted title, author, date
+            title.push(i.Project.title.clone());
+            author.push(i.Project.author.clone());
+            date.push(i.Project.date.clone());
+        }
+        for k in 0..main_path.len() {
+            let mut file = std::fs::File::open(&main_path[k])?;
             let mut content = String::new();
-            file.read_to_string(&mut content).unwrap();
+            file.read_to_string(&mut content)?;
 
             //Project Adjustments
-            for i in 0..title.len(){
-                println!("Adjusting author...");
-                content = content.replace(AUTHOR, &author[i]);
-                println!("Adjusting title...");
-                content = content.replace(TITLE, &title[i]);
-                println!("Adjusting date...");
-                content = content.replace(DATE, &date[i]);
-            }
-
+            println!("Adjusting author for {}", &main_path[k]);
+            content = content.replace("{author}", &author[k]);
+            println!("Adjusting title for {}", &main_path[k]);
+            content = content.replace("{title}", &title[k]);
+            println!("Adjusting date for {}", &main_path[k]);
+            content = content.replace("{date}", &date[k]);
             //Document Adjustments
-            for i in 0..doc_class.len(){
-                println!("Adjusting papersize...");
-                content = content.replace("letterpaper", &papersize[i]);
-                println!("Adjusting fontsize...");
-                content = content.replace("11pt", &format!("{}pt", &fontsize[i]));
-                println!("Adjusting document's class...");
-                content = content.replace("article", &doc_class[i]);
-            }
-            let mut file = std::fs::File::create(&k).unwrap();
+            println!("Adjusting papersize for {}", &main_path[k]);
+            content = content.replace("{paper_size}", &papersize[k]);
+            println!("Adjusting fontsize for {}", &main_path[k]);
+            content = content.replace("{font_size}", &fontsize[k]);
+            println!("Adjusting document's class for {}\n", &main_path[k]);
+            content = content.replace("{doc_class}", &doc_class[k]);
+
+            let mut file = std::fs::File::create(&main_path[k]).unwrap();
             file.write_all(content.as_bytes()).unwrap();
         }
         // Package adjustments
         let mut packages: Vec<Vec<String>> = Vec::new();
-        for i in &self.Document{
-            packages.push(i.packages.to_owned());
+        for i in &self.conf {
+            packages.push(i.Document.packages.to_owned());
         }
         if packages.len() < 1 {
             println!("No packages to add...");
             return Ok(());
         }
-        for k in str_path{
+        for k in 0..str_path.len() {
             let mut file = std::fs::OpenOptions::new()
                 .append(true)
-                .open(&k)
+                .open(&str_path[k])
                 .expect("Couldn't open file");
-            for i in &packages{
-                let i: Vec<String> = i.iter()
-                    .map(|x| format!("\\usepackage{{{}}}", x))
-                    .collect();
+                let i: Vec<String> = packages[k].iter().map(|x| format!("\\usepackage{{{}}}", x)).collect();
                 let i = i.join("\n");
-                println!("Adding packages to structure.tex");
-                write!(file, "{}", i).expect("Couldn't write to file");
-            }
+                println!("Adding packages to {}", &str_path[k] );
+                write!(file, "{}", i)?;
         }
         Ok(())
     }

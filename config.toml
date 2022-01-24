@@ -1,11 +1,26 @@
-[Project]
-author = 'author'
+[[conf]]
+[conf.Project]
+author = 'author1'
+title = 'title'
+date = '\\today'
+template = 'Code'
+project_name = 'Project1'
+
+[conf.Document]
+paper_size = 'letterpaper'
+font_size = 11
+document_class = 'article'
+packages = ['dramatist']
+
+[[conf]]
+[conf.Project]
+author = 'author2'
 title = 'title'
 date = '\\today'
 template = 'Basic'
-project_name = 'Project'
+project_name = 'Project2'
 
-[Document]
+[conf.Document]
 paper_size = 'letterpaper'
 font_size = 11
 document_class = 'article'

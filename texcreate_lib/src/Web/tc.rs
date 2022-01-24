@@ -4,9 +4,6 @@ use zip::write::{FileOptions, ZipWriter};
 use zip::CompressionMethod::Stored;
 use rocket::form::{FromForm, Form};
 use rocket::fs::NamedFile;
-use rocket::futures::AsyncWriteExt;
-use crate::{create, Config, Document, Project};
-use zip::CompressionMethod;
 use crate::Config::consts::{DATE, AUTHOR, TITLE};
 
 #[derive(FromForm)]
@@ -30,7 +27,7 @@ pub async fn tex_create(input: Form<Texcreate<'_>>) -> Option<NamedFile>{
     let rand = "tc_files/9999999sisjsj.zip";
     let mut zip = ZipWriter::new(std::fs::File::create(rand).unwrap());
     let options = FileOptions::default().compression_method(Stored);
-    let mut path = std::path::Path::new("tc_files").join(&input.project_name);
+    let path = std::path::Path::new("tc_files").join(&input.project_name);
     std::fs::create_dir(&path).unwrap();
     std::fs::File::create(&path.clone().join("main.tex")).unwrap();
     std::fs::File::create(&path.clone().join("structure.tex")).unwrap();
@@ -61,7 +58,7 @@ pub async fn tex_create(input: Form<Texcreate<'_>>) -> Option<NamedFile>{
 }
 
 
-pub const tc_html: &str = r#"<!DOCTYPE html>
+pub const TC_HTML: &str = r#"<!DOCTYPE html>
 <html>
 <title>TexCreate</title>
 <meta charset="UTF-8">

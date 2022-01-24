@@ -1,7 +1,7 @@
 
 use std::error::Error;
 use std::fmt;
-use std::fmt::{Display, Formatter, write};
+use std::fmt::{Display, Formatter};
 
 /// Types of errors that can occur when creating a texcreate project:
 /// - Using beamer template and not using a beamer document class

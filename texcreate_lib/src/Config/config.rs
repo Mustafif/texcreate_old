@@ -1,7 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 use std::io::prelude::*;
 use toml::{from_str, to_string_pretty};
-use super::{template::Template, consts::*};
+use super::template::Template;
 use std::fs;
 use crate::error::Errors;
 use crate::invalid_class;

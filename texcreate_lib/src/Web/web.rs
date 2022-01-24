@@ -1,7 +1,7 @@
 
-use rocket::{Response, Request, get, routes};
-use rocket::fs::{FileServer, NamedFile, relative};
-use std::path::{Path, PathBuf};
+use rocket::{get, routes};
+use rocket::fs::NamedFile;
+use std::path::Path;
 use rocket::{Rocket, Build};
 use crate::Web::tex_create;
 
