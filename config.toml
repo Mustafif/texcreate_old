@@ -1,9 +1,9 @@
-author = ''
-title = ''
-date = ''
-project_name = ''
-template = ''
-paper_size = ''
-document_class = ''
-font_size = 12
+author = 'Author'
+title = 'Title'
+date = 'Date'
+project_name = 'Project'
+template = 'Basic'
+paper_size = 'letterpaper'
+document_class = 'article'
+font_size = 11
 packages = []
