@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/matex/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tex-rs/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-config/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-error/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-latex/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-utils/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/texc-web/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

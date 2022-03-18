@@ -1,0 +1,33 @@
+[package]
+name = "texcreate"
+version = "2.0.0-beta.1"
+edition = "2021"
+
+[workspace]
+members = [
+    "tex-rs", 
+    "texc-config", 
+    "texc-core", 
+    "texc-error", 
+    "texc-utils", 
+    "texc-web", 
+    "matex",
+    "texc-latex"
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+structopt = "0.3"
+serde_derive = "1.0"
+serde = "1.0"
+serde_json = "1.0"
+toml = "0.5"
+mdbook = "0.4"
+reqwest = "0.11"
+tokio = { version = "1", features = ["full"] }
+texcreate_lib = "0.1"
+open = "2"
+texc-config = {path = "texc-config"}
+texc-utils = {path = "texc-utils"}
+async-std = "1.10.0"

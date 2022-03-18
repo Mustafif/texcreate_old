@@ -1,0 +1,17 @@
+[package]
+name = "texc-config"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-std = "1.10.0"
+serde = {version = "1", features = ["derive"]}
+texcreate_lib = "0.1.17"
+toml = "0.5.8"
+texc-latex = {path = "../texc-latex"}
+tex-rs = {path = "../tex-rs"}
+failure = "0.1.8"
+failure_derive = "0.1.8"
+zip = "0.5.13"
