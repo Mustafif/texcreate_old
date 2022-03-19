@@ -1,6 +1,6 @@
 [package]
 name = "texcreate"
-version = "2.0.0"
+version = "2.0.0-beta.1"
 edition = "2021"
 
 [workspace]
@@ -28,6 +28,6 @@ reqwest = "0.11"
 tokio = { version = "1", features = ["full"] }
 texcreate_lib = "0.1"
 open = "2"
-texc-config = {path = "texc-config"}
-texc-utils = {path = "texc-utils"}
+texc-config = {version = "^0.1",path = "texc-config"}
+texc-utils = {version = "^0.1",path = "texc-utils"}
 async-std = "1.10.0"
