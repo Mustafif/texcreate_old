@@ -47,11 +47,11 @@ pub fn code(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -
     let mut intro = Section::new("Intro");
     let mut example = Environment::new("lstlisting");
     example.attach_string(CODE.to_string());
-    let c_one = Comment::new_comment(
+    let c_one = UserDefined::new_comment(
         "To use external code, use the following command",
         Level::Body,
     );
-    let c_two = Comment::new_comment("\\lstinputlisting{file.c}", Level::Body);
+    let c_two = UserDefined::new_comment("\\lstinputlisting{file.c}", Level::Body);
 
     intro.attach(E::from(example)).unwrap();
     intro.attach(E::from(c_one)).unwrap();
