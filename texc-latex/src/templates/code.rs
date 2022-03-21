@@ -1,5 +1,5 @@
 use crate::{determine_class, set};
-use tex_rs::{Attach, Comment, Element, Environment, Latex, Level, Metadata, Section, UserDefined};
+use tex_rs::*;
 
 type E = Element;
 const CODE: &str = r#"#include <stdio.h>
