@@ -1,6 +1,7 @@
 use crate::set;
 use tex_rs::*;
 use tex_rs::Latex;
+use tex_rs::Comment;
 
 pub fn basic(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -> Latex {
     let mut latex = Latex::new();
