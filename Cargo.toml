@@ -2,7 +2,9 @@
 name = "texcreate"
 version = "2.0.0"
 edition = "2021"
-
+description = "Create LaTeX Projects using prebuilt templates"
+license = "MIT"
+repository = "http://github.com/MKProj/texcreate.git"
 [workspace]
 members = [
     "tex-rs", 
