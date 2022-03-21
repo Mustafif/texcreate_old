@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 async-std = "1.10.0"
-texc-config = {path = "../texc-config"}
+texc-config = {version = "^0.1", path = "../texc-config"}
