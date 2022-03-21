@@ -230,9 +230,6 @@ impl UserDefined {
             Level::Package => ("".to_owned(), "".to_owned(), self.0.clone()),
         }
     }
-}
-
-impl Comment {
     pub fn new_comment(text: &str, level: Level) -> Self {
         Self(format!("% {}", text), level)
     }
