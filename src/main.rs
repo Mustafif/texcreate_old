@@ -120,7 +120,18 @@ async fn main() -> TexCreateResult<()> {
             add_package,
             rm_package,
         } => {
-            println!("Coming V2.0.0-beta.2")
+            edit(proj,
+                 mode,
+                 author,
+                 title,
+                 date,
+                 rename,
+                 template,
+                 paper_size,
+                 font_size,
+                 doc_class,
+                 add_package,
+                 rm_package).await?;
         }
         CLI::Migrate => {
             let s = Config::migrate().unwrap();

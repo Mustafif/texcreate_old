@@ -1,10 +1,10 @@
-use std::borrow::{Borrow, BorrowMut};
-use async_std::fs::{File, read_to_string};
+use async_std::fs::{read_to_string, File};
 use async_std::io::prelude::*;
 use async_std::io::stdin;
-use texc_config::{to_string_multi, TexCreateError, TexCreateResult, from_str_multi};
-use texc_config::{Config, MultiConfig};
+use std::borrow::{Borrow, BorrowMut};
 use texc_config::TexCreateError::Invalid;
+use texc_config::{from_str_multi, to_string_multi, TexCreateError, TexCreateResult};
+use texc_config::{Config, MultiConfig};
 
 pub async fn init(mode: Option<String>) -> TexCreateResult<()> {
     let mode = match mode {
@@ -139,38 +139,82 @@ async fn ask_questions() -> Config {
     )
 }
 
-fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs:Option<u8>){
-    let field = match field.to_owned(){
+fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: Option<u8>) {
+    let field = match field.to_owned() {
         Some(f) => f,
-        None => "".to_string()
+        None => return println!("No changes to {}", field_name),
     };
     let fs = match fs {
         Some(f) => f,
-        None => 11
+        None => 11,
     };
-    match field_name{
-        "author" => config.author = field,
-        "title" => config.title = field,
-        "date" => config.date = field,
-        "rename" => config.project_name = field,
-        "template" => config.template = field,
-        "paper_size" => config.paper_size = field,
-        "font_size" => config.font_size = fs,
-        "doc_class" => config.document_class = field,
+    match field_name {
+        "author" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.author, &field
+            );
+            config.author = field;
+        }
+        "title" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.title, &field
+            );
+            config.title = field;
+        }
+        "date" => {
+            println!("Changed {} from {} to {}", field_name, &config.date, &field);
+            config.date = field
+        }
+        "rename" => {
+            println!("Renamed project to {}", &field);
+            config.project_name = field
+        }
+        "template" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.template, &field
+            );
+            config.template = field
+        }
+        "paper_size" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.paper_size, &field
+            );
+            config.paper_size = field
+        }
+        "font_size" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.font_size, &field
+            );
+            config.font_size = fs
+        }
+        "doc_class" => {
+            println!(
+                "Changed {} from {} to {}",
+                field_name, &config.document_class, &field
+            );
+            config.document_class = field
+        }
         "add_package" => {
+            println!("Added package {}", &field);
             let s: String = field;
             config.packages.push(s);
         }
         "rm_package" => {
+            println!("Removed package {}", &field);
             let mut v = Vec::new();
-            for i in &config.packages{
-                if i.as_str() != field.as_str(){
+            for i in &config.packages {
+                if i.as_str() != field.as_str() {
                     v.push(i.to_string());
                 }
             }
             config.packages = v;
         }
-        _ => println!("Nothing to do")
+        _ => println!("Nothing to do"),
     }
 }
 
@@ -188,16 +232,20 @@ pub async fn edit(
     add_package: Option<String>,
     rm_package: Option<String>,
 ) -> TexCreateResult<()> {
-    match mode.as_str(){
+    match mode.as_str() {
         "multi" => {
             let mut multi_config = from_str_multi(read_to_string("config.toml").await?).unwrap();
-            let proj = match proj{
+            let proj = match proj {
                 Some(p) => p,
-                None => return Err(Invalid("Project name needs to be provided for multi mode!".to_string()))
+                None => {
+                    return Err(Invalid(
+                        "Project name needs to be provided for multi mode!".to_string(),
+                    ))
+                }
             };
-            for config in &mut multi_config{
+            for config in &mut multi_config {
                 let config = config.borrow_mut();
-                if  &proj == &config.project_name{
+                if &proj == &config.project_name {
                     edit_item(config, &author, "author", None);
                     edit_item(config, &title, "title", None);
                     edit_item(config, &date, "date", None);
@@ -211,8 +259,9 @@ pub async fn edit(
                 }
             }
             let mut file = File::create("config.toml").await?;
-            file.write_all(to_string_multi(&multi_config).unwrap().as_bytes()).await?;
-        },
+            file.write_all(to_string_multi(&multi_config).unwrap().as_bytes())
+                .await?;
+        }
         "single" => {
             let mut config = Config::from_string(read_to_string("config.toml").await?).unwrap();
             edit_item(&mut config, &author, "author", None);
@@ -226,10 +275,13 @@ pub async fn edit(
             edit_item(&mut config, &add_package, "add_package", None);
             edit_item(&mut config, &rm_package, "rm_package", None);
             let mut file = File::create("config.toml").await?;
-            file.write_all(config.to_string().unwrap().as_bytes()).await?;
+            file.write_all(config.to_string().unwrap().as_bytes())
+                .await?;
         }
         _ => {
-            return Err(Invalid("Invalid mode given, only 'single' and 'multi' accepted".to_string()))
+            return Err(Invalid(
+                "Invalid mode given, only 'single' and 'multi' accepted".to_string(),
+            ))
         }
     }
 

@@ -1,4 +1,4 @@
-## 2022-03-21, Version v2.0.0
+## 2022-03-21, Version v2.0.0 - Beta 1
 ### Commits
 - [`a6a25eeb52`](http://github.com/MKProj/texcreate.git/commit/a6a25eeb5282a7d7b2310d5cd272d4e9237a8caa) Update (Mustafif)
 - [`6d04615633`](http://github.com/MKProj/texcreate.git/commit/6d046156331a7810a4a7804d5c6aec7bf6f14781) Added desc and license (Mustafif)
