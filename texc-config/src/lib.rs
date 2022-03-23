@@ -1,6 +1,8 @@
 pub mod error;
 pub mod extra;
 
+use std::fmt::format;
+use std::io::Write;
 use async_std::fs::*;
 use async_std::io::prelude::*;
 pub use error::*;
@@ -15,6 +17,10 @@ use texcreate_lib::Errors;
 use toml::{from_str, to_string_pretty};
 use zip::write::{FileOptions, ZipWriter};
 use zip::CompressionMethod::Stored;
+use zip::read::ZipFile;
+use crate::TexCreateError::Invalid;
+
+type F = std::fs::File;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Config {
@@ -133,6 +139,14 @@ impl Config {
                 &self.title,
                 &self.date,
             ),
+            "Novel" => novel(
+                self.font_size,
+                &self.paper_size,
+                &self.document_class,
+                &self.author,
+                &self.title,
+                &self.date,
+            ),
             _ => return Err(TexCreateError::InvalidTemplate(self.template.clone())),
         };
         Ok(f)
@@ -177,6 +191,75 @@ impl Config {
                 )
                 .await?;
         }
+        Ok(())
+    }
+    pub async fn zip_proj(&self) -> TexCreateResult<()>{
+        let mut zip = ZipWriter::new(F::create(format!("{}.zip", &self.project_name)).unwrap());
+        let options = FileOptions::default().compression_method(Stored);
+
+        // README.md
+        let _ = F::create("README.md").unwrap();
+        zip.start_file("README.md", options).unwrap();
+        zip.write_all(README.as_bytes()).unwrap();
+        // texcreate.toml
+        let _ = F::create("texcreate.toml").unwrap();
+        zip.start_file("texcreate.toml", options).unwrap();
+        zip.write_all(to_string_pretty(&TexcToml::default()).unwrap().as_bytes()).unwrap();
+        // out/
+        create_dir("out").await?;
+        zip.add_directory("out", options);
+        // src/
+        let src = Path::new("src");
+        create_dir(src).await?;
+
+        // src/*.tex
+        let temp_str = self.template()?.split_string();
+
+        let main = src.join(format!("{}.tex", &self.project_name));
+        let _ = F::create(&main).unwrap();
+
+        let structure = src.join("structure.tex");
+        let _ = F::create(&structure).unwrap();
+
+        zip.start_file(main.to_str().unwrap(), options);
+        zip.write_all(&temp_str.0.as_bytes()).unwrap();
+
+        zip.start_file(structure.to_str().unwrap(), options);
+        zip.write_all(&temp_str.1.as_bytes()).unwrap();
+
+        zip.finish().unwrap();
+
+        // Cleaning step
+        remove_file("README.md").await?;
+        remove_file("texcreate.toml").await?;
+        remove_dir("out").await?;
+        remove_dir_all("src").await?;
+
+
+        Ok(())
+    }
+    pub async fn zip_files(&self) -> TexCreateResult<()>{
+        let mut zip = ZipWriter::new(F::create(format!("{}.zip", &self.project_name)).unwrap());
+        let options = FileOptions::default().compression_method(Stored);
+
+        let main = format!("{}.tex", &self.project_name);
+        let structure = Path::new("structure.tex");
+        let _ = File::create(&main);
+        let _ = File::create(structure);
+        let temp_str = self.template()?.split_string();
+
+        zip.start_file(&main, options).unwrap();
+        zip.write_all(&temp_str.0.as_bytes()).unwrap();
+
+        zip.start_file("structure.tex", options).unwrap();
+        zip.write_all(&temp_str.1.as_bytes()).unwrap();
+
+        zip.finish().unwrap();
+
+        // Cleaning step
+        remove_file(&main).await?;
+        remove_file(structure).await?;
+
         Ok(())
     }
 }

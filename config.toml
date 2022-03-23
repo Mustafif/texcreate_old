@@ -1,9 +1,10 @@
-author = 'Author'
+author = 'author'
 title = 'title'
-date = 'Date'
-project_name = 'anotherprojecpt'
-template = 'Basic'
+date = '\\today'
+project_name = 'Project'
+template = 'Novel'
 paper_size = 'letterpaper'
 document_class = 'article'
 font_size = 11
 packages = []
+only_files = false

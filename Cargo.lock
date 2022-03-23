@@ -2920,20 +2920,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "texc-core"
-version = "0.1.0"
-
-[[package]]
-name = "texc-error"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "failure",
- "failure_derive",
- "texc-config",
-]
-
-[[package]]
 name = "texc-latex"
 version = "0.1.0"
 dependencies = [
@@ -2945,12 +2931,17 @@ name = "texc-utils"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "tex-rs",
  "texc-config",
 ]
 
 [[package]]
 name = "texc-web"
 version = "0.1.0"
+dependencies = [
+ "rocket",
+ "texc-config",
+]
 
 [[package]]
 name = "texcreate"

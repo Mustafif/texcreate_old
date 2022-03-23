@@ -41,7 +41,7 @@ pub fn code(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -
     let mut latex = Latex::new();
     set(&mut latex, fs, ps, dc, author, title, date);
     // Meta
-    let input = UserDefined::new("\\input{structure.tex}", Level::Meta);
+    let input = UserDefined::new("\\input{src/structure.tex}", Level::Meta);
 
     //Body
     let mut intro = Section::new("Intro");

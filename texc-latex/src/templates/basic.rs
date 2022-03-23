@@ -1,7 +1,7 @@
 use crate::set;
-use tex_rs::*;
-use tex_rs::Latex;
 use tex_rs::Comment;
+use tex_rs::Latex;
+use tex_rs::*;
 
 pub fn basic(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -> Latex {
     let mut latex = Latex::new();
@@ -15,7 +15,7 @@ pub fn basic(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) 
         "Extra packages from config.toml goes under here",
         Level::Package,
     ));
-    let input = UserDefined::new("\\input{structure.tex}", Level::Meta);
+    let input = UserDefined::new("\\input{src/structure.tex}", Level::Meta);
     comments.push(Comment::new_comment("Document code goes here", Level::Body));
 
     let mut elements = Vec::new();

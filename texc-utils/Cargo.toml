@@ -10,3 +10,4 @@ license = "MIT"
 [dependencies]
 async-std = "1.10.0"
 texc-config = {version = "^0.1", path = "../texc-config"}
+tex-rs = {version = "^0.2", path = "../tex-rs"}

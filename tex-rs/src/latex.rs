@@ -358,6 +358,74 @@ impl Latex {
         struct_file.write_all(&structure_cont.as_bytes()).await?;
         Ok(())
     }
+    pub fn split_string(&self) -> (String, String){
+        let ud_vec = &self.get_ud();
+        let mut s: Vec<String> = Vec::new();
+        let mut struct_s: Vec<String> = Vec::new();
+
+        s.push(self.document_class.to_latex_string());
+        for i in ud_vec {
+            s.push(i.1.to_owned())
+        }
+        s.push(self.metadata.to_latex_string());
+        for i in &self.packages {
+            struct_s.push(i.to_latex_string())
+        }
+        for i in ud_vec {
+            struct_s.push(i.2.to_owned())
+        }
+        s.push(String::from("\\begin{document}"));
+        s.push(String::from(
+            "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
+        ));
+        // By attach things should be order by priority
+        for i in &self.document_elements {
+            match i {
+                Element::Part(e) => {
+                    s.push(e.to_latex_string());
+                    for j in &e.1 {
+                        s.push(j.to_latex_string());
+                        s.push(j.loop_through())
+                    }
+                }
+                Element::Chapter(e) => {
+                    s.push(e.to_latex_string());
+                    for j in &e.1 {
+                        s.push(j.to_latex_string());
+                        s.push(j.loop_through())
+                    }
+                }
+                Element::Section(e) => {
+                    s.push(e.to_latex_string());
+                    for j in &e.1 {
+                        s.push(j.to_latex_string());
+                        s.push(j.loop_through())
+                    }
+                }
+                Element::Paragraph(e) => {
+                    s.push(e.to_latex_string());
+                    for j in e.1.as_ref().unwrap() {
+                        s.push(j.to_latex_string());
+                        s.push(j.loop_through())
+                    }
+                }
+                Element::Environment(e) => {
+                    s.push(e.to_latex_string());
+                }
+                Element::List(e) => s.push(e.to_latex_string()),
+                Element::UserDefined(e) => {
+                    let ud = e.evaluate();
+                    s.push(ud.0)
+                }
+                Element::Text(e) => s.push(e.to_latex_string()),
+                Element::Input(e) => s.push(e.to_latex_string()),
+            }
+        }
+        s.push(String::from("\\end{document}"));
+        let content = s.join("\n");
+        let structure_cont = struct_s.join("\n");
+        (content, structure_cont)
+    }
 }
 
 // Trait Implementations

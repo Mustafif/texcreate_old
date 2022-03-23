@@ -5,6 +5,7 @@ use std::borrow::{Borrow, BorrowMut};
 use texc_config::TexCreateError::Invalid;
 use texc_config::{from_str_multi, to_string_multi, TexCreateError, TexCreateResult};
 use texc_config::{Config, MultiConfig};
+use tex_rs::*;
 
 pub async fn init(mode: Option<String>) -> TexCreateResult<()> {
     let mode = match mode {
@@ -214,6 +215,15 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
             }
             config.packages = v;
         }
+        "only_files" => {
+            println!("Changing only-files structure to {}", &field);
+            let field = match field.as_str(){
+                "true" => true,
+                "false" => false,
+                _ => false
+            };
+            config.only_files = Some(field);
+        }
         _ => println!("Nothing to do"),
     }
 }
@@ -231,6 +241,7 @@ pub async fn edit(
     doc_class: Option<String>,
     add_package: Option<String>,
     rm_package: Option<String>,
+    only_files: Option<String>
 ) -> TexCreateResult<()> {
     match mode.as_str() {
         "multi" => {
@@ -256,6 +267,7 @@ pub async fn edit(
                     edit_item(config, &None, "font_size", font_size);
                     edit_item(config, &add_package, "add_package", None);
                     edit_item(config, &rm_package, "rm_package", None);
+                    edit_item(config, &only_files, "only_files", None);
                 }
             }
             let mut file = File::create("config.toml").await?;
@@ -274,6 +286,7 @@ pub async fn edit(
             edit_item(&mut config, &None, "font_size", font_size);
             edit_item(&mut config, &add_package, "add_package", None);
             edit_item(&mut config, &rm_package, "rm_package", None);
+            edit_item(&mut config, &only_files, "only_files", None);
             let mut file = File::create("config.toml").await?;
             file.write_all(config.to_string().unwrap().as_bytes())
                 .await?;

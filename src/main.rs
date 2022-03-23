@@ -66,11 +66,15 @@ enum CLI {
         add_package: Option<String>,
         #[structopt(long = "rm-package")]
         rm_package: Option<String>,
+        #[structopt(long = "only-files")]
+        only_files: Option<String>,
     },
     #[structopt(about = "Migrate single mode config.toml from v1 to v2")]
     Migrate,
     #[structopt(about = "Compile TexCreate Project with set TeX Compiler")]
     Compile,
+    #[structopt(about = "Zip TexCreate Project instead of building")]
+    Zip,
 }
 
 #[tokio::main]
@@ -119,19 +123,24 @@ async fn main() -> TexCreateResult<()> {
             doc_class,
             add_package,
             rm_package,
+            only_files
         } => {
-            edit(proj,
-                 mode,
-                 author,
-                 title,
-                 date,
-                 rename,
-                 template,
-                 paper_size,
-                 font_size,
-                 doc_class,
-                 add_package,
-                 rm_package).await?;
+            edit(
+                proj,
+                mode,
+                author,
+                title,
+                date,
+                rename,
+                template,
+                paper_size,
+                font_size,
+                doc_class,
+                add_package,
+                rm_package,
+                only_files
+            )
+            .await?;
         }
         CLI::Migrate => {
             let s = Config::migrate().unwrap();
@@ -142,6 +151,21 @@ async fn main() -> TexCreateResult<()> {
         CLI::Compile => {
             let texc: TexcToml = from_str(&read_to_string("texcreate.toml").await?).unwrap();
             texc.compile().await?;
+        }
+        CLI::Zip => {
+            let config: Config = from_str(&read_to_string("config.toml").await?).unwrap();
+
+            let only_files = match config.only_files.clone(){
+                Some(p) => p,
+                None => false
+            };
+
+            if only_files {
+                config.zip_files().await?;
+            } else {
+                config.zip_proj().await?;
+            }
+            println!("Successfully zipped project: {}", &config.project_name);
         }
     }
 

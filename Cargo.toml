@@ -8,9 +8,7 @@ repository = "http://github.com/MKProj/texcreate.git"
 [workspace]
 members = [
     "tex-rs", 
-    "texc-config", 
-    "texc-core", 
-    "texc-error", 
+    "texc-config",
     "texc-utils", 
     "texc-web", 
     "matex",

@@ -1,8 +1,10 @@
 pub mod basic;
 pub mod code;
+pub mod novel;
 
 pub use basic::*;
 pub use code::*;
+pub use novel::*;
 use tex_rs::{Class, Latex, Metadata};
 
 pub fn determine_class(a: &str) -> Class {
