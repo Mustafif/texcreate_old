@@ -2951,7 +2951,7 @@ dependencies = [
 
 [[package]]
 name = "tex-rs"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "async-std",
  "rayon",
@@ -2959,7 +2959,7 @@ dependencies = [
 
 [[package]]
 name = "texc-config"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-std",
  "failure",
@@ -2975,14 +2975,14 @@ dependencies = [
 
 [[package]]
 name = "texc-latex"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "tex-rs",
 ]
 
 [[package]]
 name = "texc-utils"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-std",
  "tex-rs",
@@ -3000,7 +3000,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate"
-version = "2.0.0-beta.1"
+version = "2.0.0-beta.2"
 dependencies = [
  "async-std",
  "mdbook",
