@@ -11,7 +11,7 @@ async-std = "1.10.0"
 serde = {version = "1", features = ["derive"]}
 texcreate_lib = "0.1.17"
 toml = "0.5.8"
-texc-latex = {version = "0.1",path = "../texc-latex"}
+texc-latex = {version = "^0.1",path = "../texc-latex"}
 tex-rs = {version = "0.2",path = "../tex-rs"}
 failure = "0.1.8"
 failure_derive = "0.1.8"
