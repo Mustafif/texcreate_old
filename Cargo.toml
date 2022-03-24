@@ -31,3 +31,4 @@ open = "2"
 texc-config = {version = "^0.1",path = "texc-config"}
 texc-utils = {version = "^0.1",path = "texc-utils"}
 async-std = "1.10.0"
+texc-web = {version = "^0.1", path = "texc-web"}

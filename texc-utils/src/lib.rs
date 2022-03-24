@@ -1,19 +1,16 @@
-use async_std::fs::{read_to_string, File};
+use std::borrow::{Borrow, BorrowMut};
+
+use async_std::fs::{File, read_to_string};
 use async_std::io::prelude::*;
 use async_std::io::stdin;
-use std::borrow::{Borrow, BorrowMut};
-use texc_config::TexCreateError::Invalid;
-use texc_config::{from_str_multi, to_string_multi, TexCreateError, TexCreateResult};
-use texc_config::{Config, MultiConfig};
-use tex_rs::*;
 
-pub async fn init(mode: Option<String>) -> TexCreateResult<()> {
-    let mode = match mode {
-        Some(m) => m,
-        None => "single".to_string(),
-    };
+use tex_rs::*;
+use texc_config::{TexCreateError, TexCreateResult};
+use texc_config::Config;
+use texc_config::TexCreateError::Invalid;
+
+pub async fn init() -> TexCreateResult<()> {
     let mut config = Config::default();
-    if &mode == "single" {
         // Create single mode config
         println!("Use default settings? (yes/no): ");
         let mut def_settings = String::new();
@@ -36,16 +33,6 @@ pub async fn init(mode: Option<String>) -> TexCreateResult<()> {
                 "settings option chosen!".to_string(),
             )),
         };
-    } else {
-        // Create multi mode config
-        let conf1 = Config::default();
-        let mut conf2 = Config::default();
-        conf2.project_name = "Project2".to_string();
-        let multi_config: MultiConfig = vec![conf1, conf2];
-        let s = to_string_multi(&multi_config).unwrap();
-        let mut file = File::create("config.toml").await?;
-        file.write_all(s.as_bytes()).await?;
-    }
     Ok(())
 }
 
@@ -86,7 +73,7 @@ pub fn list() {
     println!("  Available Templates  ");
     println!("=======================");
     for t in 0..temp.0.len() {
-        println!("==> {}: {}", temp.0[t], temp.1[t]);
+        println!("==> {}: {}", temp.0[t], temp.1[t.clone()]);
     }
     println!("=======================");
 }
@@ -189,7 +176,7 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
         "font_size" => {
             println!(
                 "Changed {} from {} to {}",
-                field_name, &config.font_size, &field
+                field_name, &config.font_size.to_string(), &field
             );
             config.font_size = fs
         }
@@ -230,7 +217,6 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
 
 pub async fn edit(
     proj: Option<String>,
-    mode: String,
     author: Option<String>,
     title: Option<String>,
     date: Option<String>,
@@ -243,38 +229,6 @@ pub async fn edit(
     rm_package: Option<String>,
     only_files: Option<String>
 ) -> TexCreateResult<()> {
-    match mode.as_str() {
-        "multi" => {
-            let mut multi_config = from_str_multi(read_to_string("config.toml").await?).unwrap();
-            let proj = match proj {
-                Some(p) => p,
-                None => {
-                    return Err(Invalid(
-                        "Project name needs to be provided for multi mode!".to_string(),
-                    ))
-                }
-            };
-            for config in &mut multi_config {
-                let config = config.borrow_mut();
-                if &proj == &config.project_name {
-                    edit_item(config, &author, "author", None);
-                    edit_item(config, &title, "title", None);
-                    edit_item(config, &date, "date", None);
-                    edit_item(config, &rename, "rename", None);
-                    edit_item(config, &template, "template", None);
-                    edit_item(config, &paper_size, "paper_size", None);
-                    edit_item(config, &doc_class, "doc_class", None);
-                    edit_item(config, &None, "font_size", font_size);
-                    edit_item(config, &add_package, "add_package", None);
-                    edit_item(config, &rm_package, "rm_package", None);
-                    edit_item(config, &only_files, "only_files", None);
-                }
-            }
-            let mut file = File::create("config.toml").await?;
-            file.write_all(to_string_multi(&multi_config).unwrap().as_bytes())
-                .await?;
-        }
-        "single" => {
             let mut config = Config::from_string(read_to_string("config.toml").await?).unwrap();
             edit_item(&mut config, &author, "author", None);
             edit_item(&mut config, &title, "title", None);
@@ -290,13 +244,6 @@ pub async fn edit(
             let mut file = File::create("config.toml").await?;
             file.write_all(config.to_string().unwrap().as_bytes())
                 .await?;
-        }
-        _ => {
-            return Err(Invalid(
-                "Invalid mode given, only 'single' and 'multi' accepted".to_string(),
-            ))
-        }
-    }
 
     Ok(())
 }

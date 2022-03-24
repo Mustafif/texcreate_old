@@ -1,12 +1,13 @@
-use async_std::fs::{read_to_string, File};
+use std::path::PathBuf;
+
+use async_std::fs::{File, read_to_string};
 use async_std::io::prelude::*;
-use config::*;
 use structopt::StructOpt;
+use toml::from_str;
+
+use config::*;
 use texc_config as config;
 use texc_utils as utils;
-use texcreate_lib::Errors;
-use tokio::io::AsyncWriteExt;
-use toml::from_str;
 use utils::*;
 
 #[derive(StructOpt, Debug)]
@@ -20,11 +21,7 @@ enum CLI {
     Update,
     #[structopt(about = "Initialize a config.toml file")]
     /// Initialize with `texcreate init`
-    Init {
-        /// Initialize with multi-mode
-        #[structopt(short = "m", long = "mode")]
-        mode: Option<String>,
-    },
+    Init ,
     #[structopt(about = "Lists all the available templates")]
     /// List all available templates `texcreate list`
     List,
@@ -33,8 +30,6 @@ enum CLI {
     Build {
         #[structopt(short, long)]
         file: Option<String>,
-        #[structopt(short, long)]
-        mode: Option<String>,
     },
     #[structopt(about = "Opens the TexCreate documentation")]
     Doc,
@@ -44,8 +39,6 @@ enum CLI {
     Edit {
         #[structopt(short = "p", long = "proj")]
         proj: Option<String>,
-        #[structopt(short = "m", long = "mode")]
-        mode: String,
         #[structopt(long = "author")]
         author: Option<String>,
         #[structopt(long = "title")]
@@ -84,35 +77,26 @@ async fn main() -> TexCreateResult<()> {
         CLI::Update => {
             update()?;
         }
-        CLI::Init { mode } => {
-            init(mode).await?;
+        CLI::Init  => {
+            init().await?;
         }
         CLI::List => {
             list();
         }
-        CLI::Build { file, mode } => {
+        CLI::Build { file } => {
             let file = file.unwrap_or_else(|| "config.toml".to_string());
-            let mode = mode.unwrap_or_else(|| "single".to_string());
 
-            if &mode == "mutli" {
-                let multi = from_str_multi(read_to_string(&file).await?).unwrap();
-                for i in multi {
-                    i.build().await?;
-                }
-            } else {
-                let config = Config::from_string(read_to_string(&file).await?).unwrap();
-                config.build().await?;
-            }
+            let config = Config::from_string(read_to_string(&file).await?).unwrap();
+            config.build().await?;
         }
         CLI::Doc => {
             println!("texcreate.mkproj.com coming v2.0.0-beta.3")
         }
         CLI::Web => {
-            println!("Coming V2.0.0-beta.2")
+
         }
         CLI::Edit {
             proj,
-            mode,
             author,
             title,
             date,
@@ -127,7 +111,6 @@ async fn main() -> TexCreateResult<()> {
         } => {
             edit(
                 proj,
-                mode,
                 author,
                 title,
                 date,
@@ -143,6 +126,8 @@ async fn main() -> TexCreateResult<()> {
             .await?;
         }
         CLI::Migrate => {
+            // Do note due to the complex structure of v1 multi configs
+            // Migrate is only supported for single mode
             let s = Config::migrate().unwrap();
             let mut file = File::create("config.toml").await?;
             file.write_all(s.as_bytes()).await?;
@@ -161,9 +146,9 @@ async fn main() -> TexCreateResult<()> {
             };
 
             if only_files {
-                config.zip_files().await?;
+                config.zip_files(PathBuf::from("")).await?;
             } else {
-                config.zip_proj().await?;
+                config.zip_proj(PathBuf::from("")).await?;
             }
             println!("Successfully zipped project: {}", &config.project_name);
         }

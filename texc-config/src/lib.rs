@@ -19,10 +19,11 @@ use zip::write::{FileOptions, ZipWriter};
 use zip::CompressionMethod::Stored;
 use zip::read::ZipFile;
 use crate::TexCreateError::Invalid;
+use rocket::form::FromForm;
 
 type F = std::fs::File;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, FromForm)]
 pub struct Config {
     pub author: String,
     pub title: String,
@@ -35,16 +36,6 @@ pub struct Config {
     pub packages: Vec<String>,
     pub language: Option<String>,
     pub only_files: Option<bool>,
-}
-
-pub type MultiConfig = Vec<Config>;
-
-pub fn to_string_multi(mc: &MultiConfig) -> Result<String, toml::ser::Error> {
-    Ok(to_string_pretty(mc)?)
-}
-
-pub fn from_str_multi(s: String) -> Result<MultiConfig, toml::de::Error> {
-    Ok(from_str(&s)?)
 }
 
 impl Default for Config {
@@ -124,7 +115,7 @@ impl Config {
     pub fn template(&self) -> TexCreateResult<Latex> {
         let f = match &*self.template {
             "Basic" => basic(
-                self.font_size,
+                self.clone().font_size,
                 &self.paper_size,
                 &self.document_class,
                 &self.author,
@@ -132,7 +123,7 @@ impl Config {
                 &self.date,
             ),
             "Code" => code(
-                self.font_size,
+                self.clone().font_size,
                 &self.paper_size,
                 &self.document_class,
                 &self.author,
@@ -140,7 +131,7 @@ impl Config {
                 &self.date,
             ),
             "Novel" => novel(
-                self.font_size,
+                self.clone().font_size,
                 &self.paper_size,
                 &self.document_class,
                 &self.author,
@@ -193,8 +184,8 @@ impl Config {
         }
         Ok(())
     }
-    pub async fn zip_proj(&self) -> TexCreateResult<()>{
-        let mut zip = ZipWriter::new(F::create(format!("{}.zip", &self.project_name)).unwrap());
+    pub async fn zip_proj(&self, path: PathBuf) -> TexCreateResult<()>{
+        let mut zip = ZipWriter::new(F::create(format!("{}/{}.zip",path.to_str().unwrap() ,&self.project_name)).unwrap());
         let options = FileOptions::default().compression_method(Stored);
 
         // README.md
@@ -238,8 +229,8 @@ impl Config {
 
         Ok(())
     }
-    pub async fn zip_files(&self) -> TexCreateResult<()>{
-        let mut zip = ZipWriter::new(F::create(format!("{}.zip", &self.project_name)).unwrap());
+    pub async fn zip_files(&self, path: PathBuf) -> TexCreateResult<()>{
+        let mut zip = ZipWriter::new(F::create(format!("{}/{}.zip",path.to_str().unwrap(), &self.project_name)).unwrap());
         let options = FileOptions::default().compression_method(Stored);
 
         let main = format!("{}.tex", &self.project_name);

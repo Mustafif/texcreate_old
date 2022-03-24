@@ -7,8 +7,6 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use toml::to_string_pretty;
 
-const COMPILE: &str = "pdflatex --output-directory out src/<name>.tex";
-
 pub const README: &str = r#"# Let's Begin <project>
 Welcome to <project>, let's begin with an overview of where all of the files are located.
 

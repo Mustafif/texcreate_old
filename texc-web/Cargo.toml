@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 rocket = "0.5.0-rc.1"
 texc-config = {version = "^0.1", path = "../texc-config"}
+tempdir = "0.3.7"
