@@ -191,22 +191,22 @@ impl Config {
         // README.md
         let readme_path = path.join("README.md");
         let _ = F::create(&readme_path).unwrap();
-        zip.start_file(&readme_path, options).unwrap();
+        zip.start_file(readme_path.to_str().unwrap(), options).unwrap();
         zip.write_all(README.as_bytes()).unwrap();
         // texcreate.toml
         let toml_path = path.join("texcreate.toml");
         let _ = F::create(&toml_path).unwrap();
-        zip.start_file(&toml_path, options).unwrap();
+        zip.start_file(toml_path.to_str().unwrap(), options).unwrap();
         let mut tex_toml = TexcToml::default();
         tex_toml.project_name = self.clone().project_name;
         zip.write_all(to_string_pretty(&tex_toml).unwrap().as_bytes()).unwrap();
         // out/
         let out_path = path.join("out");
         create_dir(&out_path).await?;
-        zip.add_directory(&out_path, options);
+        zip.add_directory(out_path.to_str().unwrap(), options);
         // src/
         let src = path.join("src");
-        create_dir(src).await?;
+        create_dir(&src).await?;
 
         // src/*.tex
         let temp_str = self.template()?.split_string();
@@ -247,7 +247,7 @@ impl Config {
         zip.start_file(&main, options).unwrap();
         zip.write_all(&temp_str.0.as_bytes()).unwrap();
 
-        zip.start_file("structure.tex", options).unwrap();
+        zip.start_file(structure.to_str().unwrap(), options).unwrap();
         zip.write_all(&temp_str.1.as_bytes()).unwrap();
 
         zip.finish().unwrap();
