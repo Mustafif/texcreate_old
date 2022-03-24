@@ -9,7 +9,6 @@ use rocket::{get, routes};
 use rocket::fs::NamedFile;
 use rocket::{Rocket, Build};
 use tempdir::TempDir;
-use web::texc_post;
 #[get("/")]
 pub async fn texc_home() -> Option<NamedFile>{
     let temp_dir = TempDir::new("html_temp").unwrap();
