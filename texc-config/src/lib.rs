@@ -189,20 +189,23 @@ impl Config {
         let options = FileOptions::default().compression_method(Stored);
 
         // README.md
-        let _ = F::create("README.md").unwrap();
-        zip.start_file("README.md", options).unwrap();
+        let readme_path = path.join("README.md");
+        let _ = F::create(&readme_path).unwrap();
+        zip.start_file(&readme_path, options).unwrap();
         zip.write_all(README.as_bytes()).unwrap();
         // texcreate.toml
-        let _ = F::create("texcreate.toml").unwrap();
-        zip.start_file("texcreate.toml", options).unwrap();
+        let toml_path = path.join("texcreate.toml");
+        let _ = F::create(&toml_path).unwrap();
+        zip.start_file(&toml_path, options).unwrap();
         let mut tex_toml = TexcToml::default();
         tex_toml.project_name = self.clone().project_name;
         zip.write_all(to_string_pretty(&tex_toml).unwrap().as_bytes()).unwrap();
         // out/
-        create_dir("out").await?;
-        zip.add_directory("out", options);
+        let out_path = path.join("out");
+        create_dir(&out_path).await?;
+        zip.add_directory(&out_path, options);
         // src/
-        let src = Path::new("src");
+        let src = path.join("src");
         create_dir(src).await?;
 
         // src/*.tex
@@ -223,10 +226,10 @@ impl Config {
         zip.finish().unwrap();
 
         // Cleaning step
-        remove_file("README.md").await?;
-        remove_file("texcreate.toml").await?;
-        remove_dir("out").await?;
-        remove_dir_all("src").await?;
+        remove_file(&readme_path).await?;
+        remove_file(&toml_path).await?;
+        remove_dir(&out_path).await?;
+        remove_dir_all(&src).await?;
 
 
         Ok(())
@@ -235,10 +238,10 @@ impl Config {
         let mut zip = ZipWriter::new(F::create(format!("{}/{}.zip",path.to_str().unwrap(), &self.project_name)).unwrap());
         let options = FileOptions::default().compression_method(Stored);
 
-        let main = format!("{}.tex", &self.project_name);
-        let structure = Path::new("structure.tex");
+        let main = format!("{}/{}.tex", path.to_str().unwrap(), &self.project_name);
+        let structure = path.join("structure.tex");
         let _ = File::create(&main);
-        let _ = File::create(structure);
+        let _ = File::create(&structure);
         let temp_str = self.template()?.split_string();
 
         zip.start_file(&main, options).unwrap();
@@ -251,7 +254,7 @@ impl Config {
 
         // Cleaning step
         remove_file(&main).await?;
-        remove_file(structure).await?;
+        remove_file(&structure).await?;
 
         Ok(())
     }
