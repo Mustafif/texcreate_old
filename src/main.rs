@@ -9,6 +9,7 @@ use config::*;
 use texc_config as config;
 use texc_utils as utils;
 use utils::*;
+use texc_web::texweb;
 
 #[derive(StructOpt, Debug)]
 #[structopt(
@@ -93,7 +94,7 @@ async fn main() -> TexCreateResult<()> {
             println!("texcreate.mkproj.com coming v2.0.0-beta.3")
         }
         CLI::Web => {
-
+            texweb().launch().await.unwrap()
         }
         CLI::Edit {
             proj,

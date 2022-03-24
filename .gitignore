@@ -3,3 +3,5 @@ Project
 *.tex
 *.pdf
 config.toml
+*.zip
+test/

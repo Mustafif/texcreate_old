@@ -58,6 +58,7 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <input class="w3-teal w3-button" type="text" name="document_class" id="document_class" placeholder="Document Class"><br>
     <br>
     <input class="w3-teal w3-button" type="text" name="only_files" id="only_files" placeholder="Only Files (true/false)"><br>
+    <br>
     <input class="w3-btn w3-teal" type="submit" value="Submit">
 </form>
 </div>

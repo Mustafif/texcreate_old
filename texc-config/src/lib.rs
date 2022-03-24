@@ -195,7 +195,9 @@ impl Config {
         // texcreate.toml
         let _ = F::create("texcreate.toml").unwrap();
         zip.start_file("texcreate.toml", options).unwrap();
-        zip.write_all(to_string_pretty(&TexcToml::default()).unwrap().as_bytes()).unwrap();
+        let mut tex_toml = TexcToml::default();
+        tex_toml.project_name = self.clone().project_name;
+        zip.write_all(to_string_pretty(&tex_toml).unwrap().as_bytes()).unwrap();
         // out/
         create_dir("out").await?;
         zip.add_directory("out", options);
