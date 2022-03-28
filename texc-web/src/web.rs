@@ -1,9 +1,8 @@
-use rocket::post;
 use rocket::form::Form;
 use rocket::fs::NamedFile;
-use texc_config::Config;
+use rocket::post;
 use tempdir::TempDir;
-
+use texc_config::Config;
 
 #[post("/", data = "<input>")]
 pub async fn texc_post(input: Form<Config>) -> Option<NamedFile> {

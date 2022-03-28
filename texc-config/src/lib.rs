@@ -1,13 +1,15 @@
 pub mod error;
 pub mod extra;
 
-use std::fmt::format;
-use std::io::Write;
+use crate::TexCreateError::Invalid;
 use async_std::fs::*;
 use async_std::io::prelude::*;
 pub use error::*;
 pub use extra::*;
+use rocket::form::FromForm;
 use serde::{Deserialize, Serialize};
+use std::fmt::format;
+use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 use tex_rs::Latex;
@@ -15,11 +17,9 @@ use texc_latex::templates::*;
 use texcreate_lib::config::{Config as LegacyConfig, Document, Project};
 use texcreate_lib::Errors;
 use toml::{from_str, to_string_pretty};
+use zip::read::ZipFile;
 use zip::write::{FileOptions, ZipWriter};
 use zip::CompressionMethod::Stored;
-use zip::read::ZipFile;
-use crate::TexCreateError::Invalid;
-use rocket::form::FromForm;
 
 type F = std::fs::File;
 
@@ -121,6 +121,7 @@ impl Config {
                 &self.author,
                 &self.title,
                 &self.date,
+                &self.packages
             ),
             "Code" => code(
                 self.clone().font_size,
@@ -129,6 +130,7 @@ impl Config {
                 &self.author,
                 &self.title,
                 &self.date,
+                &self.packages
             ),
             "Novel" => novel(
                 self.clone().font_size,
@@ -137,6 +139,25 @@ impl Config {
                 &self.author,
                 &self.title,
                 &self.date,
+                &self.packages
+            ),
+            "Theatre" => theatre(
+                self.clone().font_size,
+                &self.paper_size,
+                &self.document_class,
+                &self.author,
+                &self.title,
+                &self.date,
+                &self.packages
+            ),
+            "Lachaise" => lachaise(
+                self.clone().font_size,
+                &self.paper_size,
+                &self.document_class,
+                &self.author,
+                &self.title,
+                &self.date,
+                &self.packages
             ),
             _ => return Err(TexCreateError::InvalidTemplate(self.template.clone())),
         };
@@ -146,6 +167,9 @@ impl Config {
         println!("Checking for any errors...");
         check_errors(&self)?;
         println!("Loading template: {}", &self.template);
+        if &self.template == "Book"{
+            book(&self.project_name, &self.title, &self.author).await.unwrap();
+        }
         let latex = self.template()?;
         println!("Creating project: {}", &self.project_name);
         let path = Path::new(&self.project_name);
@@ -184,22 +208,32 @@ impl Config {
         }
         Ok(())
     }
-    pub async fn zip_proj(&self, path: PathBuf) -> TexCreateResult<()>{
-        let mut zip = ZipWriter::new(F::create(format!("{}/{}.zip",path.to_str().unwrap() ,&self.project_name)).unwrap());
+    pub async fn zip_proj(&self, path: PathBuf) -> TexCreateResult<()> {
+        let mut zip = ZipWriter::new(
+            F::create(format!(
+                "{}/{}.zip",
+                path.to_str().unwrap(),
+                &self.project_name
+            ))
+            .unwrap(),
+        );
         let options = FileOptions::default().compression_method(Stored);
 
         // README.md
         let readme_path = path.join("README.md");
         let _ = F::create(&readme_path).unwrap();
-        zip.start_file(readme_path.to_str().unwrap(), options).unwrap();
+        zip.start_file(readme_path.to_str().unwrap(), options)
+            .unwrap();
         zip.write_all(README.as_bytes()).unwrap();
         // texcreate.toml
         let toml_path = path.join("texcreate.toml");
         let _ = F::create(&toml_path).unwrap();
-        zip.start_file(toml_path.to_str().unwrap(), options).unwrap();
+        zip.start_file(toml_path.to_str().unwrap(), options)
+            .unwrap();
         let mut tex_toml = TexcToml::default();
         tex_toml.project_name = self.clone().project_name;
-        zip.write_all(to_string_pretty(&tex_toml).unwrap().as_bytes()).unwrap();
+        zip.write_all(to_string_pretty(&tex_toml).unwrap().as_bytes())
+            .unwrap();
         // out/
         let out_path = path.join("out");
         create_dir(&out_path).await?;
@@ -231,11 +265,17 @@ impl Config {
         remove_dir(&out_path).await?;
         remove_dir_all(&src).await?;
 
-
         Ok(())
     }
-    pub async fn zip_files(&self, path: PathBuf) -> TexCreateResult<()>{
-        let mut zip = ZipWriter::new(F::create(format!("{}/{}.zip",path.to_str().unwrap(), &self.project_name)).unwrap());
+    pub async fn zip_files(&self, path: PathBuf) -> TexCreateResult<()> {
+        let mut zip = ZipWriter::new(
+            F::create(format!(
+                "{}/{}.zip",
+                path.to_str().unwrap(),
+                &self.project_name
+            ))
+            .unwrap(),
+        );
         let options = FileOptions::default().compression_method(Stored);
 
         let main = format!("{}/{}.tex", path.to_str().unwrap(), &self.project_name);
@@ -247,7 +287,8 @@ impl Config {
         zip.start_file(&main, options).unwrap();
         zip.write_all(&temp_str.0.as_bytes()).unwrap();
 
-        zip.start_file(structure.to_str().unwrap(), options).unwrap();
+        zip.start_file(structure.to_str().unwrap(), options)
+            .unwrap();
         zip.write_all(&temp_str.1.as_bytes()).unwrap();
 
         zip.finish().unwrap();

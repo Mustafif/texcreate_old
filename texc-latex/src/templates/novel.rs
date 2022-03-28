@@ -10,7 +10,7 @@ const NOVEL_STRUCT: &str = r#"\pagestyle{fancy}
 \setlength{\headheight}{14.5pt}
 "#;
 
-pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -> Latex {
+pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex {
     let mut latex = Latex::new();
     if dc != "book" {
         let dc = "book";
@@ -32,14 +32,17 @@ pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) 
     latex.add_package("xcolor".to_string());
     latex.add_package("lipsum".to_string());
 
-    latex.set_elements(&vec![
-        E::from(novel_struct),
-        E::from(input),
-        E::from(toc),
-        E::from(newpage.clone()),
-        E::from(some_chapter),
-        E::from(newpage.clone()),
-        E::from(lipsum.clone()),
+    for i in packages{
+        latex.add_package(i.to_string());
+    }
+    latex.set_elements(elements![
+        novel_struct,
+        input,
+        toc,
+        newpage.clone(),
+        some_chapter,
+        newpage.clone(),
+        lipsum.clone()
     ]);
     latex
 }

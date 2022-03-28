@@ -8,3 +8,5 @@ license = "MIT"
 
 [dependencies]
 tex-rs = {version = "0.2", path = "../tex-rs"}
+mdbook = "0.4.15"
+reqwest = "0.11.10"

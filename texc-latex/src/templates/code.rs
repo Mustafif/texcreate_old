@@ -37,7 +37,7 @@ const PKGEXTRA: &str = r#"\definecolor{codegreen}{rgb}{0,0.6,0}
 \lstset{style=lang_style}
 "#;
 
-pub fn code(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -> Latex {
+pub fn code(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex {
     let mut latex = Latex::new();
     set(&mut latex, fs, ps, dc, author, title, date);
     // Meta
@@ -63,10 +63,14 @@ pub fn code(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str) -
     latex.add_package("xcolor".to_string());
     latex.add_package("amsmath".to_string());
 
-    latex.set_elements(&vec![
-        E::from(input),
-        E::from(intro),
-        E::from(UserDefined::new(PKGEXTRA, Level::Package)),
+    for i in packages{
+        latex.add_package(i.to_string());
+    }
+
+    latex.set_elements(elements![
+        input,
+        intro,
+        UserDefined::new(PKGEXTRA, Level::Package)
     ]);
     latex
 }

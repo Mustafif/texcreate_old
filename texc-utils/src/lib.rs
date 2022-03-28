@@ -1,38 +1,38 @@
 use std::borrow::{Borrow, BorrowMut};
 
-use async_std::fs::{File, read_to_string};
+use async_std::fs::{read_to_string, File};
 use async_std::io::prelude::*;
 use async_std::io::stdin;
 
 use tex_rs::*;
-use texc_config::{TexCreateError, TexCreateResult};
 use texc_config::Config;
 use texc_config::TexCreateError::Invalid;
+use texc_config::{TexCreateError, TexCreateResult};
 
 pub async fn init() -> TexCreateResult<()> {
     let mut config = Config::default();
-        // Create single mode config
-        println!("Use default settings? (yes/no): ");
-        let mut def_settings = String::new();
-        stdin().read_line(&mut def_settings).await?;
-        return match def_settings.trim() {
-            "yes" => {
-                let s = config.to_string().unwrap();
-                let mut file = File::create("config.toml").await?;
-                file.write_all(s.as_bytes()).await?;
-                Ok(())
-            }
-            "no" => {
-                let conf = ask_questions().await;
-                let s = conf.to_string().unwrap();
-                let mut file = File::create("config.toml").await?;
-                file.write_all(s.as_bytes()).await?;
-                Ok(())
-            }
-            _ => Err(TexCreateError::Invalid(
-                "settings option chosen!".to_string(),
-            )),
-        };
+    // Create single mode config
+    println!("Use default settings? (yes/no): ");
+    let mut def_settings = String::new();
+    stdin().read_line(&mut def_settings).await?;
+    return match def_settings.trim() {
+        "yes" => {
+            let s = config.to_string().unwrap();
+            let mut file = File::create("config.toml").await?;
+            file.write_all(s.as_bytes()).await?;
+            Ok(())
+        }
+        "no" => {
+            let conf = ask_questions().await;
+            let s = conf.to_string().unwrap();
+            let mut file = File::create("config.toml").await?;
+            file.write_all(s.as_bytes()).await?;
+            Ok(())
+        }
+        _ => Err(TexCreateError::Invalid(
+            "settings option chosen!".to_string(),
+        )),
+    };
     Ok(())
 }
 
@@ -176,7 +176,9 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
         "font_size" => {
             println!(
                 "Changed {} from {} to {}",
-                field_name, &config.font_size.to_string(), &field
+                field_name,
+                &config.font_size.to_string(),
+                &field
             );
             config.font_size = fs
         }
@@ -204,10 +206,10 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
         }
         "only_files" => {
             println!("Changing only-files structure to {}", &field);
-            let field = match field.as_str(){
+            let field = match field.as_str() {
                 "true" => true,
                 "false" => false,
-                _ => false
+                _ => false,
             };
             config.only_files = Some(field);
         }
@@ -227,23 +229,23 @@ pub async fn edit(
     doc_class: Option<String>,
     add_package: Option<String>,
     rm_package: Option<String>,
-    only_files: Option<String>
+    only_files: Option<String>,
 ) -> TexCreateResult<()> {
-            let mut config = Config::from_string(read_to_string("config.toml").await?).unwrap();
-            edit_item(&mut config, &author, "author", None);
-            edit_item(&mut config, &title, "title", None);
-            edit_item(&mut config, &date, "date", None);
-            edit_item(&mut config, &rename, "rename", None);
-            edit_item(&mut config, &template, "template", None);
-            edit_item(&mut config, &paper_size, "paper_size", None);
-            edit_item(&mut config, &doc_class, "doc_class", None);
-            edit_item(&mut config, &None, "font_size", font_size);
-            edit_item(&mut config, &add_package, "add_package", None);
-            edit_item(&mut config, &rm_package, "rm_package", None);
-            edit_item(&mut config, &only_files, "only_files", None);
-            let mut file = File::create("config.toml").await?;
-            file.write_all(config.to_string().unwrap().as_bytes())
-                .await?;
+    let mut config = Config::from_string(read_to_string("config.toml").await?).unwrap();
+    edit_item(&mut config, &author, "author", None);
+    edit_item(&mut config, &title, "title", None);
+    edit_item(&mut config, &date, "date", None);
+    edit_item(&mut config, &rename, "rename", None);
+    edit_item(&mut config, &template, "template", None);
+    edit_item(&mut config, &paper_size, "paper_size", None);
+    edit_item(&mut config, &doc_class, "doc_class", None);
+    edit_item(&mut config, &None, "font_size", font_size);
+    edit_item(&mut config, &add_package, "add_package", None);
+    edit_item(&mut config, &rm_package, "rm_package", None);
+    edit_item(&mut config, &only_files, "only_files", None);
+    let mut file = File::create("config.toml").await?;
+    file.write_all(config.to_string().unwrap().as_bytes())
+        .await?;
 
     Ok(())
 }

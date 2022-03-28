@@ -118,8 +118,8 @@ impl Latex {
         self.packages.push(Package(package));
     }
     /// Sets the elements for the Latex Document
-    pub fn set_elements(&mut self, elements: &Vec<Element>) {
-        self.document_elements = elements.to_owned();
+    pub fn set_elements(&mut self, elements: Vec<Element>) {
+        self.document_elements = elements;
     }
     /// Returns a vector of UDTuple, used for write so they
     /// can be written in the correct location
@@ -358,7 +358,7 @@ impl Latex {
         struct_file.write_all(&structure_cont.as_bytes()).await?;
         Ok(())
     }
-    pub fn split_string(&self) -> (String, String){
+    pub fn split_string(&self) -> (String, String) {
         let ud_vec = &self.get_ud();
         let mut s: Vec<String> = Vec::new();
         let mut struct_s: Vec<String> = Vec::new();

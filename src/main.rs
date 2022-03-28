@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use async_std::fs::{File, read_to_string};
+use async_std::fs::{read_to_string, File};
 use async_std::io::prelude::*;
 use structopt::StructOpt;
 use toml::from_str;
@@ -8,8 +8,8 @@ use toml::from_str;
 use config::*;
 use texc_config as config;
 use texc_utils as utils;
-use utils::*;
 use texc_web::texweb;
+use utils::*;
 
 #[derive(StructOpt, Debug)]
 #[structopt(
@@ -22,7 +22,7 @@ enum CLI {
     Update,
     #[structopt(about = "Initialize a config.toml file")]
     /// Initialize with `texcreate init`
-    Init ,
+    Init,
     #[structopt(about = "Lists all the available templates")]
     /// List all available templates `texcreate list`
     List,
@@ -78,7 +78,7 @@ async fn main() -> TexCreateResult<()> {
         CLI::Update => {
             update()?;
         }
-        CLI::Init  => {
+        CLI::Init => {
             init().await?;
         }
         CLI::List => {
@@ -93,9 +93,7 @@ async fn main() -> TexCreateResult<()> {
         CLI::Doc => {
             println!("texcreate.mkproj.com coming v2.0.0-beta.3")
         }
-        CLI::Web => {
-            texweb().launch().await.unwrap()
-        }
+        CLI::Web => texweb().launch().await.unwrap(),
         CLI::Edit {
             proj,
             author,
@@ -108,7 +106,7 @@ async fn main() -> TexCreateResult<()> {
             doc_class,
             add_package,
             rm_package,
-            only_files
+            only_files,
         } => {
             edit(
                 proj,
@@ -122,7 +120,7 @@ async fn main() -> TexCreateResult<()> {
                 doc_class,
                 add_package,
                 rm_package,
-                only_files
+                only_files,
             )
             .await?;
         }
@@ -141,9 +139,9 @@ async fn main() -> TexCreateResult<()> {
         CLI::Zip => {
             let config: Config = from_str(&read_to_string("config.toml").await?).unwrap();
 
-            let only_files = match config.only_files.clone(){
+            let only_files = match config.only_files.clone() {
                 Some(p) => p,
-                None => false
+                None => false,
             };
 
             if only_files {

@@ -235,6 +235,16 @@ impl UserDefined {
     }
 }
 
+// Macros
+#[macro_export]
+macro_rules! elements {
+   ($($x:expr),+) => ({
+       let mut v = Vec::new();
+       $( v.push(Element::from($x)); )+
+       v
+   });
+}
+
 // Trait Implementations //
 impl Convert for Part {
     fn to_latex_string(&self) -> String {

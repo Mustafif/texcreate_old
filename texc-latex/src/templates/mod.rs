@@ -1,11 +1,19 @@
 pub mod basic;
+pub mod book;
 pub mod code;
 pub mod novel;
+pub mod theatre;
+pub mod beamer;
+pub mod lachaise;
 
+pub use lachaise::*;
+pub use beamer::*;
 pub use basic::*;
+pub use book::*;
 pub use code::*;
 pub use novel::*;
 use tex_rs::{Class, Latex, Metadata};
+pub use theatre::*;
 
 pub fn determine_class(a: &str) -> Class {
     match a {
