@@ -10,7 +10,8 @@
 //! use std::path::Path;
 //!
 //! fn main() {
-//!     let mut latex = latex::Latex::new();
+//!     use std::path::PathBuf;
+//! let mut latex = latex::Latex::new();
 //!     latex.set_class(Class::Book);
 //!     latex.set_metadata(Metadata::default());
 //!     latex.add_package("dramatist".to_owned());
@@ -35,7 +36,7 @@
 //!
 //!     part_two.attach(Element::from(list)).unwrap();
 //!
-//!     latex.set_elements(&vec![Element::from(part_one), Element::from(part_two)]);
+//!     latex.set_elements(elements![part_one, part_two]);
 //!
 //!     latex.write(Path::new("simple.tex").to_path_buf()).unwrap()
 //! }

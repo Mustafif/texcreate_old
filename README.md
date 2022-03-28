@@ -34,11 +34,8 @@ $ cargo install texcreate
 ```
 or the beta by: 
 ```shell
-$ cargo install --locked --version 2.0.0-beta.2 texcreate
+$ cargo install --locked --version 2.0.0-beta.3 texcreate
 ```
-
-> Note: There's a limited amount of templates available 
-> for the moment as all are being written in `tex-rs`
 
 
 ## New Changes In Version 2
@@ -57,6 +54,6 @@ $ cargo install --locked --version 2.0.0-beta.2 texcreate
 - New `config.toml`
 - Rewritten `web` and `edit` commands 
   - Web utilizes temporary directories instead of creating static files
-
+- Templates rewritten in `tex-rs`
 
 More changes can be seen in the [CHANGELOG](CHANGELOG.md)

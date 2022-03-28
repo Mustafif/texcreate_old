@@ -1,27 +1,28 @@
-# Changelog
-
-## [v2.0.0-beta.2](https://github.com/MKProj/texcreate/tree/v2.0.0-beta.2) (2022-03-24)
-
-[Full Changelog](https://github.com/MKProj/texcreate/compare/v2.0.0...v2.0.0-beta.2)
-
-## [v2.0.0](https://github.com/MKProj/texcreate/tree/v2.0.0) (2022-03-21)
-
-[Full Changelog](https://github.com/MKProj/texcreate/compare/v1.2.0...v2.0.0)
-
-**Closed issues:**
-
-- error: Found argument 'create' which wasn't expected [\#1](https://github.com/MKProj/texcreate/issues/1)
-
-## [v1.2.0](https://github.com/MKProj/texcreate/tree/v1.2.0) (2022-01-24)
-
-[Full Changelog](https://github.com/MKProj/texcreate/compare/v1.1.0...v1.2.0)
-
-## [v1.1.0](https://github.com/MKProj/texcreate/tree/v1.1.0) (2022-01-22)
-
-[Full Changelog](https://github.com/MKProj/texcreate/compare/v0.4.1...v1.1.0)
-
-## [v0.4.1](https://github.com/MKProj/texcreate/tree/v0.4.1) (2021-11-12)
-
-[Full Changelog](https://github.com/MKProj/texcreate/compare/80e368aed3f186f335de6c3e6072356f73fe49c4...v0.4.1)
+<a name="unreleased"></a>
+## [Unreleased]
 
 
+<a name="v2.0.0-beta.3"></a>
+## [v2.0.0-beta.3] - 2022-03-28
+
+<a name="v2.0.0-beta.2"></a>
+## [v2.0.0-beta.2] - 2022-03-24
+
+<a name="v2.0.0"></a>
+## [v2.0.0] - 2022-03-21
+
+<a name="v1.2.0"></a>
+## [v1.2.0] - 2022-01-24
+
+<a name="v1.1.0"></a>
+## [v1.1.0] - 2022-01-21
+
+<a name="v0.4.1"></a>
+## v0.4.1 - 2021-11-11
+
+[Unreleased]: https://github.com/MKProj/texcreate/compare/v2.0.0-beta.3...HEAD
+[v2.0.0-beta.3]: https://github.com/MKProj/texcreate/compare/v2.0.0-beta.2...v2.0.0-beta.3
+[v2.0.0-beta.2]: https://github.com/MKProj/texcreate/compare/v2.0.0...v2.0.0-beta.2
+[v2.0.0]: https://github.com/MKProj/texcreate/compare/v1.2.0...v2.0.0
+[v1.2.0]: https://github.com/MKProj/texcreate/compare/v1.1.0...v1.2.0
+[v1.1.0]: https://github.com/MKProj/texcreate/compare/v0.4.1...v1.1.0

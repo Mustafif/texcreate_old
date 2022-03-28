@@ -237,6 +237,7 @@ impl UserDefined {
 
 // Macros
 #[macro_export]
+/// Creates a vector of elements instead of creating `vec![Element::from(foo)]`
 macro_rules! elements {
    ($($x:expr),+) => ({
        let mut v = Vec::new();
