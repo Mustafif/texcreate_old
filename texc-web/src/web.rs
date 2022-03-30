@@ -4,6 +4,9 @@ use rocket::post;
 use tempdir::TempDir;
 use texc_config::Config;
 
+
+/// Accepts a form of `Config` and returns the `zipped` file
+/// Uses the `zip_files()` or `zip_proj()` functions depending on `only-files`
 #[post("/", data = "<input>")]
 pub async fn texc_post(input: Form<Config>) -> Option<NamedFile> {
     let temp_dir = TempDir::new("texc_temp").unwrap();
