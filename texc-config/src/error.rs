@@ -3,6 +3,13 @@ use failure;
 use failure_derive::Fail;
 use std::io::Error;
 
+/// The TexCreate Errors that can occur
+/// - Beamer Error: When Beamer template is chosen, but doc_class isn't beamer
+/// - Invalid Template: Template doesn't exist
+/// - Invalid Document Class: Document Class doesn't exist
+/// - Empty Fields: A field in `config.toml` is left empty
+/// - IO Error: Error caused by `std::io::Error`
+/// - Invalid: Any other error
 #[derive(Fail, Debug)]
 pub enum TexCreateError {
     #[fail(
@@ -41,9 +48,10 @@ impl From<Error> for TexCreateError {
         Self::IOError(e)
     }
 }
-
+/// Result type for TexCreate
 pub type TexCreateResult<T> = std::result::Result<T, TexCreateError>;
 
+/// Checks if config has a beamer error, if so returns `TexCreateError::BeamerError`
 pub fn check_beamer_error(config: &Config) -> TexCreateResult<()> {
     /*
     Beamer error occurs when the Document class is
@@ -55,7 +63,7 @@ pub fn check_beamer_error(config: &Config) -> TexCreateResult<()> {
         Ok(())
     }
 }
-
+/// Checks if config has an invalid template, if so returns `TexCreateError::InvalidTemplate`
 pub fn check_invalid_template(config: &Config) -> TexCreateResult<()> {
     /*
     Invalid template error occurs when a user enters a template that
@@ -67,7 +75,7 @@ pub fn check_invalid_template(config: &Config) -> TexCreateResult<()> {
         Ok(())
     }
 }
-
+/// Checks if the config has an invalid document class, if so returns `TexCreateError::InvalidDocClass`
 pub fn check_invalid_class(config: &Config) -> TexCreateResult<()> {
     /*
     Invalid class error occurs when a user enters a document
@@ -81,7 +89,7 @@ pub fn check_invalid_class(config: &Config) -> TexCreateResult<()> {
         Ok(())
     }
 }
-
+/// Checks if the config has any empty fields, if so returns `TexCreateError::EmptyFields`
 pub fn check_empty_field(config: &Config) -> TexCreateResult<()> {
     /*
     Checks each field if empty, ignores fields that are optional
@@ -106,7 +114,7 @@ pub fn check_empty_field(config: &Config) -> TexCreateResult<()> {
         Ok(())
     }
 }
-
+/// Contains all checks helper functions into one function
 pub fn check_errors(config: &Config) -> TexCreateResult<()> {
     /*
     Checks all errors in one function

@@ -1,4 +1,11 @@
+//! TexCreate Config Library <br>
+//! This library contains all code related to `config.toml` <br>
+//! Developer: Mustafif Khan <br>
+//! License: MIT & GPLv2
+
+/// Contains all error handling using `failure` crate
 pub mod error;
+/// Contains all code related to the `README.md` & `texcreate.toml`
 pub mod extra;
 
 use crate::TexCreateError::Invalid;
@@ -23,6 +30,19 @@ use zip::CompressionMethod::Stored;
 
 type F = std::fs::File;
 
+
+/// The Config struct contains all necessary metadata information
+/// - Author: The author of the project
+/// - Title: The title of the document
+/// - Date: The date for the document
+/// - Project Name: The name for the project
+/// - Template: The prebuilt template to use
+/// - Paper-size: The paper-size for the document
+/// - Document Class: The document class of the document
+/// - Font size: The font size for the document
+/// - Packages: Additional packages to add
+/// - Language: __Not supported yet__
+/// - Only Files: Whether structure is project or files _(default: false)_
 #[derive(Debug, Clone, Deserialize, Serialize, FromForm)]
 pub struct Config {
     pub author: String,
@@ -39,6 +59,7 @@ pub struct Config {
 }
 
 impl Default for Config {
+    /// Default settings for Config
     fn default() -> Self {
         Self {
             author: "Author".to_string(),
@@ -57,6 +78,7 @@ impl Default for Config {
 }
 
 impl Config {
+    /// Creates a new Config
     pub fn new(
         author: &str,
         title: &str,
@@ -84,12 +106,15 @@ impl Config {
             only_files,
         }
     }
+    /// Using `toml::to_string_pretty()`, turns Config into toml string for `config.toml`
     pub fn to_string(&self) -> Result<String, toml::ser::Error> {
         Ok(to_string_pretty(self)?)
     }
+    /// From `config.toml` string, turns into Config
     pub fn from_string(s: String) -> Result<Self, toml::de::Error> {
         Ok(from_str(&s)?)
     }
+    /// Turns a v1 `config.toml` into v2 Config toml string
     pub fn migrate() -> Result<String, toml::ser::Error> {
         let legacy = LegacyConfig::config(&None);
         let config = Config::new(
@@ -112,6 +137,8 @@ impl Config {
         );
         config.to_string()
     }
+
+    /// Grabs the `tex_rs::Latex` template from `&self.template` by matching the string
     pub fn template(&self) -> TexCreateResult<Latex> {
         let f = match &*self.template {
             "Basic" => basic(
@@ -163,12 +190,14 @@ impl Config {
         };
         Ok(f)
     }
+    /// Builds project depending on `Config.only_files`
     pub async fn build(&self) -> TexCreateResult<()> {
         println!("Checking for any errors...");
         check_errors(&self)?;
         println!("Loading template: {}", &self.template);
         if &self.template == "Book"{
             book(&self.project_name, &self.title, &self.author).await.unwrap();
+            return Ok(());
         }
         let latex = self.template()?;
         println!("Creating project: {}", &self.project_name);
@@ -208,6 +237,7 @@ impl Config {
         }
         Ok(())
     }
+    /// Zips a project structure
     pub async fn zip_proj(&self, path: PathBuf) -> TexCreateResult<()> {
         let mut zip = ZipWriter::new(
             F::create(format!(
@@ -267,6 +297,7 @@ impl Config {
 
         Ok(())
     }
+    /// Zips a only files structure
     pub async fn zip_files(&self, path: PathBuf) -> TexCreateResult<()> {
         let mut zip = ZipWriter::new(
             F::create(format!(

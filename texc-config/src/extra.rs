@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use toml::to_string_pretty;
-
+/// README.md explaining how to start the project
 pub const README: &str = r#"# Let's Begin <project>
 Welcome to <project>, let's begin with an overview of where all of the files are located.
 
@@ -25,7 +25,7 @@ $ texcreate compile
 $ <texcompiler> --output-directory out src/<project>.tex
 ```
 "#;
-
+/// Creates the README using the project name
 pub fn readme_make(project: &str) -> String {
     let mut r = README.to_string();
     while r.contains("<project>") {
@@ -33,7 +33,9 @@ pub fn readme_make(project: &str) -> String {
     }
     r
 }
-
+/// TexcToml represents `texcreate.toml` which uses
+/// - Project Name : Used to compile the project
+/// - Compiler: Specific tex compiler to use
 #[derive(Deserialize, Serialize)]
 pub struct TexcToml {
     pub project_name: String,
@@ -50,6 +52,7 @@ impl Default for TexcToml {
 }
 
 impl TexcToml {
+    /// Compiles the project using specified project name and compiler
     pub async fn compile(&self) -> TexCreateResult<()> {
         remove_dir_all("out").await?;
         create_dir("out").await?;
@@ -69,7 +72,7 @@ impl TexcToml {
         Ok(())
     }
 }
-
+/// Writes `texcreate.toml` using a path and project name from `Config.project_name`
 pub async fn write_toml(path: PathBuf, project_name: &str) -> TexCreateResult<()> {
     let mut texc = TexcToml::default();
     texc.project_name = project_name.to_string();
