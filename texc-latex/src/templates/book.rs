@@ -3,6 +3,7 @@ use mdbook::Config;
 use mdbook::MDBook;
 use std::io::{self, Cursor};
 const TEX_TEMP: &str = "https://github.com/MKProj/Basics_Template/releases/download/tex/tex.zip";
+/// Used to get files from web
 pub type TexResult<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
 fn path(project_name: &str) -> String {
@@ -23,6 +24,16 @@ async fn book_get(path: &str) -> TexResult<()> {
     Ok(())
 }
 
+/// Same book function used in `texcreate v1.2.0`
+/// Uses only project name, title, and author
+/// Creates markdown book and tex project obtained from github release
+/// ```
+/// use texc_latex::book::book;
+/// #[tokio::main]
+/// async fn main(){
+///     book("ProjectName", "Title", "Author").await.unwrap();
+/// }
+/// ```
 pub async fn book(project_name: &str, title: &str, author: &str) -> Result<(), Error> {
     let mut cfg = Config::default();
     cfg.book.title = Some(title.to_string());

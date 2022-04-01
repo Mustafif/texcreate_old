@@ -1,6 +1,19 @@
 use tex_rs::*;
 use crate::set;
 
+
+/// Creates the beamer template in `tex_rs::Latex`
+/// ```
+/// use texc_latex::beamer;
+// ///
+// /// fn main(){
+// ///     let beamer_latex = beamer::beamer(11, "letterpaper", "article", "author", "title", "Some day", &vec![]);
+// ///     // You can write with the following:
+// ///     // beamer_latex.write(...)
+// ///     // beamer_latex.async_write(...)
+// ///     // beamer_latex.split_write(...), used in texcreate
+// /// }
+/// ```
 pub fn beamer(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex{
     let mut latex = Latex::new();
     set(&mut latex, fs, ps, dc, author, title, date);

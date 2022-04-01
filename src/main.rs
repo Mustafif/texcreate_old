@@ -1,3 +1,17 @@
+//! TexCreate <br>
+//! A LaTeX Project Creator using prebuilt templates <br>
+//! Developer: Mustafif Khan <br>
+//! License: MIT & GPLv2 <br>
+//! This project contains a family of libraries that contribute
+//! to various areas of the project, and can be used standalone, or
+//! implemented in a custom TexCreate.
+//! - [tex-rs](https://docs.rs/tex-rs/)
+//! - [texc-config](https://docs.rs/texc-config/)
+//! - [texc-latex](https://docs.rs/texc-latex/)
+//! - [texc-utils](https://docs.rs/texc-utils/)
+//! - [texc-web](https://docs.rs/texc-web)
+
+
 use std::path::PathBuf;
 
 use async_std::fs::{read_to_string, File};

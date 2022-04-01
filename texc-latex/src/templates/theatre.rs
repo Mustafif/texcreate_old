@@ -1,6 +1,19 @@
 use crate::set;
 use tex_rs::*;
 
+/// Creates the theatre template in `tex_rs::Latex`
+/// ```
+/// use texc_latex::theatre;
+// ///
+// /// fn main(){
+// ///     let theatre_latex = theatre::theatre(11, "letterpaper", "article", "author", "title", "Some day", &vec![]);
+// ///     // You can write with the following:
+// ///     // theatre_latex.write(...)
+// ///     // theatre_latex.async_write(...)
+// ///     // theatre_latex.split_write(...), used in texcreate
+// /// }
+/// ```
+
 pub fn theatre(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex {
     let mut latex = Latex::new();
     set(&mut latex, fs, ps, dc, author, title, date);

@@ -1,3 +1,9 @@
+//! TexCreate Utilities Library <br>
+//! This library is intended to contain functions for subcommands <br>
+//! Developer: Mustafif Khan <br>
+//! Project: TexCreate  <br>
+//! License: MIT & GPLv2 <br>
+
 use std::borrow::{Borrow, BorrowMut};
 
 use async_std::fs::{read_to_string, File};
@@ -9,6 +15,8 @@ use texc_config::Config;
 use texc_config::TexCreateError::Invalid;
 use texc_config::{TexCreateError, TexCreateResult};
 
+
+/// Initializes a TexCreate Project
 pub async fn init() -> TexCreateResult<()> {
     let mut config = Config::default();
     // Create single mode config
@@ -36,6 +44,7 @@ pub async fn init() -> TexCreateResult<()> {
     Ok(())
 }
 
+/// Updates TexCreate
 pub fn update() -> TexCreateResult<()> {
     let cmd = std::process::Command::new("cargo")
         .arg("install")
@@ -66,7 +75,7 @@ fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
         ],
     )
 }
-
+/// Lists all templates
 pub fn list() {
     let temp = valid_templates();
     println!("=======================");
@@ -216,7 +225,7 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
         _ => println!("Nothing to do"),
     }
 }
-
+/// Runs the edit command for TexCreate by changing any field specified
 pub async fn edit(
     proj: Option<String>,
     author: Option<String>,

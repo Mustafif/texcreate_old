@@ -10,6 +10,19 @@ const NOVEL_STRUCT: &str = r#"\pagestyle{fancy}
 \setlength{\headheight}{14.5pt}
 "#;
 
+/// Creates the novel template in `tex_rs::Latex`
+/// ```
+/// use texc_latex::novel;
+// ///
+// /// fn main(){
+// ///     let novel_latex = novel::novel(11, "letterpaper", "article", "author", "title", "Some day", &vec![]);
+// ///     // You can write with the following:
+// ///     // novel_latex.write(...)
+// ///     // novel_latex.async_write(...)
+// ///     // novel_latex.split_write(...), used in texcreate
+// /// }
+/// ```
+
 pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex {
     let mut latex = Latex::new();
     if dc != "book" {
