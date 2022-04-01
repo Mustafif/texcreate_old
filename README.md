@@ -6,7 +6,7 @@
 # TexCreate From MKProjects
 
 ---
-[Documentation]() // Coming soon // [TexCreate Website]()
+[Documentation](https://docs.rs/texcreate/) || [TexCreate Website](http://texcreate.mkproj.com)
 
 TexCreate provides users to easily create projects by using a `config.toml` file
 to set metadata and templates.
@@ -28,14 +28,9 @@ zip        Zip TexCreate Project instead of building
 ```
 
 ### Installing 
-You can install the stable `v1.2.0` by: 
+You can install the stable `v2.0.0` by: 
 ```shell
 $ cargo install texcreate 
-```
-or the beta by: 
-```shell
-$ cargo install --locked --version 2.0.0-beta.3 texcreate
-```
 
 
 ## New Changes In Version 2
