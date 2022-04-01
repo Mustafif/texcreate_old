@@ -11,8 +11,7 @@ members = [
     "tex-rs", 
     "texc-config",
     "texc-utils", 
-    "texc-web", 
-    "matex",
+    "texc-web",
     "texc-latex"
 ]
 
