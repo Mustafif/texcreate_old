@@ -5,6 +5,7 @@ edition = "2021"
 description = "Create LaTeX Projects using prebuilt templates"
 license = "MIT"
 repository = "http://github.com/MKProj/texcreate.git"
+documentation = "http://docs.rs/texcreate/"
 [workspace]
 members = [
     "tex-rs", 
