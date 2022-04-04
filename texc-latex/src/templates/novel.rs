@@ -13,8 +13,8 @@ const NOVEL_STRUCT: &str = r#"\pagestyle{fancy}
 /// Creates the novel template in `tex_rs::Latex`
 /// ```
 /// use texc_latex::novel;
-// ///
-// /// fn main(){
+//
+/// fn main(){
 // ///     let novel_latex = novel::novel(11, "letterpaper", "article", "author", "title", "Some day", &vec![]);
 // ///     // You can write with the following:
 // ///     // novel_latex.write(...)
