@@ -31,7 +31,7 @@ zip        Zip TexCreate Project instead of building
 You can install the stable `v2.0.0` by: 
 ```shell
 $ cargo install texcreate 
-
+```
 
 ## New Changes In Version 2
 - Removed support for Multi mode 
