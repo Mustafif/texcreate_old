@@ -1,8 +1,6 @@
 use crate::Config;
-use failure;
-use failure_derive::Fail;
-use std::io::Error;
-
+use thiserror::Error;
+use std::fmt::Display;
 /// The TexCreate Errors that can occur
 /// - Beamer Error: When Beamer template is chosen, but doc_class isn't beamer
 /// - Invalid Template: Template doesn't exist
@@ -10,25 +8,21 @@ use std::io::Error;
 /// - Empty Fields: A field in `config.toml` is left empty
 /// - IO Error: Error caused by `std::io::Error`
 /// - Invalid: Any other error
-#[derive(Fail, Debug)]
+#[derive(Error, Debug)]
 pub enum TexCreateError {
-    #[fail(
-        display = "{} Document Class is illegal for Beamer, please set class to beamer",
-        _0
+    #[error(
+        "'{0}' document_class is illegal for Beamer Template!!!\nPlease set document_class to 'beamer'",
     )]
     BeamerError(String),
-    #[fail(
-        display = "{} is an invalid Template, use texcreate list for list of available templates",
-        _0
-    )]
+    #[error("'{0}' is an invalid Template, use texcreate list for list of available templates")]
     InvalidTemplate(String),
-    #[fail(display = "{} is an invalid Document Class!", _0)]
+    #[error("'{0}' is an invalid Document Class!")]
     InvalidDocClass(String),
-    #[fail(display = "The {} field has an empty value!", _0)]
+    #[error("The '{0}' field has an empty value!")]
     EmptyFields(String),
-    #[fail(display = "{}", _0)]
-    IOError(#[cause] Error),
-    #[fail(display = "Invalid {}", _0)]
+    #[error("{0}")]
+    IOError(#[from] std::io::Error),
+    #[error("Invalid '{0}'")]
     Invalid(String),
 }
 
@@ -43,11 +37,6 @@ fn valid_classes() -> Vec<&'static str> {
     ]
 }
 
-impl From<Error> for TexCreateError {
-    fn from(e: Error) -> Self {
-        Self::IOError(e)
-    }
-}
 /// Result type for TexCreate
 pub type TexCreateResult<T> = std::result::Result<T, TexCreateError>;
 
@@ -115,13 +104,33 @@ pub fn check_empty_field(config: &Config) -> TexCreateResult<()> {
     }
 }
 /// Contains all checks helper functions into one function
-pub fn check_errors(config: &Config) -> TexCreateResult<()> {
+pub fn check_errors(config: &Config) -> Result<(), String> {
     /*
     Checks all errors in one function
      */
-    check_beamer_error(config)?;
-    check_invalid_template(config)?;
-    check_invalid_class(config)?;
-    check_empty_field(config)?;
+    if check_beamer_error(config).is_err(){
+        return match check_beamer_error(config){
+            Err(e) => Err(e.to_string()),
+            _ => Err("".to_string())
+        }
+    }
+    if check_invalid_class(config).is_err(){
+        return match check_invalid_class(config){
+            Err(e) => Err(e.to_string()),
+            _ => Err("".to_string())
+        }
+    }
+    if check_invalid_template(config).is_err(){
+        return match check_invalid_template(config){
+            Err(e) => Err(e.to_string()),
+            _ => Err("".to_string())
+        }
+    }
+    if check_empty_field(config).is_err(){
+        return match check_empty_field(config){
+            Err(e) => Err(e.to_string()),
+            _ => Err("".to_string())
+        }
+    }
     Ok(())
 }

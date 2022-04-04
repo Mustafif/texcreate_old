@@ -3,30 +3,34 @@
 //! Developer: Mustafif Khan <br>
 //! License: MIT & GPLv2
 
-/// Contains all error handling using `failure` crate
-pub mod error;
-/// Contains all code related to the `README.md` & `texcreate.toml`
-pub mod extra;
-
-use crate::TexCreateError::Invalid;
-use async_std::fs::*;
-use async_std::io::prelude::*;
-pub use error::*;
-pub use extra::*;
-use rocket::form::FromForm;
-use serde::{Deserialize, Serialize};
 use std::fmt::format;
 use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
-use tex_rs::Latex;
-use texc_latex::templates::*;
+use std::process::exit;
+
+use async_std::fs::*;
+use async_std::io::prelude::*;
+use rocket::form::FromForm;
+use serde::{Deserialize, Serialize};
 use texcreate_lib::config::{Config as LegacyConfig, Document, Project};
 use texcreate_lib::Errors;
 use toml::{from_str, to_string_pretty};
+use zip::CompressionMethod::Stored;
 use zip::read::ZipFile;
 use zip::write::{FileOptions, ZipWriter};
-use zip::CompressionMethod::Stored;
+
+pub use error::*;
+pub use extra::*;
+use tex_rs::Latex;
+use texc_latex::templates::*;
+
+use crate::TexCreateError::Invalid;
+
+/// Contains all error handling using `failure` crate
+pub mod error;
+/// Contains all code related to the `README.md` & `texcreate.toml`
+pub mod extra;
 
 type F = std::fs::File;
 
@@ -186,14 +190,37 @@ impl Config {
                 &self.date,
                 &self.packages
             ),
+            "Beamer" => beamer(
+                self.clone().font_size,
+                &self.paper_size,
+                &self.document_class,
+                &self.author,
+                &self.title,
+                &self.date,
+                &self.packages
+            ),
             _ => return Err(TexCreateError::InvalidTemplate(self.template.clone())),
         };
         Ok(f)
     }
     /// Builds project depending on `Config.only_files`
-    pub async fn build(&self) -> TexCreateResult<()> {
-        println!("Checking for any errors...");
-        check_errors(&self)?;
+    pub async fn build(&self, force: Option<bool>) -> TexCreateResult<()> {
+        let force = match force{
+            Some(a) => a,
+            None => false
+        };
+
+        if !force{
+            println!("Checking for any errors...");
+            match check_errors(&self){
+                Ok(_) => (),
+                Err(e) => {
+                    eprintln!("{}", e.to_string());
+                    return Err(exit(1))
+                }
+            };
+        }
+
         println!("Loading template: {}", &self.template);
         if &self.template == "Book"{
             book(&self.project_name, &self.title, &self.author).await.unwrap();
@@ -214,10 +241,10 @@ impl Config {
             // texcreate.toml
             write_toml(path.to_path_buf(), &self.project_name).await?;
             // out/
-            let mut out = path.to_path_buf().join("out");
+            let out = path.to_path_buf().join("out");
             create_dir(&out).await?;
             // src/
-            let mut src = path.to_path_buf().join("src");
+            let src = path.to_path_buf().join("src");
             create_dir(&src).await?;
             println!("Writing Latex Template in {}", &src.to_str().unwrap());
             latex
@@ -227,7 +254,7 @@ impl Config {
                 )
                 .await?;
         } else {
-            let mut path = path.to_path_buf();
+            let path = path.to_path_buf();
             latex
                 .split_write(
                     path.clone().join(&format!("{}.tex", &self.project_name)),
@@ -267,7 +294,7 @@ impl Config {
         // out/
         let out_path = path.join("out");
         create_dir(&out_path).await?;
-        zip.add_directory(out_path.to_str().unwrap(), options);
+        zip.add_directory(out_path.to_str().unwrap(), options).unwrap();
         // src/
         let src = path.join("src");
         create_dir(&src).await?;
@@ -281,10 +308,10 @@ impl Config {
         let structure = src.join("structure.tex");
         let _ = F::create(&structure).unwrap();
 
-        zip.start_file(main.to_str().unwrap(), options);
+        zip.start_file(main.to_str().unwrap(), options).unwrap();
         zip.write_all(&temp_str.0.as_bytes()).unwrap();
 
-        zip.start_file(structure.to_str().unwrap(), options);
+        zip.start_file(structure.to_str().unwrap(), options).unwrap();
         zip.write_all(&temp_str.1.as_bytes()).unwrap();
 
         zip.finish().unwrap();

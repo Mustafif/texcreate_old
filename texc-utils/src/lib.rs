@@ -4,21 +4,16 @@
 //! Project: TexCreate  <br>
 //! License: MIT & GPLv2 <br>
 
-use std::borrow::{Borrow, BorrowMut};
 
-use async_std::fs::{read_to_string, File};
+use async_std::fs::{File, read_to_string};
 use async_std::io::prelude::*;
 use async_std::io::stdin;
-
-use tex_rs::*;
-use texc_config::Config;
-use texc_config::TexCreateError::Invalid;
 use texc_config::{TexCreateError, TexCreateResult};
-
+use texc_config::Config;
 
 /// Initializes a TexCreate Project
 pub async fn init() -> TexCreateResult<()> {
-    let mut config = Config::default();
+    let config = Config::default();
     // Create single mode config
     println!("Use default settings? (yes/no): ");
     let mut def_settings = String::new();
@@ -41,7 +36,6 @@ pub async fn init() -> TexCreateResult<()> {
             "settings option chosen!".to_string(),
         )),
     };
-    Ok(())
 }
 
 /// Updates TexCreate
@@ -227,7 +221,6 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
 }
 /// Runs the edit command for TexCreate by changing any field specified
 pub async fn edit(
-    proj: Option<String>,
     author: Option<String>,
     title: Option<String>,
     date: Option<String>,

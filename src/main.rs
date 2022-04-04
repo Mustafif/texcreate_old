@@ -45,6 +45,8 @@ enum CLI {
     Build {
         #[structopt(short, long)]
         file: Option<String>,
+        #[structopt(short, long)]
+        force : Option<bool>
     },
     #[structopt(about = "Opens the TexCreate documentation")]
     Doc,
@@ -52,8 +54,6 @@ enum CLI {
     Web,
     #[structopt(about = "Quickly change config.toml parameters")]
     Edit {
-        #[structopt(short = "p", long = "proj")]
-        proj: Option<String>,
         #[structopt(long = "author")]
         author: Option<String>,
         #[structopt(long = "title")]
@@ -98,11 +98,11 @@ async fn main() -> TexCreateResult<()> {
         CLI::List => {
             list();
         }
-        CLI::Build { file } => {
+        CLI::Build { file, force } => {
             let file = file.unwrap_or_else(|| "config.toml".to_string());
 
             let config = Config::from_string(read_to_string(&file).await?).unwrap();
-            config.build().await?;
+            config.build(force).await?;
         }
         CLI::Doc => {
             match open::that("http://docs.rs/texcreate"){
@@ -112,7 +112,6 @@ async fn main() -> TexCreateResult<()> {
         }
         CLI::Web => texweb().launch().await.unwrap(),
         CLI::Edit {
-            proj,
             author,
             title,
             date,
@@ -126,7 +125,6 @@ async fn main() -> TexCreateResult<()> {
             only_files,
         } => {
             edit(
-                proj,
                 author,
                 title,
                 date,
