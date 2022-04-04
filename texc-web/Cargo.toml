@@ -1,6 +1,6 @@
 [package]
 name = "texc-web"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 description = "Library for local texcreate web version"
 license = "MIT"

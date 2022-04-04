@@ -1,6 +1,6 @@
 [package]
 name = "texc-latex"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "Contains LaTeX templates for TeXCreate"
 license = "MIT"
