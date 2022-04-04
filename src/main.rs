@@ -105,7 +105,10 @@ async fn main() -> TexCreateResult<()> {
             config.build().await?;
         }
         CLI::Doc => {
-            println!("texcreate.mkproj.com coming v2.0.0-beta.3")
+            match open::that("http://docs.rs/texcreate"){
+                Ok(_) => println!("Opened docs successfully!"),
+                Err(e) => println!("Error: {}", e)
+            }
         }
         CLI::Web => texweb().launch().await.unwrap(),
         CLI::Edit {
