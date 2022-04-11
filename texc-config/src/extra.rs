@@ -68,6 +68,8 @@ impl TexcToml {
                 "Successfully compiled src/{}.tex to out/{}.pdf",
                 &self.project_name, &self.project_name
             );
+        } else {
+            eprintln!("Error in compiling: {}", cmd.status.to_string());
         }
         Ok(())
     }

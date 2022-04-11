@@ -190,6 +190,15 @@ impl Config {
                 &self.date,
                 &self.packages
             ),
+            "Lachaise-Mod" => lachaise_modified(
+                self.clone().font_size,
+                &self.paper_size,
+                &self.document_class,
+                &self.author,
+                &self.title,
+                &self.date,
+                &self.packages
+            ),
             "Beamer" => beamer(
                 self.clone().font_size,
                 &self.paper_size,

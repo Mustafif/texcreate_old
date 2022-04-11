@@ -56,7 +56,7 @@ pub fn update() -> TexCreateResult<()> {
 fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
     (
         vec![
-            "Basic", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise",
+            "Basic", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod"
         ],
         vec![
             "Designed for simple documents",
@@ -66,6 +66,7 @@ fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
             "Designed to write well...novels",
             "Designed to create presentations",
             "Designed for school assignments and academic papers",
+            "Modified version of Lachaise Template, changes in colours/design"
         ],
     )
 }

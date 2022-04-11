@@ -12,6 +12,7 @@ pub mod theatre;
 pub mod beamer;
 /// Lachaise template
 pub mod lachaise;
+pub mod lachaise_modified;
 
 pub use lachaise::*;
 pub use beamer::*;
@@ -21,6 +22,7 @@ pub use code::*;
 pub use novel::*;
 use tex_rs::{Class, Latex, Metadata};
 pub use theatre::*;
+pub use lachaise_modified::*;
 
 
 /// Used to set the `tex_rs::Class`

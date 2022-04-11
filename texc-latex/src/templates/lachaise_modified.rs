@@ -16,7 +16,7 @@ use crate::set;
 // /// }
 /// ```
 
-pub fn lachaise(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex{
+pub fn lachaise_modified(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex{
     let mut latex = Latex::new();
     set(&mut latex, fs, ps, dc, author, title, date);
 
@@ -129,16 +129,19 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 \end{warn}
 %----------------------------------------------------------------------------------------"#, Body);
     let struct_extra = UserDefined::new(r#"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Lachaise Assignment
+% Modified Lachaise Assignment
 % Structure Specification File
 % Version 1.0 (26/6/2018)
 %
 % This template originates from:
 % http://www.LaTeXTemplates.com
 %
-% Authors:
+% Authors of Lachaise:
 % Marion Lachaise & François Févotte
 % Vel (vel@LaTeXTemplates.com)
+%
+% Modified by Mustafif Khan
+% mustafif0929@gmail.com
 %
 % License:
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
@@ -176,33 +179,34 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 \usepackage{XCharter} % Use the XCharter fonts
 %----------------------------------------------------------------------------------------
-%	COMMAND LINE ENVIRONMENT
+%	TERMINAL ENVIRONMENT
 %----------------------------------------------------------------------------------------
 % Usage:
-% \begin{commandline}
+% \begin{terminal}
 %	\begin{verbatim}
 %		$ ls
 %
 %		Applications	Desktop	...
 %	\end{verbatim}
-% \end{commandline}
-\mdfdefinestyle{commandline}{
+% \end{terminal}
+\mdfdefinestyle{terminal}{
 	leftmargin=10pt,
 	rightmargin=10pt,
 	innerleftmargin=15pt,
-	middlelinecolor=black!50!white,
-	middlelinewidth=2pt,
+	middlelinecolor=black,
+	%middlelinewidth=2pt,
 	frametitlerule=false,
-	backgroundcolor=black!5!white,
-	frametitle={Command Line},
+	backgroundcolor=black,
+	frametitle={Terminal},
 	frametitlefont={\normalfont\sffamily\color{white}\hspace{-1em}},
-	frametitlebackgroundcolor=black!50!white,
+	fontcolor = green,
+	frametitlebackgroundcolor=green!50!black,
 	nobreak,
 }
 % Define a custom environment for command-line snapshots
-\newenvironment{commandline}{
+\newenvironment{terminal}{
 	\medskip
-	\begin{mdframed}[style=commandline]
+	\begin{mdframed}[style=terminal]
 }{
 	\end{mdframed}
 	\medskip
@@ -222,7 +226,7 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 	leftmargin=2cm,
 	rightmargin=2cm,
 	singleextra={%
-		\draw[fill=black!10!white](P)++(0,-1.2em)rectangle(P-|O);
+		\draw[fill=blue!50!white](P)++(0,-1.2em)rectangle(P-|O);
 		\node[anchor=north west]
 		at(P-|O){\ttfamily\mdfilename};
 		%
@@ -233,7 +237,7 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 	nobreak,
 }
 % Define a custom environment for file contents
-\newenvironment{file}[1][File]{ % Set the default filename to "File"
+\newenvironment{file}[1][FILE]{ % Set the default filename to "File"
 	\medskip
 	\newcommand{\mdfilename}{#1}
 	\begin{mdframed}[style=file]
@@ -251,10 +255,9 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 \mdfdefinestyle{question}{
 	innertopmargin=1.2\baselineskip,
 	innerbottommargin=0.8\baselineskip,
-	roundcorner=5pt,
 	nobreak,
 	singleextra={%
-		\draw(P-|O)node[xshift=1em,anchor=west,fill=white,draw,rounded corners=5pt]{%
+		\draw(P-|O)node[xshift=1em,anchor=west,fill=white,draw]{%
 		Question \theQuestion\questionTitle};
 	},
 }
@@ -283,13 +286,13 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 	singleextra={%
 		\draw(P-|O)++(-0.5em,0)node(tmp1){};
 		\draw(P-|O)++(0.5em,0)node(tmp2){};
-		\fill[black,rotate around={45:(P-|O)}](tmp1)rectangle(tmp2);
+		\fill[red,rotate around={45:(P-|O)}](tmp1)rectangle(tmp2);
 		\node at(P-|O){\color{white}\scriptsize\bf !};
-		\draw[very thick](P-|O)++(0,-1em)--(O);%--(O-|P);
+		\draw[very thick, red](P-|O)++(0,-1em)--(O);%--(O-|P);
 	}
 }
 % Define a custom environment for warning text
-\newenvironment{warn}[1][Warning:]{ % Set the default warning to "Warning:"
+\newenvironment{warn}[1][WARNING:]{ % Set the default warning to "Warning:"
 	\medskip
 	\begin{mdframed}[style=warning]
 		\noindent{\textbf{#1}}
@@ -308,9 +311,9 @@ Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget 
 	leftline=false, rightline=false,
 	nobreak,
 	singleextra={%
-		\fill[black](P-|O)circle[radius=0.4em];
+		\fill[teal](P-|O)circle[radius=0.4em];
 		\node at(P-|O){\color{white}\scriptsize\bf i};
-		\draw[very thick](P-|O)++(0,-0.8em)--(O);%--(O-|P);
+		\draw[very thick, teal](P-|O)++(0,-0.8em)--(O);%--(O-|P);
 	}
 }
 % Define a custom environment for information
