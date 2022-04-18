@@ -1,9 +1,8 @@
-use crate::TexCreateError::Invalid;
 use crate::TexCreateResult;
 use async_std::fs::{create_dir, remove_dir_all, File};
 use async_std::io::WriteExt;
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::Command;
 use toml::to_string_pretty;
 /// README.md explaining how to start the project

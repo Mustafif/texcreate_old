@@ -41,6 +41,15 @@ dependencies = [
 
 [[package]]
 name = "ansi_term"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee49baf6cb617b853aa8d93bf420db2383fab46d314482ca2803b40d5fde979b"
+dependencies = [
+ "winapi 0.3.9",
+]
+
+[[package]]
+name = "ansi_term"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d52a9bb7ec0cf484c551830a7ce27bd20d67eac647e1befb56b0be4ee39a55d2"
@@ -239,7 +248,7 @@ dependencies = [
  "cc",
  "cfg-if 1.0.0",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.4.4",
  "object",
  "rustc-demangle",
 ]
@@ -426,11 +435,11 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "2.34.0"
+version = "2.33.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0610544180c38b88101fecf2dd634b174a62eef6946f84dfc6a7127512b381c"
+checksum = "826bf7bc84f9435630275cb8e802a4a0ec792b615969934bd16d42ffed10f207"
 dependencies = [
- "ansi_term",
+ "ansi_term 0.11.0",
  "atty",
  "bitflags",
  "strsim 0.8.0",
@@ -791,14 +800,14 @@ dependencies = [
 
 [[package]]
 name = "flate2"
-version = "1.0.22"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e6988e897c1c9c485f43b47a529cef42fde0547f9d8d41a7062518f1d8fc53f"
+checksum = "b39522e96686d38f4bc984b9198e3a0613264abaebaff2c5c918bfa6b6da09af"
 dependencies = [
  "cfg-if 1.0.0",
  "crc32fast",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.5.1",
 ]
 
 [[package]]
@@ -1183,9 +1192,9 @@ dependencies = [
 
 [[package]]
 name = "httparse"
-version = "1.6.0"
+version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9100414882e15fb7feccb4897e5f0ff0ff1ca7d1a86a23208ada4d7a18e6c6c4"
+checksum = "6330e8a36bd8c859f3fa6d9382911fbb7147ec39807f63b923933a247240b9ba"
 
 [[package]]
 name = "httpdate"
@@ -1523,6 +1532,15 @@ checksum = "a92518e98c078586bc6c934028adcca4c92a53d6a958196de835170a01d84e4b"
 dependencies = [
  "adler",
  "autocfg",
+]
+
+[[package]]
+name = "miniz_oxide"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2b29bd4bc3f33391105ebee3589c19197c4271e3e5a9ec9bfe8127eeff8f082"
+dependencies = [
+ "adler",
 ]
 
 [[package]]
@@ -2780,7 +2798,7 @@ version = "0.3.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c6b5c64445ba8094a6ab0c3cd2ad323e07171012d9c98b0b15651daf1787a10"
 dependencies = [
- "clap 2.34.0",
+ "clap 2.33.4",
  "lazy_static",
  "structopt-derive",
 ]
@@ -2895,7 +2913,7 @@ dependencies = [
 
 [[package]]
 name = "tex-rs"
-version = "0.2.6"
+version = "0.2.7"
 dependencies = [
  "async-std",
  "rayon",
@@ -2903,7 +2921,7 @@ dependencies = [
 
 [[package]]
 name = "texc-config"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "anyhow",
  "async-std",
@@ -2921,7 +2939,7 @@ dependencies = [
 
 [[package]]
 name = "texc-latex"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "mdbook",
  "reqwest",
@@ -2930,7 +2948,7 @@ dependencies = [
 
 [[package]]
 name = "texc-utils"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "async-std",
  "tex-rs",
@@ -2939,7 +2957,7 @@ dependencies = [
 
 [[package]]
 name = "texc-web"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "rocket",
  "tempdir",
@@ -2948,7 +2966,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate"
-version = "2.0.3"
+version = "2.1.0"
 dependencies = [
  "async-std",
  "mdbook",
@@ -3259,7 +3277,7 @@ version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4bc28f93baff38037f64e6f43d34cfa1605f27a49c34e8a04c5e78b0babf2596"
 dependencies = [
- "ansi_term",
+ "ansi_term 0.12.1",
  "lazy_static",
  "matchers",
  "regex",

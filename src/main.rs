@@ -30,7 +30,7 @@ use utils::*;
     name = "texcreate",
     about = "Create LaTeX projects using prebuilt templates"
 )]
-enum CLI {
+enum CLI{
     /// Update TexCreate
     #[structopt(name = "update", about = "Updates to latest version")]
     Update,
@@ -43,9 +43,9 @@ enum CLI {
     #[structopt(about = "Build a project using a config.toml file")]
     /// Create project with a config.toml file `texcreate build`
     Build {
-        #[structopt(short, long)]
+        #[structopt(long)]
         file: Option<String>,
-        #[structopt(short, long)]
+        #[structopt(long)]
         force : Option<bool>
     },
     #[structopt(about = "Opens the TexCreate documentation")]

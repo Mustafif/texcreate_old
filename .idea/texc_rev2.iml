@@ -12,6 +12,10 @@
       <sourceFolder url="file://$MODULE_DIR$/texc-latex/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/texc-utils/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/texc-web/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/structopt/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/structopt/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/structopt/structopt-derive/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/structopt/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

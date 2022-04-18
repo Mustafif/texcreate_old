@@ -3,30 +3,22 @@
 //! Developer: Mustafif Khan <br>
 //! License: MIT & GPLv2
 
-use std::fmt::format;
 use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
-use std::process::exit;
-
 use async_std::fs::*;
 use async_std::io::prelude::*;
 use rocket::form::FromForm;
 use serde::{Deserialize, Serialize};
-use texcreate_lib::config::{Config as LegacyConfig, Document, Project};
-use texcreate_lib::Errors;
+use texcreate_lib::config::Config as LegacyConfig;
 use toml::{from_str, to_string_pretty};
 use zip::CompressionMethod::Stored;
-use zip::read::ZipFile;
 use zip::write::{FileOptions, ZipWriter};
 
 pub use error::*;
 pub use extra::*;
 use tex_rs::Latex;
 use texc_latex::templates::*;
-
-use crate::TexCreateError::Invalid;
-
 /// Contains all error handling using `failure` crate
 pub mod error;
 /// Contains all code related to the `README.md` & `texcreate.toml`
@@ -224,8 +216,7 @@ impl Config {
             match check_errors(&self){
                 Ok(_) => (),
                 Err(e) => {
-                    eprintln!("{}", e.to_string());
-                    return Err(exit(1))
+                    panic!("{}", e)
                 }
             };
         }

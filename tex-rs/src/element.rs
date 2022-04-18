@@ -1,6 +1,4 @@
 use crate::Convert;
-use std::fmt::format;
-
 // Type aliases //
 type Body = String;
 type Meta = String;
@@ -129,7 +127,7 @@ impl Element {
             Element::Paragraph(p) => Some(p.to_owned().1.unwrap()),
             Element::Text(_) => None,
             Element::Input(_) => None,
-            Element::Environment(e) => None,
+            Element::Environment(_) => None,
             Element::UserDefined(_) => None,
             Element::List(_) => None,
         }
@@ -285,8 +283,7 @@ impl Convert for Paragraph {
 
 impl Convert for Text {
     fn to_latex_string(&self) -> String {
-        let par = "\\par";
-        let mut text = String::new();
+        let text: String;
         match &self.1 {
             TextType::Normal => text = self.0.clone(),
             TextType::Bold => {
@@ -305,7 +302,7 @@ impl Convert for Text {
                 text = format!("\\verb!{}!", &self.0);
             }
         }
-        format!("{} {}", par, &text)
+        format!("{}", &text)
     }
     /* fn to_matex_string(&self) -> String {
         match &self.1{

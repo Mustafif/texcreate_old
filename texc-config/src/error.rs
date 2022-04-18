@@ -1,6 +1,5 @@
 use crate::Config;
 use thiserror::Error;
-use std::fmt::Display;
 /// The TexCreate Errors that can occur
 /// - Beamer Error: When Beamer template is chosen, but doc_class isn't beamer
 /// - Invalid Template: Template doesn't exist
@@ -28,7 +27,7 @@ pub enum TexCreateError {
 
 fn valid_templates() -> Vec<&'static str> {
     vec![
-        "Basic", "Book", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise",
+        "Basic", "Book", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod"
     ]
 }
 fn valid_classes() -> Vec<&'static str> {

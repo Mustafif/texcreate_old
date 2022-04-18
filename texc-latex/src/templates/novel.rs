@@ -25,8 +25,9 @@ const NOVEL_STRUCT: &str = r#"\pagestyle{fancy}
 
 pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, packages: &Vec<String>) -> Latex {
     let mut latex = Latex::new();
+    let mut dc = dc;
     if dc != "book" {
-        let dc = "book";
+        dc = "book";
     }
     set(&mut latex, fs, ps, dc, author, title, date);
 
@@ -37,8 +38,8 @@ pub fn novel(fs: u8, ps: &str, dc: &str, author: &str, title: &str, date: &str, 
     let label_some_chapter = UserDefined::new(r"\label{ch:some-chapter}", Level::Body);
     let lipsum = UserDefined::new(r"\lipsum*[20]", Level::Body);
     let mut some_chapter = Chapter::new("Some Chapter");
-    some_chapter.attach(E::from(label_some_chapter));
-    some_chapter.attach(E::from(lipsum.clone()));
+    some_chapter.attach(E::from(label_some_chapter)).unwrap();
+    some_chapter.attach(E::from(lipsum.clone())).unwrap();
 
     let novel_struct = UserDefined::new(NOVEL_STRUCT, Level::Package);
 

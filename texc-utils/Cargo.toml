@@ -1,10 +1,12 @@
 [package]
 name = "texc-utils"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 description = "Utility library for TexCreate"
 license = "MIT"
-
+repository = "http://github.com/MKProj/texcreate.git"
+documentation = "http://docs.rs/texc-utils/"
+homepage = "http://texcreate.mkproj.com"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

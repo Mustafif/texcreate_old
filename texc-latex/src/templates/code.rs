@@ -1,4 +1,4 @@
-use crate::{determine_class, set};
+use crate::set;
 use tex_rs::*;
 
 type E = Element;
