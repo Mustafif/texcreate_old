@@ -2913,7 +2913,7 @@ dependencies = [
 
 [[package]]
 name = "tex-rs"
-version = "0.2.7"
+version = "0.2.8"
 dependencies = [
  "async-std",
  "rayon",
@@ -2921,7 +2921,7 @@ dependencies = [
 
 [[package]]
 name = "texc-config"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "anyhow",
  "async-std",
@@ -2941,7 +2941,7 @@ dependencies = [
 
 [[package]]
 name = "texc-latex"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "mdbook",
  "reqwest",
@@ -2950,7 +2950,7 @@ dependencies = [
 
 [[package]]
 name = "texc-utils"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "async-std",
  "tex-rs",
@@ -2959,7 +2959,7 @@ dependencies = [
 
 [[package]]
 name = "texc-web"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "rocket",
  "tempdir",
@@ -2968,7 +2968,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate"
-version = "2.1.0"
+version = "2.2.0"
 dependencies = [
  "async-std",
  "mdbook",
