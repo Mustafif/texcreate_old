@@ -23,11 +23,17 @@ pub enum TexCreateError {
     IOError(#[from] std::io::Error),
     #[error("Invalid '{0}'")]
     Invalid(String),
+    #[error("Cannot have both custom_template and template fields, please remove one of them!")]
+    BothTemplate,
+    #[error("Cannot find custom template directory, make sure to have files under '{0}'.")]
+    CannotFindCustom(String),
+    #[error("Cannot build project if no template field is present")]
+    MissingTemplate
 }
 
 fn valid_templates() -> Vec<&'static str> {
     vec![
-        "Basic", "Book", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod"
+        "Basic", "Book", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod", "Dictionary", "News"
     ]
 }
 fn valid_classes() -> Vec<&'static str> {
@@ -41,24 +47,46 @@ pub type TexCreateResult<T> = std::result::Result<T, TexCreateError>;
 
 /// Checks if config has a beamer error, if so returns `TexCreateError::BeamerError`
 pub fn check_beamer_error(config: &Config) -> TexCreateResult<()> {
+    if config.template.is_none(){
+        return Ok(());
+    }
     /*
     Beamer error occurs when the Document class is
     not set as beamer when the Beamer Template is chosen
      */
-    if config.template == "Beamer" && config.document_class != "beamer" {
+    if config.template.as_ref().unwrap() == "Beamer" && config.document_class != "beamer" {
         Err(TexCreateError::BeamerError(config.document_class.clone()))
     } else {
         Ok(())
     }
 }
+/// Explicit Missing Template Check
+/// This occurs when both `Config.template == None && Config.custom_template == None`
+pub fn check_missing_template(config: &Config) -> TexCreateResult<()>{
+    if config.template.is_none() && config.custom_template.is_none() {
+        return Err(TexCreateError::MissingTemplate);
+    }
+    Ok(())
+}
+
 /// Checks if config has an invalid template, if so returns `TexCreateError::InvalidTemplate`
 pub fn check_invalid_template(config: &Config) -> TexCreateResult<()> {
     /*
     Invalid template error occurs when a user enters a template that
     does not exist, to do this we look at a vec and see if it matches
      */
-    if !valid_templates().contains(&config.template.as_str()) {
-        Err(TexCreateError::InvalidTemplate(config.template.clone()))
+    let template = match &config.template{
+        Some(a) => a.to_string(),
+        None => {
+            return if config.custom_template == None {
+                Err(TexCreateError::MissingTemplate)
+            } else {
+                Ok(())
+            }
+        }
+    };
+    if !valid_templates().contains(&template.as_str()) {
+        Err(TexCreateError::InvalidTemplate(template))
     } else {
         Ok(())
     }
@@ -79,6 +107,7 @@ pub fn check_invalid_class(config: &Config) -> TexCreateResult<()> {
 }
 /// Checks if the config has any empty fields, if so returns `TexCreateError::EmptyFields`
 pub fn check_empty_field(config: &Config) -> TexCreateResult<()> {
+    check_missing_template(config)?;
     /*
     Checks each field if empty, ignores fields that are optional
      */
@@ -90,8 +119,6 @@ pub fn check_empty_field(config: &Config) -> TexCreateResult<()> {
         Err(TexCreateError::EmptyFields("Date".to_string()))
     } else if config.project_name.is_empty() {
         Err(TexCreateError::EmptyFields("Project Name".to_string()))
-    } else if config.template.is_empty() {
-        Err(TexCreateError::EmptyFields("Template".to_string()))
     } else if config.document_class.is_empty() {
         Err(TexCreateError::EmptyFields("Document Class".to_string()))
     } else if config.paper_size.is_empty() {
@@ -115,6 +142,12 @@ pub fn check_errors(config: &Config) -> Result<(), String> {
     }
     if check_invalid_class(config).is_err(){
         return match check_invalid_class(config){
+            Err(e) => Err(e.to_string()),
+            _ => Err("".to_string())
+        }
+    }
+    if check_missing_template(config).is_err(){
+        return match check_missing_template(config){
             Err(e) => Err(e.to_string()),
             _ => Err("".to_string())
         }

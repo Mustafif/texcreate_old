@@ -2927,6 +2927,8 @@ dependencies = [
  "async-std",
  "failure",
  "failure_derive",
+ "lazy_static",
+ "regex",
  "rocket",
  "serde",
  "tex-rs",

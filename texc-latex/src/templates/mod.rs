@@ -12,7 +12,13 @@ pub mod theatre;
 pub mod beamer;
 /// Lachaise template
 pub mod lachaise;
+/// Modified Lachaise template
 pub mod lachaise_modified;
+/// Dictionary template
+pub mod dictionary;
+/// News template
+pub mod news;
+
 
 pub use lachaise::*;
 pub use beamer::*;
@@ -23,6 +29,8 @@ pub use novel::*;
 use tex_rs::{Class, Latex, Metadata};
 pub use theatre::*;
 pub use lachaise_modified::*;
+pub use dictionary::*;
+
 
 
 /// Used to set the `tex_rs::Class`

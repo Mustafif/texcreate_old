@@ -21,6 +21,7 @@ pub struct Latex {
     pub packages: Vec<Package>,
     /// Document elements contains a vector of all the elements
     pub document_elements: Vec<Element>,
+    pub maketitle: bool,
 }
 
 /// Different kind of document classes
@@ -94,6 +95,7 @@ impl Latex {
             metadata: Metadata::default(),
             packages: Vec::new(),
             document_elements: Vec::new(),
+            maketitle: true,
         }
     }
     /// Sets the class for Latex Document
@@ -134,6 +136,9 @@ impl Latex {
         }
         v
     }
+    pub fn no_maketitle(&mut self){
+        self.maketitle = false
+    }
     /// Normal write that uses `std`
     pub fn write(&self, path: PathBuf) -> Result<(), std::io::Error> {
         let ud_vec = &self.get_ud();
@@ -152,9 +157,11 @@ impl Latex {
             s.push(i.2.to_owned())
         }
         s.push(String::from("\\begin{document}"));
-        s.push(String::from(
-            "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
-        ));
+        if self.maketitle{
+            s.push(String::from(
+                "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
+            ));
+        }
         // By attach things should be order by priority
         for i in &self.document_elements {
             match i {
@@ -225,9 +232,11 @@ impl Latex {
             s.push(i.2.to_owned())
         }
         s.push(String::from("\\begin{document}"));
-        s.push(String::from(
-            "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
-        ));
+        if self.maketitle{
+            s.push(String::from(
+                "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
+            ));
+        }
         // By attach things should be order by priority
         for i in &self.document_elements {
             match i {
@@ -302,9 +311,11 @@ impl Latex {
             struct_s.push(i.2.to_owned())
         }
         s.push(String::from("\\begin{document}"));
-        s.push(String::from(
-            "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
-        ));
+        if self.maketitle{
+            s.push(String::from(
+                "\\maketitle\n\\pagenumbering{arabic}\n\\newpage",
+            ));
+        }
         // By attach things should be order by priority
         for i in &self.document_elements {
             match i {

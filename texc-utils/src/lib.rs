@@ -56,7 +56,7 @@ pub fn update() -> TexCreateResult<()> {
 fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
     (
         vec![
-            "Basic", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod"
+            "Basic", "Math", "Theatre", "Code", "Novel", "Beamer", "Lachaise", "Lachaise-Mod", "Dictionary", "News"
         ],
         vec![
             "Designed for simple documents",
@@ -66,13 +66,15 @@ fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
             "Designed to write well...novels",
             "Designed to create presentations",
             "Designed for school assignments and academic papers",
-            "Modified version of Lachaise Template, changes in colours/design"
+            "Modified version of Lachaise Template, changes in colours/design",
+            "Designed to write your own dictionary",
+            "Designed to write columned newspapers"
         ],
     )
 }
 /// Lists all templates
 pub fn list() {
-    let temp = valid_templates();
+    let mut temp = valid_templates();
     println!("=======================");
     println!("  Available Templates  ");
     println!("=======================");
@@ -121,11 +123,11 @@ async fn ask_questions() -> Config {
         title.trim(),
         date.trim(),
         project_name.trim(),
-        template.trim(),
+        &Some(template),
+        &None,
         paper_size.trim(),
         font_size.trim().parse().unwrap(),
         vec![],
-        None,
         def_structure,
         document_class.trim(),
     )
@@ -166,9 +168,9 @@ fn edit_item(config: &mut Config, field: &Option<String>, field_name: &str, fs: 
         "template" => {
             println!(
                 "Changed {} from {} to {}",
-                field_name, &config.template, &field
+                field_name, &config.template.as_ref().unwrap(), &field
             );
-            config.template = field
+            config.template = Some(field)
         }
         "paper_size" => {
             println!(
