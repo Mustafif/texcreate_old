@@ -6,6 +6,7 @@ use tex_rs::Latex;
 use texc_latex::set;
 use tex_rs::Element;
 use tex_rs::Level;
+use tex_rs::Level::Meta;
 use crate::{TexCreateError, TexCreateResult};
 
 
@@ -30,7 +31,7 @@ pub async fn create_custom_template(path: PathBuf, fs: u8, ps: &str, dc: &str, a
     let main_content = read_to_string(main).await?;
     let str_content = read_to_string(structure).await?;
 
-    latex.set_elements(elements![UserDefined::new(&main_content, Level::Body), UserDefined::new(&str_content, Level::Package)]);
+    latex.set_elements(elements![UserDefined::new(&main_content, Level::Body), UserDefined::new(&str_content, Level::Package), UserDefined::new(r"\input{src/structure.tex}", Meta)]);
     for i in packages{
         latex.add_package(i.to_string());
     }

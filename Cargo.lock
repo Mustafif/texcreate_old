@@ -2921,7 +2921,7 @@ dependencies = [
 
 [[package]]
 name = "texc-config"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "anyhow",
  "async-std",
@@ -2968,7 +2968,7 @@ dependencies = [
 
 [[package]]
 name = "texcreate"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "async-std",
  "mdbook",
