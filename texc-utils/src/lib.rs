@@ -74,7 +74,7 @@ fn valid_templates() -> (Vec<&'static str>, Vec<&'static str>) {
 }
 /// Lists all templates
 pub fn list() {
-    let mut temp = valid_templates();
+    let temp = valid_templates();
     println!("=======================");
     println!("  Available Templates  ");
     println!("=======================");

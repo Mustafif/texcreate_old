@@ -1,3 +1,7 @@
+#[cfg(target_os = "linux")]
+use tectonic::latex_to_pdf;
+#[cfg(target_os = "linux")]
+use async_std::io::ReadExt;
 use crate::TexCreateResult;
 use async_std::fs::{create_dir, remove_dir_all, File};
 use async_std::io::WriteExt;
@@ -20,8 +24,6 @@ Welcome to <project>, let's begin with an overview of where all of the files are
 To compile a project, you can use:
 ```
 $ texcreate compile
-# or
-$ <texcompiler> --output-directory out src/<project>.tex
 ```
 "#;
 /// Creates the README using the project name
@@ -56,20 +58,32 @@ impl TexcToml {
         remove_dir_all("out").await?;
         create_dir("out").await?;
         let s = format!("src/{}.tex", &self.project_name);
-        let cmd = Command::new(&self.compiler)
-            .arg("--output-directory")
-            .arg("out")
-            .arg(&s)
-            .output()
-            .unwrap();
-        if cmd.status.success() {
-            println!(
-                "Successfully compiled src/{}.tex to out/{}.pdf",
-                &self.project_name, &self.project_name
-            );
-        } else {
-            eprintln!("Error in compiling: {}", cmd.status.to_string());
+
+        #[cfg(target_os = "linux")]{
+            let data = read_to_string(&s).await?;
+            let pdf_data = latex_to_pdf(&data).expect("processing failed");
+            let out = PathBuf::from("out").join(&format!("{}.pdf", &self.project_name));
+            let mut pdf = File::create(&out).await?;
+            pdf.write_all(&pdf_data).await?;
         }
+
+        #[cfg(not(target_os = "linux"))]{
+            let cmd = Command::new(&self.compiler)
+                .arg("--output-directory")
+                .arg("out")
+                .arg(&s)
+                .output()
+                .unwrap();
+            if cmd.status.success() {
+                println!(
+                    "Successfully compiled src/{}.tex to out/{}.pdf",
+                    &self.project_name, &self.project_name
+                );
+            } else {
+                eprintln!("Error in compiling: {}", cmd.status.to_string());
+            }
+        }
+
         Ok(())
     }
 }

@@ -45,30 +45,17 @@ zip        Zip TexCreate Project instead of building
 --- 
 
 ### Installing 
-You can install the stable `v2.0.0` by: 
+You can install the stable `v2` by: 
 ```shell
 $ cargo install texcreate 
 ```
 
 ---
 
-## New Changes In Version 2
-- Removed support for Multi mode 
-- Added new commands 
-  - compile
-  - migrate 
-  - zip
-- Replaced `texcreate_lib` with...
-  - `tex-rs`: For building LaTeX in Rust
-  - `texc-utils`: For utility functions in TexCreate
-  - `texc-web`: Library to run `texweb`
-  - `texc-config`: Library for everything related to `config.toml`
-  - `texc-latex`: Contains all of the LaTeX Templates
-- New project structure 
-- New `config.toml`
-- Rewritten `web` and `edit` commands 
-  - Web utilizes temporary directories instead of creating static files
-- Templates rewritten in `tex-rs`
+## Changes for v2.3
+
+- Linux's systems will utilize `tectonic` for the `compile` command
+  - Other systems will use the current method due to complication with dependencies
 
 ---
 

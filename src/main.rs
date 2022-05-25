@@ -160,9 +160,9 @@ async fn main() -> TexCreateResult<()> {
             };
 
             if only_files {
-                config.zip_files(PathBuf::from("")).await?;
+                config.zip_files(&PathBuf::from("")).await?;
             } else {
-                config.zip_proj(PathBuf::from("")).await?;
+                config.zip_proj(&PathBuf::from("")).await?;
             }
             println!("Successfully zipped project: {}", &config.project_name);
         }

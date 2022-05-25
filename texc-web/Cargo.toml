@@ -13,3 +13,6 @@ homepage = "http://texcreate.mkproj.com"
 rocket = "0.5.0-rc.1"
 texc-config = {version = "^0.1", path = "../texc-config"}
 tempdir = "0.3.7"
+zip = "0.6.1"
+async-std = "1.11.0"
+toml = "0.5.9"

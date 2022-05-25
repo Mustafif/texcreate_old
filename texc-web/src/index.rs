@@ -48,6 +48,9 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <option value="Novel">Novel</option>
     <option value="Beamer">Beamer</option>
     <option value="Lachaise">Lachaise</option>
+    <option value="Lachaise-Mod"> Lachaise Modified</option>
+    <option value="Dictionary">Dictionary</option>
+    <option value="News">News</option>
     </select>
     <br>
     <label for="paper_size">Paper Size</label><br>

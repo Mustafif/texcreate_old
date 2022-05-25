@@ -142,7 +142,11 @@ impl Config {
 
     /// Grabs the `tex_rs::Latex` template from `&self.template` by matching the string
     pub fn template(&self) -> TexCreateResult<Latex> {
-        let f = match &*self.template.clone().unwrap() {
+        let template = match &self.template{
+            None => {"Basic".to_string()}
+            Some(a) => {a.to_owned()}
+        };
+        let f = match template.as_str() {
             "Basic" => basic(
                 self.clone().font_size,
                 &self.paper_size,
@@ -328,20 +332,15 @@ impl Config {
         Ok(())
     }
     /// Zips a project structure
-    pub async fn zip_proj(&self, path: PathBuf) -> TexCreateResult<()> {
+    pub async fn zip_proj(&self, path: &PathBuf) -> TexCreateResult<()> {
         let mut zip = ZipWriter::new(
-            F::create(format!(
-                "{}/{}.zip",
-                path.to_str().unwrap(),
-                &self.project_name
-            ))
-            .unwrap(),
+            F::create(&path)?
         );
         let options = FileOptions::default().compression_method(Stored);
 
         // README.md
         let readme_path = path.join("README.md");
-        let _ = F::create(&readme_path).unwrap();
+        let _ = F::create(&readme_path)?;
         zip.start_file(readme_path.to_str().unwrap(), options)
             .unwrap();
         zip.write_all(README.as_bytes()).unwrap();
@@ -388,7 +387,7 @@ impl Config {
         Ok(())
     }
     /// Zips a only files structure
-    pub async fn zip_files(&self, path: PathBuf) -> TexCreateResult<()> {
+    pub async fn zip_files(&self, path: &PathBuf) -> TexCreateResult<()> {
         let mut zip = ZipWriter::new(
             F::create(format!(
                 "{}/{}.zip",
